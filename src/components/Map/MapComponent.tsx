@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useDevicePermissions } from "./hooks";
+import { useDevicePermissions } from "../../hooks";
 import L from "leaflet";
 
 // 🕋 Kabe'nin koordinatları (Mekke, Suudi Arabistan)
