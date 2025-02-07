@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Outlet } from "react-router";
 import './BasicLayout.css'
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Footer } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
 
