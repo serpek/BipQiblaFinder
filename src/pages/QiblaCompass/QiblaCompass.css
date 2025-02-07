@@ -15,7 +15,7 @@
     top: 0;
     left: 0;
     transform: rotate(152deg);
-    background: url(assets/kaaba.png) 50% 0% no-repeat;
+    background: url(/assets/kaaba.png) 50% 0% no-repeat;
     background-size: 20%;
     z-index: 1;
     border-radius: 50%;
@@ -30,7 +30,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     transition: transform 0.1s ease-out;
-    background: url(./assets/compass.png) center no-repeat;
+    background: url(assets/compass.png) center no-repeat;
     background-size: contain;
   }
   
@@ -38,7 +38,7 @@
     opacity: 0;
     width: 20%;
     height: 20%;
-    background: rgb(8, 223, 69) url(./assets/kaaba.png) center no-repeat;
+    background: rgb(8, 223, 69) url(/assets/kaaba.png) center no-repeat;
     border-radius: 50%;
     transition: opacity 0.5s ease-out;
     background-size: 80%;

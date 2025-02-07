@@ -1,10 +1,14 @@
-import { Card, Button } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { Card, Button, Layout, Typography, Row, Col } from 'antd';
+
+const { Header, Content, Footer } = Layout;
+const { Title, Paragraph } = Typography;
 
 const KibleYonTayini: React.FC = () => {
     const [permissionGranted, setPermissionGranted] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [direction, setDirection] = useState<number | null>(null);
+    const [distance, setDistance] = useState<number | null>(null);
     const [darkMode, setDarkMode] = useState(false);
 
     useEffect(() => {
@@ -13,7 +17,9 @@ const KibleYonTayini: React.FC = () => {
                 (position) => {
                     const { latitude, longitude } = position.coords;
                     const kibleAcisi = calculateQiblaDirection(latitude, longitude);
+                    const mesafe = calculateDistance(latitude, longitude);
                     setDirection(kibleAcisi);
+                    setDistance(mesafe);
                 },
                 () => {
                     setError('Konum bilgisi alınamadı. Lütfen konum izni verin.');
@@ -24,10 +30,10 @@ const KibleYonTayini: React.FC = () => {
         }
 
         if (typeof DeviceOrientationEvent !== 'undefined') {
-            const requestPermission = (DeviceOrientationEvent as any).requestPermission;
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-            if (typeof requestPermission === 'function') {
-                requestPermission()
+            if (isIOS && (DeviceOrientationEvent as any).requestPermission) {
+                (DeviceOrientationEvent as any).requestPermission()
                     .then((response: string) => {
                         if (response === 'granted') {
                             setPermissionGranted(true);
@@ -70,35 +76,78 @@ const KibleYonTayini: React.FC = () => {
         return (Math.atan2(y, x) * (180 / Math.PI) + 360) % 360;
     };
 
+    const calculateDistance = (latitude: number, longitude: number): number => {
+        const kaabaLatitude = 21.4225;
+        const kaabaLongitude = 39.8262;
+        const R = 6371; // Dünya'nın yarıçapı (km)
+
+        const dLat = ((kaabaLatitude - latitude) * Math.PI) / 180;
+        const dLon = ((kaabaLongitude - longitude) * Math.PI) / 180;
+
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos((latitude * Math.PI) / 180) *
+            Math.cos((kaabaLatitude * Math.PI) / 180) *
+            Math.sin(dLon / 2) *
+            Math.sin(dLon / 2);
+
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Mesafe km cinsinden
+    };
+
     return (
-        <div className={
-            `flex flex-col items-center justify-center min-h-screen p-4 transition-colors duration-500 ${darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-black'
-            }`
-        }>
-            <Card className="w-full max-w-sm shadow-xl rounded-2xl">
-                <div className="flex flex-col items-center p-6">
-                    <h1 className="text-2xl font-bold mb-4">Kıble Yönü Belirleyici</h1>
-                    <Button onClick={() => setDarkMode(!darkMode)} className="mb-4">
-                        {darkMode ? 'Aydınlık Mod' : 'Karanlık Mod'}
-                    </Button>
-                    {!permissionGranted && (
-                        <Button onClick={() => window.location.reload()} className="mb-4">
-                            İzin Ver ve Başlat
+        <Layout style={{ minHeight: '100vh', backgroundColor: darkMode ? '#141414' : '#f0f2f5' }}>
+            <Header style={{ backgroundColor: darkMode ? '#1f1f1f' : '#001529', color: '#fff', textAlign: 'center' }}>
+                <Title level={2} style={{ color: '#fff' }}>Kıble Yönü Belirleyici</Title>
+            </Header>
+
+            <Content style={{ padding: '20px' }}>
+                <Row justify="center" align="middle">
+                    <Col span={24} style={{ textAlign: 'center' }}>
+                        <Button type="primary" onClick={() => setDarkMode(!darkMode)}>
+                            {darkMode ? 'Aydınlık Mod' : 'Karanlık Mod'}
                         </Button>
-                    )}
-                    {error && <p className="text-red-500 text-center">{error}</p>}
-                    {direction !== null && (
-                        <div className="relative w-40 h-40 border-4 border-blue-500 rounded-full flex items-center justify-center">
-                            <div
-                                className="absolute w-2 h-20 bg-gradient-to-b from-red-500 to-yellow-500 rounded-md origin-bottom transition-transform duration-500 ease-in-out"
-                                style={{ transform: `rotate(${direction}deg)` }}
-                            ></div>
-                            <p className="absolute bottom-2 text-sm">Kıble Bu Yönde</p>
-                        </div>
-                    )}
-                </div>
-            </Card>
-        </div>
+                    </Col>
+
+                    <Col span={24} style={{ marginTop: '20px', textAlign: 'center' }}>
+                        <Card bordered={true} style={{ maxWidth: 400, margin: 'auto' }}>
+                            {!permissionGranted && (
+                                <Button type="default" onClick={() => window.location.reload()}>
+                                    İzin Ver ve Başlat
+                                </Button>
+                            )}
+
+                            {error && <Paragraph type="danger">{error}</Paragraph>}
+
+                            {direction !== null && (
+                                <div style={{ position: 'relative', width: '160px', height: '160px', margin: 'auto' }}>
+                                    <img
+                                        src="/compass.png"
+                                        alt="Pusula"
+                                        style={{ width: '100%', height: '100%', transform: `rotate(${direction}deg)`, transition: 'transform 0.5s ease-in-out' }}
+                                    />
+                                    <img
+                                        src="./assets/kaaba.png"
+                                        alt="Kabe"
+                                        style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: '32px', height: '32px' }}
+                                    />
+                                    <Paragraph>Kıble Bu Yönde</Paragraph>
+                                </div>
+                            )}
+
+                            {direction !== null && distance !== null && (
+                                <div style={{ marginTop: '20px' }}>
+                                    <Paragraph strong>Kıble Açısı: {direction.toFixed(2)}°</Paragraph>
+                                    <Paragraph strong>Mesafe: {distance.toFixed(2)} km</Paragraph>
+                                </div>
+                            )}
+                        </Card>
+                    </Col>
+                </Row>
+            </Content>
+
+            <Footer style={{ textAlign: 'center' }}>©2025 Kıble Yönü Belirleyici</Footer>
+        </Layout>
     );
 };
 
