@@ -1,12 +1,13 @@
 import { createRoot } from 'react-dom/client'
 import { ConfigProvider, ThemeConfig } from 'antd';
 import trTR from 'antd/locale/tr_TR';
+import '@ant-design/v5-patch-for-react-19';
 
 import './index.css'
-import App from './App.tsx'
 import LogRocket from 'logrocket';
 import { BrowserRouter, Routes, Route } from 'react-router';
 import BasicLayout from './layouts/BasicLayout.tsx';
+import { QiblaCompass, KibleYonTayini } from './pages';
 
 LogRocket.init('r4dzqd/sample-app');
 
@@ -22,7 +23,8 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <Routes>
         <Route element={<BasicLayout />}>
-          <Route index element={<App />} />
+          <Route index element={<QiblaCompass />} />
+          <Route path='/q1' element={<KibleYonTayini />} />
         </Route>
       </Routes>
     </BrowserRouter>

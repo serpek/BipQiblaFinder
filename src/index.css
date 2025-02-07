@@ -18,7 +18,14 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
+
 
 #root {
   background-color: #0000001a;

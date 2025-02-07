@@ -1,0 +1,46 @@
+
+.compass {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    margin: 100px auto;
+  }
+  
+  .compass > .arrow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform: rotate(152deg);
+    background: url(assets/kaaba.png) 50% 0% no-repeat;
+    background-size: 20%;
+    z-index: 1;
+    border-radius: 50%;
+  }
+  
+  .compass > .compass-circle,
+  .compass > .my-point {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease-out;
+    background: url(./assets/compass.png) center no-repeat;
+    background-size: contain;
+  }
+  
+  .compass > .my-point {
+    opacity: 0;
+    width: 20%;
+    height: 20%;
+    background: rgb(8, 223, 69) url(./assets/kaaba.png) center no-repeat;
+    border-radius: 50%;
+    transition: opacity 0.5s ease-out;
+    background-size: 80%;
+  }
+  

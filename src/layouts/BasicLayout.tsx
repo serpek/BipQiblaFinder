@@ -39,7 +39,7 @@ const BasicLayout: React.FC = () => {
   };
 
   return (
-    <Layout>
+    <Layout style={{height: '100vh'}}>
       <Header className="layout-header">
         <Button type="text" variant="text" icon={<MenuOutlined />} onClick={showDrawer} />
       </Header>

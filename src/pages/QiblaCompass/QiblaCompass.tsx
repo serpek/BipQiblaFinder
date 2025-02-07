@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import { useDevicePermissions } from './hooks';
-import './App.css';
-import { Qibla } from './utils/qibla';
+import { useDevicePermissions } from '../../hooks';
+import { Qibla } from '../../utils/qibla';
+import './QiblaCompass.css';
 
-function App() {
+function QiblaCompass() {
   const {
     orientation,
     location,
@@ -87,4 +87,4 @@ function App() {
   );
 }
 
-export default App;
+export default QiblaCompass;
