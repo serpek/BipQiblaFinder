@@ -2,18 +2,9 @@ body {
   display: flex;
   flex-direction: column;
   height: 100vh;
-}
-
-.logo {
-  width: 300px;
-  text-align: center;
-  margin: 0 auto 50px;
-}
-
-.button {
-  width: 300px;
-  text-align: center;
-  margin: 0 auto;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
 
 .compass {

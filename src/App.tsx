@@ -60,13 +60,6 @@ function App() {
 
   return (
     <>
-      <div className="logo">
-        <img
-          src="https://bip.com/wp-content/themes/bip/assets/img/bip-logo.png"
-          alt="BIP Logo"
-        />
-      </div>
-      <h2>Bip Kıble Bulucu</h2>
       <div>
         <div>
           {geoPermission === 'denied' && (
@@ -85,11 +78,11 @@ function App() {
         <div className="compass-circle" ref={compassCircle}></div>
         <div className="my-point" ref={myPoint}></div>
       </div>
-      <div>
+      {/*<div>
          <div>pointDegree: {pointDegree}</div>
         <div>compass: {orientation.alpha}</div>
         <div>Position: {JSON.stringify(location)}</div>
-      </div>
+          </div>*/}
     </>
   );
 }
