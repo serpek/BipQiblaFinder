@@ -1,32 +1,14 @@
 import { MenuOutlined } from "@ant-design/icons";
 import { Button, Drawer, Layout, Menu, MenuProps } from "antd";
 import { useState } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import './BasicLayout.css'
 
 const { Header, Content, Footer } = Layout;
 
-type MenuItem = Required<MenuProps>['items'][number];
-
-const items: MenuItem[] = [
-  {
-    key: 'm1',
-    label: 'Kullanım Koşulları'
-  },
-  {
-    key: 'm2',
-    label: 'Aydınlatma Metni'
-  },
-  {
-    key: 'm3',
-    label: 'Çerez Aydınlatma Metni'
-  }
-];
-
 const BasicLayout: React.FC = () => {
   const [open, setOpen] = useState(false);
   let navigate = useNavigate();
-
 
   const showDrawer = () => {
     setOpen(true);
