@@ -49,6 +49,11 @@ const BasicLayout: React.FC = () => {
               label: 'Kible Yön Tayini',
               onClick: () => navigate('/q1')
             },
+            {
+              key: 'm11',
+              label: 'QiblaFinder',
+              onClick: () => navigate('/q2')
+            },
             { type: 'divider' },
             {
               key: 'm2',
