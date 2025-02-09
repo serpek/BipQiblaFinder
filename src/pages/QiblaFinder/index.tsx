@@ -8,7 +8,7 @@ const toDegrees = (radians: number) => radians * (180 / Math.PI);
 const calculateQiblaAngle = (lat: number, lng: number): number => {
   const meccaLng = 39.8262;
   const meccaLat = 21.4225;
-  
+
   const phiK = toRadians(meccaLat);
   const lambdaK = toRadians(meccaLng);
   const phi = toRadians(lat);
@@ -17,7 +17,7 @@ const calculateQiblaAngle = (lat: number, lng: number): number => {
   const term1 = Math.sin(lambdaK - lambda);
   const term2 = Math.cos(phi) * Math.tan(phiK);
   const term3 = Math.sin(phi) * Math.cos(lambdaK - lambda);
-  
+
   let angle = Math.atan2(term1, term2 - term3);
   return (toDegrees(angle) + 360) % 360;
 };
@@ -45,29 +45,57 @@ const CompassWrapper = styled.div<{ disabled: boolean }>`
   margin: 2rem 0;
   opacity: ${props => props.disabled ? 0.5 : 1};
   transition: opacity 0.3s ease;
+  display: grid;
+  place-items: center;
 `;
 
 const CompassSvg = styled.svg.attrs({
   viewBox: '0 0 100 100',
-})`
+}) <{ heading: number }>`
   width: 100%;
   height: 100%;
+  transform: rotate(${props => props.heading ?? 0}deg);
 `;
 
-const Arrow = styled.path<{ rotating: boolean }>`
+const Arrow = styled.path.attrs({
+  d: "M50 10 L58 70 L50 90 L42 70 Z", // Yeni ok tasarımı
+}) <{ rotating: boolean }>`
+  fill: #FF3D00;
+  transform-origin: 50% 50%;
   animation: ${rotate} 2s linear infinite;
   animation-play-state: ${props => props.rotating ? 'running' : 'paused'};
 `;
 
+const CompassCircle = styled.circle.attrs({
+  cx: 50,
+  cy: 50,
+  r: 48,
+})`
+  fill: none;
+  stroke: #FFF;
+  stroke-width: 2;
+`;
+
+const CenterDot = styled.circle.attrs({
+  cx: 50,
+  cy: 50,
+  r: 2,
+})`
+  fill: #FFF;
+`;
+
 const Indicator = styled.div<{ angle: number }>`
   position: absolute;
-  top: 10%;
+  top: 0;
   left: 50%;
-  width: 4px;
-  height: 20%;
-  background: #ff4081;
-  transform-origin: bottom;
-  transform: translateX(-50%) rotate(${props => props.angle}deg);
+  width: 3px;
+  height: 40%;
+  background: linear-gradient(to bottom, #ff4081 0%, transparent 100%);
+  transform-origin: 50% 100%;
+  transform: 
+    translateX(-50%) 
+    rotate(${props => props.angle}deg);
+  z-index: 2;
 `;
 
 const StatusMessage = styled.div`
@@ -110,10 +138,10 @@ const QiblaFinder: React.FC = () => {
           timeout: 5000,
         });
       });
-      
-      if (typeof DeviceOrientationEvent !== 'undefined' && 
-          // @ts-ignore iOS özellik kontrolü
-          typeof DeviceOrientationEvent.requestPermission === 'function') {
+
+      if (typeof DeviceOrientationEvent !== 'undefined' &&
+        // @ts-ignore iOS özellik kontrolü
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
         // @ts-ignore iOS izin isteği
         const permission = await DeviceOrientationEvent.requestPermission();
         if (permission === 'granted') {
@@ -146,14 +174,14 @@ const QiblaFinder: React.FC = () => {
   }, [permissionGranted]);
 
   // Hesaplamalar
-  const qiblaAngle = userLocation 
+  const qiblaAngle = userLocation
     ? calculateQiblaAngle(
-        userLocation.coords.latitude,
-        userLocation.coords.longitude
-      )
+      userLocation.coords.latitude,
+      userLocation.coords.longitude
+    )
     : 0;
 
-  const currentAngle = heading !== null 
+  const currentAngle = heading !== null
     ? (360 - heading + qiblaAngle) % 360
     : 0;
 
@@ -164,7 +192,7 @@ const QiblaFinder: React.FC = () => {
   return (
     <Container>
       <h1>Kıble Pusulası</h1>
-      
+
       {error && (
         <StatusMessage>
           ❗ Hata: {error}
@@ -184,14 +212,14 @@ const QiblaFinder: React.FC = () => {
       {permissionGranted && (
         <>
           <CompassWrapper disabled={heading === null}>
-            <CompassSvg>
-              <circle cx="50" cy="50" r="45" fill="none" stroke="#FFF" strokeWidth="2"/>
-              <Arrow
-                rotating={heading === null}
-                d="M50 15 L55 50 L50 85 L45 50 Z"
-                fill="#FFD600"
-              />
-              <text x="50" y="30" textAnchor="middle" fill="#FFF">K</text>
+            <CompassSvg heading={heading ?? 0}>
+              <CompassCircle />
+              <CenterDot />
+
+              {/* Kuzey işareti */}
+              <text x="50" y="18" textAnchor="middle" fill="#FFF" fontSize="8">N</text>
+
+              <Arrow rotating={heading === null} />
             </CompassSvg>
             <Indicator angle={currentAngle} />
           </CompassWrapper>
