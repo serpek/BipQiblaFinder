@@ -10,6 +10,11 @@ const BasicLayout: React.FC = () => {
   const [open, setOpen] = useState(false);
   let navigate = useNavigate();
 
+  const goto = (path: string) => {
+    navigate(path)
+    onClose()
+  };
+
   const showDrawer = () => {
     setOpen(true);
   };
@@ -42,33 +47,33 @@ const BasicLayout: React.FC = () => {
             {
               key: 'm0',
               label: 'Home',
-              onClick: () => navigate('/')
+              onClick: () => goto('/')
             },
             {
               key: 'm1',
               label: 'Kible Yön Tayini',
-              onClick: () => navigate('/q1')
+              onClick: () => goto('/q1')
             },
             {
               key: 'm11',
               label: 'QiblaFinder',
-              onClick: () => navigate('/q2')
+              onClick: () => goto('/q2')
             },
             { type: 'divider' },
             {
               key: 'm2',
               label: 'Terms of Use',
-              onClick: () => navigate('/terms')
+              onClick: () => goto('/terms')
             },
             {
               key: 'm3',
               label: ' Privacy Notice',
-              onClick: () => navigate('/privacy')
+              onClick: () => goto('/privacy')
             },
             {
               key: 'm4',
               label: 'Cookie Policy',
-              onClick: () => navigate('/cookie')
+              onClick: () => goto('/cookie')
             }
           ]}
           style={{ border: 0 }}

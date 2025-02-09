@@ -9,7 +9,12 @@ import { BrowserRouter, Routes, Route } from 'react-router';
 import BasicLayout from './layouts/BasicLayout.tsx';
 import { QiblaCompass, KibleYonTayini, CookiePolicy, PrivacyPolicy, TermsOfUse, QiblaFinder } from './pages';
 
+import setupLogRocketReact from 'logrocket-react';
+
 LogRocket.init('r4dzqd/sample-app');
+
+setupLogRocketReact(LogRocket);
+LogRocket.identify(location.origin);
 
 const config: ThemeConfig = {
   token: {
