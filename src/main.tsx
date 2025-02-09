@@ -1,20 +1,24 @@
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter, Routes, Route } from 'react-router';
+import { ClientJS } from 'clientjs'
+import LogRocket from 'logrocket';
+import setupLogRocketReact from 'logrocket-react';
 import { ConfigProvider, ThemeConfig } from 'antd';
 import trTR from 'antd/locale/tr_TR';
 import '@ant-design/v5-patch-for-react-19';
 
-import './index.css'
-import LogRocket from 'logrocket';
-import { BrowserRouter, Routes, Route } from 'react-router';
 import BasicLayout from './layouts/BasicLayout.tsx';
 import { QiblaCompass, CookiePolicy, PrivacyPolicy, TermsOfUse, Compass1, Compass2, Compass3 } from './pages';
 
-import setupLogRocketReact from 'logrocket-react';
+import './index.css'
+
+const client = new ClientJS();
+const fingerprint = client.getFingerprint();
 
 LogRocket.init('r4dzqd/sample-app');
+LogRocket.identify(`${fingerprint}`);
 
 setupLogRocketReact(LogRocket);
-LogRocket.identify(location.origin);
 
 const config: ThemeConfig = {
   token: {

@@ -50,17 +50,17 @@ const BasicLayout: React.FC = () => {
               onClick: () => goto('/')
             },
             {
-              key: 'm1',
+              key: 'm11',
               label: 'Compass 1',
               onClick: () => goto('/q1')
             },
             {
-              key: 'm11',
+              key: 'm12',
               label: 'Compass 2',
               onClick: () => goto('/q2')
             },
             {
-              key: 'm11',
+              key: 'm13',
               label: 'Compass 3',
               onClick: () => goto('/q3')
             },
