@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router';
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { ClientJS } from 'clientjs'
 import LogRocket from 'logrocket';
 import setupLogRocketReact from 'logrocket-react';

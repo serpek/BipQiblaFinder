@@ -1,7 +1,8 @@
-import { MenuOutlined } from "@ant-design/icons";
-import { Button, Drawer, Layout, Menu, MenuProps } from "antd";
 import { useState } from "react";
-import { Outlet, useNavigate } from "react-router";
+import { Outlet, useNavigate } from "react-router-dom";
+import { Button, Drawer, Layout, Menu, MenuProps } from "antd";
+import { MenuOutlined } from "@ant-design/icons";
+
 import './BasicLayout.css'
 
 const { Header, Content, Footer } = Layout;
