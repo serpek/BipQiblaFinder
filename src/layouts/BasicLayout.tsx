@@ -51,13 +51,18 @@ const BasicLayout: React.FC = () => {
             },
             {
               key: 'm1',
-              label: 'Kible Yön Tayini',
+              label: 'Compass 1',
               onClick: () => goto('/q1')
             },
             {
               key: 'm11',
-              label: 'QiblaFinder',
+              label: 'Compass 2',
               onClick: () => goto('/q2')
+            },
+            {
+              key: 'm11',
+              label: 'Compass 3',
+              onClick: () => goto('/q3')
             },
             { type: 'divider' },
             {

@@ -1,24 +1,52 @@
 import React from 'react';
-import { Canvas } from '@react-three/fiber';
-import { useSpring, animated } from '@react-spring/three';
-import { useGeoLocation, useDeviceOrientation } from './hooks';
+import styled from 'styled-components';
+import { Card } from 'antd';
+import { useGeolocation, useMotion } from 'react-use';
+
+const CompassContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f0f2f5;
+`;
 
 const Compass: React.FC = () => {
-  const { latitude, longitude } = useGeoLocation();
-  const { alpha } = useDeviceOrientation();
+  const { latitude, longitude } = useGeolocation();
+  const { rotationRate: { alpha } } = useMotion();
+
+  if (latitude === null || longitude === null) {
+    return (
+      <CompassContainer>
+        <Card title="Qibla Finder" style={{ width: 300, textAlign: 'center' }}>
+          <p>Konum bilgisi alınamıyor. Lütfen konum izinlerini kontrol edin.</p>
+        </Card>
+      </CompassContainer>
+    );
+  }
+
+  if (alpha === null) {
+    return (
+      <CompassContainer>
+        <Card title="Qibla Finder" style={{ width: 300, textAlign: 'center' }}>
+          <p>Cihaz yön bilgisi alınamıyor. Lütfen sensör izinlerini kontrol edin.</p>
+        </Card>
+      </CompassContainer>
+    );
+  }
 
   const qiblaDirection = calculateQiblaDirection(latitude, longitude);
   const compassRotation = alpha - qiblaDirection;
 
-  const { rotation } = useSpring({ rotation: [0, 0, compassRotation] });
-
   return (
-    <Canvas>
-      <animated.mesh rotation={rotation}>
-        <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial color="red" />
-      </animated.mesh>
-    </Canvas>
+    <CompassContainer>
+      <Card title="Qibla Finder" style={{ width: 300, textAlign: 'center' }}>
+        <div style={{ transform: `rotate(${compassRotation}deg)`, transition: 'transform 0.3s ease' }}>
+          <img src="/compass.png" alt="Compass" style={{ width: 200, height: 200 }} />
+        </div>
+        <p>Kabe'ye doğru {qiblaDirection.toFixed(2)}° dönmelisiniz.</p>
+      </Card>
+    </CompassContainer>
   );
 };
 

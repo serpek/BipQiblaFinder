@@ -7,7 +7,7 @@ import './index.css'
 import LogRocket from 'logrocket';
 import { BrowserRouter, Routes, Route } from 'react-router';
 import BasicLayout from './layouts/BasicLayout.tsx';
-import { QiblaCompass, KibleYonTayini, CookiePolicy, PrivacyPolicy, TermsOfUse, QiblaFinder } from './pages';
+import { QiblaCompass, CookiePolicy, PrivacyPolicy, TermsOfUse, Compass1, Compass2, Compass3 } from './pages';
 
 import setupLogRocketReact from 'logrocket-react';
 
@@ -29,8 +29,9 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route element={<BasicLayout />}>
           <Route index element={<QiblaCompass />} />
-          <Route path='/q1' element={<KibleYonTayini />} />
-          <Route path='/q2' element={<QiblaFinder />} />
+          <Route path='/q1' element={<Compass1 />} />
+          <Route path='/q2' element={<Compass2 />} />
+          <Route path='/q3' element={<Compass3 />} />
           <Route path='/terms' element={<TermsOfUse />} />
           <Route path='/privacy' element={<PrivacyPolicy />} />
           <Route path='/cookie' element={<CookiePolicy />} />
