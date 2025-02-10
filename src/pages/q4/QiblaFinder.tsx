@@ -3,7 +3,6 @@ import {Card, Col, notification, Row, Statistic} from "antd";
 
 const style: CSSProperties = {padding: '8px'};
 
-
 const directions = [
     {name: 'Kuzey', short: 'N', angle: 0},
     {name: 'Kuzeydoğu', short: 'NE', angle: 45},
@@ -45,9 +44,7 @@ const getQiblaAngle = (latitude: number, longitude: number): number => {
     return (angle * (180 / Math.PI) + 360) % 360;
 };
 
-
 const getDirectionName = (angle: number): { name: string, short: string } => {
-
     const index = Math.round(angle / 45) % 8;
     return directions[index];
 };
@@ -58,6 +55,7 @@ const QiblaCompass = () => {
     const [qiblaAngle, setQiblaAngle] = useState<number>(0);
     const [deviceAngle, setDeviceAngle] = useState<number>(0);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [offset, setOffset] = useState<number>(0); // Offset düzeltmesi için
     const lastRotation = useRef<number>(0);
 
     useEffect(() => {
@@ -88,7 +86,7 @@ const QiblaCompass = () => {
             if (!event.absolute) {
                 api.warning({
                     message: 'Uyarı',
-                    description: 'Pusula kalibrasyonu önerilir.'
+                    description: 'Pusula kalibrasyonu önerilir. Cihazınızı 8 şeklinde sallayarak kalibre edebilirsiniz.'
                 });
             }
             if (event.alpha !== null) {
@@ -109,8 +107,8 @@ const QiblaCompass = () => {
         return lastRotation.current;
     };
 
-    const rotation = smoothRotation((360 - deviceAngle) % 360);
-    const kaabaRotation = (qiblaAngle - deviceAngle + 360) % 360;
+    const rotation = smoothRotation((360 - deviceAngle + offset) % 360);
+    const kaabaRotation = (qiblaAngle - deviceAngle + offset + 360) % 360;
 
     const qiblaDirection = getDirectionName(qiblaAngle);
 
@@ -155,7 +153,7 @@ const QiblaCompass = () => {
                 </Col>
             </Row>
             <Row gutter={16}>
-                <Col className="gutter-row" span={12} style={style}>
+                <Col className="gutter-row" span={8} style={style}>
                     <Card bordered={false} title="Kıble Yönü">
                         <Statistic
                             title={qiblaDirection.name}
@@ -165,7 +163,7 @@ const QiblaCompass = () => {
                         />
                     </Card>
                 </Col>
-                <Col className="gutter-row" span={12} style={style}>
+                <Col className="gutter-row" span={8} style={style}>
                     <Card bordered={false} title="Kıble Yönü">
                         <Row align="stretch" justify="center">
                             <Col>
@@ -185,17 +183,29 @@ const QiblaCompass = () => {
                                 </svg>
                             </Col>
                             <Col>
-
                                 <Statistic
                                     title="Yön"
                                     value={kaabaRotation.toFixed(0)}
                                     suffix="°"
-                                /></Col>
+                                />
+                            </Col>
                         </Row>
                     </Card>
                 </Col>
-            </Row>
 
+                <Col className="gutter-row" span={8} style={style}>
+                    <Card bordered={false} title="Kalibrasyon Düzeltmesi">
+                        <input
+                            type="range"
+                            min="-10"
+                            max="10"
+                            value={offset}
+                            onChange={(e) => setOffset(Number(e.target.value))}
+                        />
+                        <p>Offset: {offset}°</p>
+                    </Card>
+                </Col>
+            </Row>
         </div>
     );
 };
