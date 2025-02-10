@@ -22,6 +22,10 @@ interface DeviceOrientationEventExtended extends DeviceOrientationEvent {
     requestPermission?: () => Promise<"granted" | "denied">;
 }
 
+interface DeviceMotionEventExtended extends DeviceMotionEvent {
+    requestPermission?: () => Promise<"granted" | "denied">;
+}
+
 export function useOrientation(): {
     orientation: OrientationResult | undefined;
     motion: MotionResult | undefined
@@ -30,22 +34,30 @@ export function useOrientation(): {
     const [motion, setMotion] = useState<MotionResult>()
 
     // Determine if we need to request permission (for iOS 13+)
-    const [isPermissionGranted, setIsPermissionGranted] = useState(
+    const [isOrientationGranted, setIsOrientationGranted] = useState(
         typeof (DeviceOrientationEvent as unknown as DeviceOrientationEventExtended)
+            .requestPermission !== "function",
+    );
+    const [isMotionGranted, setIsMotionGranted] = useState(
+        typeof (DeviceMotionEvent as unknown as DeviceMotionEventExtended)
             .requestPermission !== "function",
     );
 
     const requestPermission = useCallback(async () => {
-        const deviceOrientationEvent =
-            DeviceOrientationEvent as unknown as DeviceOrientationEventExtended;
-
+        const deviceOrientationEvent = DeviceOrientationEvent as unknown as DeviceOrientationEventExtended;
         if (typeof deviceOrientationEvent.requestPermission === "function") {
-            try {
-                const permissionState = await deviceOrientationEvent.requestPermission();
-                setIsPermissionGranted(permissionState === "granted");
-            } catch (error) {
-                console.error("Error requesting device orientation permission:", error);
-            }
+            deviceOrientationEvent.requestPermission()
+                .then(permissionState => {
+                    setIsOrientationGranted(permissionState === "granted");
+                }).catch(console.error);
+        }
+
+        const deviceMotionEvent = DeviceMotionEvent as unknown as DeviceMotionEventExtended;
+        if (typeof deviceMotionEvent.requestPermission === 'function') {
+            deviceMotionEvent.requestPermission()
+                .then(permissionState => {
+                    setIsMotionGranted(permissionState === "granted");
+                }).catch(console.error);
         }
     }, []);
 
@@ -69,25 +81,28 @@ export function useOrientation(): {
     }, []);
 
     useEffect(() => {
-        if (isPermissionGranted) {
+        if (isOrientationGranted) {
             window.addEventListener("deviceorientation", handleOrientation);
 
             return () => {
                 window.removeEventListener("deviceorientation", handleOrientation);
             };
         }
-    }, [isPermissionGranted, handleOrientation]);
+    }, [isOrientationGranted, handleOrientation]);
+
+    useEffect(() => {
+        if (isMotionGranted) {
+            window.addEventListener("devicemotion", handleMotion);
+
+            return () => {
+                window.removeEventListener("devicemotion", handleMotion);
+            };
+        }
+    }, [isMotionGranted, handleMotion]);
+
 
     useEffect(() => {
         requestPermission().catch(console.error)
-
-        // if (window.DeviceOrientationEvent) {
-        //     window.addEventListener('deviceorientationabsolute', handleOrientation);
-        // }
-
-        if (window.ondevicemotion) {
-            window.addEventListener('devicemotion', handleMotion);
-        }
     }, []);
 
     return {orientation, motion}
