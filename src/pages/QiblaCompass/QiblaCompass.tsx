@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDevicePermissions } from '../../hooks';
-import { Qibla } from '../../utils/qibla';
+import { Qibla } from '../../utils';
 import './QiblaCompass.css';
 
 function QiblaCompass() {
@@ -21,6 +21,10 @@ function QiblaCompass() {
   const isIOS =
     navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
     navigator.userAgent.match(/AppleWebKit/);
+
+  useEffect(() => {
+    console.log(motionPermission, geoPermission)
+  }, [motionPermission, geoPermission]);
 
   useEffect(() => {
     const compass = orientation.alpha;

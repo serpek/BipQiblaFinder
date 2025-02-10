@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Layout, Typography, Row, Col } from 'antd';
 
-const { Header, Content, Footer } = Layout;
-const { Title, Paragraph } = Typography;
+const {  Content, Footer } = Layout;
+const {  Paragraph } = Typography;
 
 const KibleYonTayini: React.FC = () => {
     const [permissionGranted, setPermissionGranted] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [direction, setDirection] = useState<number | null>(null);
     const [distance, setDistance] = useState<number | null>(null);
-    const [darkMode, setDarkMode] = useState(false);
 
     useEffect(() => {
         if (navigator.geolocation) {
@@ -96,18 +95,10 @@ const KibleYonTayini: React.FC = () => {
     };
 
     return (
-        <Layout style={{ minHeight: '100vh', backgroundColor: darkMode ? '#141414' : '#f0f2f5' }}>
-            <Header style={{ backgroundColor: darkMode ? '#1f1f1f' : '#001529', color: '#fff', textAlign: 'center' }}>
-                <Title level={2} style={{ color: '#fff' }}>Kıble Yönü Belirleyici</Title>
-            </Header>
+        <Layout style={{ minHeight: '100vh'}}>
 
             <Content style={{ padding: '20px' }}>
                 <Row justify="center" align="middle">
-                    <Col span={24} style={{ textAlign: 'center' }}>
-                        <Button type="primary" onClick={() => setDarkMode(!darkMode)}>
-                            {darkMode ? 'Aydınlık Mod' : 'Karanlık Mod'}
-                        </Button>
-                    </Col>
 
                     <Col span={24} style={{ marginTop: '20px', textAlign: 'center' }}>
                         <Card bordered={true} style={{ maxWidth: 400, margin: 'auto' }}>
