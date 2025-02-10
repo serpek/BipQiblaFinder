@@ -1,6 +1,5 @@
 import {CSSProperties, useEffect, useState} from 'react';
 import {Card, Col, Row, Statistic} from "antd";
-import {ArrowDownOutlined} from "@ant-design/icons";
 
 const style: CSSProperties = {padding: '8px'};
 
@@ -142,7 +141,7 @@ const QiblaCompass = () => {
                     <Card bordered={false} title="Kıble Yönü">
                         <Statistic
                             title={qiblaDirection.name}
-                            value={qiblaAngle.toFixed(2)}
+                            value={qiblaAngle.toFixed(0)}
                             precision={2}
                             suffix={`° ${qiblaDirection.short}`}
                         />
@@ -150,13 +149,24 @@ const QiblaCompass = () => {
                 </Col>
                 <Col className="gutter-row" span={12} style={style}>
                     <Card bordered={false} title="Kıble Yönü">
+
+                        <svg
+                            width="50"
+                            height="50"
+                            viewBox="0 0 100 100"
+                            style={{
+                                transform: `rotate(${kaabaRotation}deg)`,
+                                margin: '0 auto',
+                                transition: 'transform 0.5s ease-out'
+                            }}
+                        >
+                            <polygon points="50,10 60,40 50,30 40,40" fill="red"/>
+                        </svg>
+
                         <Statistic
-                            title="Idle"
-                            value={9.3}
-                            precision={2}
-                            valueStyle={{color: '#cf1322'}}
-                            prefix={<ArrowDownOutlined/>}
-                            suffix="%"
+                            title="Yön"
+                            value={kaabaRotation.toFixed(0)}
+                            suffix="°"
                         />
                     </Card>
                 </Col>
