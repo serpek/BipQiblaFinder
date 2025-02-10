@@ -119,7 +119,7 @@ const QiblaCompass = () => {
     };
 
     const rotation = smoothRotation((360 - deviceAngle + offset) % 360);
-    const kaabaRotation = (qiblaAngle - deviceAngle + offset + 360) % 360;
+    const kaabaRotation = (qiblaAngle + offset + 360) % 360; // Kabe yönü her zaman sabit kalmalı
 
     const qiblaDirection = getDirectionName(qiblaAngle);
 
@@ -155,8 +155,9 @@ const QiblaCompass = () => {
                                     position: 'absolute',
                                     top: '50%',
                                     left: '50%',
-                                    transform: `translate(-50%, -50%) rotate(${kaabaRotation}deg) translateY(-120px)`,
+                                    transform: `translate(-50%, -50%) rotate(${kaabaRotation - rotation}deg) translateY(-120px)`,
                                     transformOrigin: 'center',
+                                    transition: 'transform 0.5s ease-out',
                                 }}
                             />
                         </div>
