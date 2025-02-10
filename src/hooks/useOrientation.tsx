@@ -65,33 +65,47 @@ export function useOrientation(): {
     }, []);
 
     const handleOrientation = useCallback((e: DeviceOrientationEvent) => {
-        setOrientation((prev) => ({...prev, alpha: e.alpha, beta: e.beta, gamma: e.gamma}))
+        setOrientation((prev) => ({
+            ...prev,
+            alpha: Math.round(e.alpha || 0),
+            beta: Math.round(e.beta || 0),
+            gamma: Math.round(e.gamma || 0)
+        }))
     }, []);
 
     const handleOrientationAbsolute = useCallback((e: DeviceOrientationEvent) => {
-        setOrientationAbsolute((prev) => ({...prev, alpha: e.alpha, beta: e.beta, gamma: e.gamma}))
+        setOrientationAbsolute((prev) => ({
+            ...prev,
+            alpha: Math.round(e.alpha || 0),
+            beta: Math.round(e.beta || 0),
+            gamma: Math.round(e.gamma || 0)
+        }))
     }, []);
 
     const handleMotion = useCallback((e: DeviceMotionEvent) => {
         setMotion((prev) => ({
             ...prev,
-            x: e.acceleration?.x,
-            y: e.acceleration?.y,
-            z: e.acceleration?.z,
-            alpha: e.rotationRate?.alpha,
-            beta: e.rotationRate?.beta,
-            gamma: e.rotationRate?.gamma,
-            gravityX: e.accelerationIncludingGravity?.x,
-            gravityY: e.accelerationIncludingGravity?.y,
-            gravityZ: e.accelerationIncludingGravity?.z,
+            x: Math.round(e.acceleration?.x || 0),
+            y: Math.round(e.acceleration?.y || 0),
+            z: Math.round(e.acceleration?.z || 0),
+            alpha: Math.round(e.rotationRate?.alpha || 0),
+            beta: Math.round(e.rotationRate?.beta || 0),
+            gamma: Math.round(e.rotationRate?.gamma || 0),
+            gravityX: Math.round(e.accelerationIncludingGravity?.x || 0),
+            gravityY: Math.round(e.accelerationIncludingGravity?.y || 0),
+            gravityZ: Math.round(e.accelerationIncludingGravity?.z || 0),
         }))
     }, []);
 
     useEffect(() => {
         if (window.DeviceOrientationEvent && 'ondeviceorientationabsolute' in window) {
             window.addEventListener('deviceorientationabsolute', handleOrientationAbsolute);
+
+            return () => {
+                window.removeEventListener("deviceorientationabsolute", handleOrientationAbsolute);
+            };
         }
-    }, []);
+    }, [handleOrientationAbsolute]);
 
     useEffect(() => {
         if (isOrientationGranted) {
