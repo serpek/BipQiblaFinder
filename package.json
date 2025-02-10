@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "expo": "npx expo start",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "install": "npm install"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",

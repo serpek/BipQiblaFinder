@@ -7,7 +7,7 @@ import { ConfigProvider, ThemeConfig } from 'antd';
 import trTR from 'antd/locale/tr_TR';
 import '@ant-design/v5-patch-for-react-19';
 
-import BasicLayout from './layouts/BasicLayout.tsx';
+import {BasicLayout} from './layouts';
 import { QiblaCompass, CookiePolicy, PrivacyPolicy, TermsOfUse, Compass1, Compass2, Compass3 } from './pages';
 
 import './index.css'
