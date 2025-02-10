@@ -1,5 +1,5 @@
-import {CSSProperties, useEffect, useState} from 'react';
-import {Card, Col, Row, Statistic} from "antd";
+import {CSSProperties, useEffect, useRef, useState} from 'react';
+import {Card, Col, notification, Row, Statistic} from "antd";
 
 const style: CSSProperties = {padding: '8px'};
 
@@ -36,12 +36,15 @@ const getQiblaAngle = (latitude: number, longitude: number): number => {
     const userLng = longitude * (Math.PI / 180);
 
     const deltaLng = makkahLng - userLng;
-    const y = Math.sin(deltaLng);
-    const x = Math.cos(userLat) * Math.tan(makkahLat) - Math.sin(userLat) * Math.cos(deltaLng);
 
-    const angle = Math.atan2(y, x) * (180 / Math.PI);
-    return (angle + 360) % 360; // 0-360 aralığında döner
+    const angle = Math.atan2(
+        Math.sin(deltaLng),
+        Math.cos(userLat) * Math.tan(makkahLat) - Math.sin(userLat) * Math.cos(deltaLng)
+    );
+
+    return (angle * (180 / Math.PI) + 360) % 360;
 };
+
 
 const getDirectionName = (angle: number): { name: string, short: string } => {
 
@@ -50,9 +53,12 @@ const getDirectionName = (angle: number): { name: string, short: string } => {
 };
 
 const QiblaCompass = () => {
+    const [api, contextHolder] = notification.useNotification();
+
     const [qiblaAngle, setQiblaAngle] = useState<number>(0);
     const [deviceAngle, setDeviceAngle] = useState<number>(0);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const lastRotation = useRef<number>(0);
 
     useEffect(() => {
         const fetchLocation = async () => {
@@ -79,6 +85,12 @@ const QiblaCompass = () => {
         }
 
         const handleOrientation = (event: DeviceOrientationEvent) => {
+            if (!event.absolute) {
+                api.warning({
+                    message: 'Uyarı',
+                    description: 'Pusula kalibrasyonu önerilir.'
+                });
+            }
             if (event.alpha !== null) {
                 setDeviceAngle(event.alpha);
             }
@@ -91,8 +103,14 @@ const QiblaCompass = () => {
         return () => window.removeEventListener('deviceorientation', handleOrientation);
     }, []);
 
-    const rotation = (360 - deviceAngle) % 360; // Kullanıcının telefonu çevirdiği yöne göre pusulayı döndür
-    const kaabaRotation = (qiblaAngle - deviceAngle + 360) % 360; // Kabe yönünü sabit tutmak için ayarlandı
+    const smoothRotation = (newAngle: number) => {
+        const delta = ((newAngle - lastRotation.current + 540) % 360) - 180;
+        lastRotation.current = (lastRotation.current + delta) % 360;
+        return lastRotation.current;
+    };
+
+    const rotation = smoothRotation((360 - deviceAngle) % 360);
+    const kaabaRotation = (qiblaAngle - deviceAngle + 360) % 360;
 
     const qiblaDirection = getDirectionName(qiblaAngle);
 
@@ -101,7 +119,7 @@ const QiblaCompass = () => {
             {errorMessage && (
                 <p style={{color: 'red', marginBottom: '10px'}}>{errorMessage}</p>
             )}
-
+            {contextHolder}
             <Row gutter={16}>
                 <Col className="gutter-row" span={24} style={style}>
                     <Card bordered={false} title="Pusula">
@@ -149,25 +167,31 @@ const QiblaCompass = () => {
                 </Col>
                 <Col className="gutter-row" span={12} style={style}>
                     <Card bordered={false} title="Kıble Yönü">
+                        <Row align="stretch" justify="center">
+                            <Col>
+                                <svg
+                                    width="50"
+                                    height="50"
+                                    viewBox="0 0 100 100"
+                                    style={{
+                                        transform: `rotate(${kaabaRotation}deg)`,
+                                        margin: '0 auto',
+                                        transition: 'transform 0.5s ease-out',
+                                        background: '#efefef',
+                                        borderRadius: '50%'
+                                    }}
+                                >
+                                    <polygon points="50,10 60,40 50,30 40,40" fill="red"/>
+                                </svg>
+                            </Col>
+                            <Col>
 
-                        <svg
-                            width="50"
-                            height="50"
-                            viewBox="0 0 100 100"
-                            style={{
-                                transform: `rotate(${kaabaRotation}deg)`,
-                                margin: '0 auto',
-                                transition: 'transform 0.5s ease-out'
-                            }}
-                        >
-                            <polygon points="50,10 60,40 50,30 40,40" fill="red"/>
-                        </svg>
-
-                        <Statistic
-                            title="Yön"
-                            value={kaabaRotation.toFixed(0)}
-                            suffix="°"
-                        />
+                                <Statistic
+                                    title="Yön"
+                                    value={kaabaRotation.toFixed(0)}
+                                    suffix="°"
+                                /></Col>
+                        </Row>
                     </Card>
                 </Col>
             </Row>
