@@ -29,13 +29,14 @@ export function useOrientation(): {
     useEffect(() => {
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientationabsolute', (e) => {
-                SetOrientation({alpha: e.alpha, beta: e.beta, gamma: e.gamma})
+                SetOrientation((prev) => ({...prev, alpha: e.alpha, beta: e.beta, gamma: e.gamma}))
             });
         }
         if (window.ondevicemotion) {
             window.addEventListener('devicemotion', (e) => {
                 console.log('devicemotion: ', e)
-                SetMotion({
+                SetMotion((prev) => ({
+                    ...prev,
                     x: e.acceleration?.x,
                     y: e.acceleration?.y,
                     z: e.acceleration?.z,
@@ -45,7 +46,7 @@ export function useOrientation(): {
                     gravityX: e.accelerationIncludingGravity?.x,
                     gravityY: e.accelerationIncludingGravity?.y,
                     gravityZ: e.accelerationIncludingGravity?.z,
-                })
+                }))
             });
         }
     }, []);

@@ -4,7 +4,7 @@ import {calcQiblaDegreeToPoint, getQiblaAngle} from "../../utils";
 
 const Pusula: React.FC = () => {
 
-    const orientation = useOrientation();
+    const {motion, orientation} = useOrientation();
 
     const {coords, isGeolocationAvailable, isGeolocationEnabled} =
         useGeolocated({
@@ -62,52 +62,52 @@ const Pusula: React.FC = () => {
             </tr>
             <tr>
                 <td>alpha (orientation)</td>
-                <td>{orientation.orientation?.alpha}</td>
+                <td>{orientation?.alpha}</td>
             </tr>
             <tr>
                 <td>beta (orientation)</td>
-                <td>{orientation.orientation?.beta}</td>
+                <td>{orientation?.beta}</td>
             </tr>
             <tr>
                 <td>gamma (orientation)</td>
-                <td>{orientation.orientation?.gamma}</td>
+                <td>{orientation?.gamma}</td>
             </tr>
 
             <tr>
                 <td>x (motion)</td>
-                <td>{orientation.motion?.x}</td>
+                <td>{motion?.x}</td>
             </tr>
             <tr>
                 <td>y (motion)</td>
-                <td>{orientation.motion?.y}</td>
+                <td>{motion?.y}</td>
             </tr>
             <tr>
                 <td>z (motion)</td>
-                <td>{orientation.motion?.z}</td>
+                <td>{motion?.z}</td>
             </tr>
             <tr>
                 <td>alpha (motion)</td>
-                <td>{orientation.motion?.alpha}</td>
+                <td>{motion?.alpha}</td>
             </tr>
             <tr>
                 <td>beta (motion)</td>
-                <td>{orientation.motion?.beta}</td>
+                <td>{motion?.beta}</td>
             </tr>
             <tr>
                 <td>gamma (motion)</td>
-                <td>{orientation.motion?.gamma}</td>
+                <td>{motion?.gamma}</td>
             </tr>
             <tr>
                 <td>gravityX (motion)</td>
-                <td>{orientation.motion?.gravityX}</td>
+                <td>{motion?.gravityX}</td>
             </tr>
             <tr>
                 <td>gravityY (motion)</td>
-                <td>{orientation.motion?.gravityY}</td>
+                <td>{motion?.gravityY}</td>
             </tr>
             <tr>
                 <td>gravityZ (motion)</td>
-                <td>{orientation.motion?.gravityZ}</td>
+                <td>{motion?.gravityZ}</td>
             </tr>
             </tbody>
         </table>
