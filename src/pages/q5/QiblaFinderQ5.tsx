@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useGeolocated, useOrientation} from "../../hooks";
 import {calcQiblaDegreeToPoint, getQiblaAngle} from "../../utils";
 
@@ -6,7 +6,7 @@ const Pusula: React.FC = () => {
 
     const {motion, orientation} = useOrientation();
 
-    const {coords, isGeolocationAvailable, isGeolocationEnabled} =
+    const {coords, isGeolocationAvailable, isGeolocationEnabled, getPosition} =
         useGeolocated({
             positionOptions: {
                 enableHighAccuracy: true,
@@ -15,27 +15,21 @@ const Pusula: React.FC = () => {
         });
 
 
-    useEffect(() => {
-        if (coords) {
-            console.log('getQiblaAngle: ', getQiblaAngle(coords.latitude, coords.longitude))
-            console.log('calcQiblaDegreeToPoint: ', calcQiblaDegreeToPoint(coords.latitude, coords.longitude))
-        }
-    }, [coords]);
-
-
-    useEffect(() => {
-        if (orientation) {
-            console.log('orientation: ', orientation)
-        }
-    }, [orientation]);
-
-    return !isGeolocationAvailable ? (
+    return <>{!isGeolocationAvailable ? (
         <div>Your browser does not support Geolocation</div>
     ) : !isGeolocationEnabled ? (
         <div>Geolocation is not enabled</div>
     ) : coords ? (
         <table>
             <tbody>
+            <tr>
+                <td>getQiblaAngle</td>
+                <td>{getQiblaAngle(coords.latitude, coords.longitude)}</td>
+            </tr>
+            <tr>
+                <td>calcQiblaDegreeToPoint</td>
+                <td>{calcQiblaDegreeToPoint(coords.latitude, coords.longitude)}</td>
+            </tr>
             <tr>
                 <td>latitude</td>
                 <td>{coords.latitude}</td>
@@ -113,7 +107,9 @@ const Pusula: React.FC = () => {
         </table>
     ) : (
         <div>Getting the location data&hellip; </div>
-    );
+    )}
+        <button onClick={getPosition}>getPosition</button>
+    </>;
 };
 
 export default Pusula;
