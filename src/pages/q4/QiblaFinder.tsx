@@ -53,6 +53,7 @@ const QiblaCompass = () => {
     const [api, contextHolder] = notification.useNotification();
 
     const [qiblaAngle, setQiblaAngle] = useState<number>(0);
+    const [hasCalibrate, setHasCalibrate] = useState<boolean>(false);
     const [deviceAngle, setDeviceAngle] = useState<number>(0);
     const [errorMessage, setErrorMessage] = useState<string>('');
     const [offset, setOffset] = useState<number>(0); // Offset düzeltmesi için
@@ -84,10 +85,7 @@ const QiblaCompass = () => {
 
         const handleOrientation = (event: DeviceOrientationEvent) => {
             if (!event.absolute) {
-                api.warning({
-                    message: 'Uyarı',
-                    description: 'Pusula kalibrasyonu önerilir. Cihazınızı 8 şeklinde sallayarak kalibre edebilirsiniz.'
-                });
+                setHasCalibrate(true)
             }
             if (event.alpha !== null) {
                 setDeviceAngle(event.alpha);
@@ -100,6 +98,15 @@ const QiblaCompass = () => {
 
         return () => window.removeEventListener('deviceorientation', handleOrientation);
     }, []);
+
+    useEffect(() => {
+        if (hasCalibrate) {
+            api.warning({
+                message: 'Uyarı',
+                description: 'Pusula kalibrasyonu önerilir. Cihazınızı 8 şeklinde sallayarak kalibre edebilirsiniz.'
+            });
+        }
+    }, [api, hasCalibrate])
 
     const smoothRotation = (newAngle: number) => {
         const delta = ((newAngle - lastRotation.current + 540) % 360) - 180;
