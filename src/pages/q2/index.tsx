@@ -18,7 +18,7 @@ const calculateQiblaAngle = (lat: number, lng: number): number => {
   const term2 = Math.cos(phi) * Math.tan(phiK);
   const term3 = Math.sin(phi) * Math.cos(lambdaK - lambda);
 
-  let angle = Math.atan2(term1, term2 - term3);
+  const angle = Math.atan2(term1, term2 - term3);
   return (toDegrees(angle) + 360) % 360;
 };
 
@@ -140,9 +140,8 @@ const QiblaFinder: React.FC = () => {
       });
 
       if (typeof DeviceOrientationEvent !== 'undefined' &&
-        // @ts-ignore iOS özellik kontrolü
         typeof DeviceOrientationEvent.requestPermission === 'function') {
-        // @ts-ignore iOS izin isteği
+
         const permission = await DeviceOrientationEvent.requestPermission();
         if (permission === 'granted') {
           setPermissionGranted(true);
@@ -154,7 +153,7 @@ const QiblaFinder: React.FC = () => {
         setPermissionGranted(true);
         setUserLocation(position);
       }
-    } catch (err) {
+    } catch {
       setError('Konum erişimi reddedildi veya alınamadı');
     }
   }, []);

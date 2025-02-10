@@ -4,11 +4,9 @@ import "leaflet/dist/leaflet.css";
 import { useDevicePermissions } from "../../hooks";
 import L from "leaflet";
 
-// 🕋 Kabe'nin koordinatları (Mekke, Suudi Arabistan)
 const KAABA_LAT = 21.4225;
 const KAABA_LON = 39.8262;
 
-// 📌 Kıble Açısını Hesaplayan Fonksiyon
 const calculateQiblaDirection = (lat: number, lon: number) => {
   const userLatRad = (Math.PI * lat) / 180;
   const userLonRad = (Math.PI * lon) / 180;
@@ -25,7 +23,6 @@ const calculateQiblaDirection = (lat: number, lon: number) => {
   return qiblaAngle;
 };
 
-// 📌 Harita Güncelleyici
 const MapUpdater: React.FC<{ latitude: number; longitude: number }> = ({ latitude, longitude }) => {
   const map = useMap();
   useEffect(() => {
