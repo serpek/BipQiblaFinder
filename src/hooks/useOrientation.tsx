@@ -28,10 +28,12 @@ interface DeviceMotionEventExtended extends DeviceMotionEvent {
 
 export function useOrientation(): {
     orientation: OrientationResult | undefined;
+    orientationAbsolute: OrientationResult | undefined;
     motion: MotionResult | undefined
     requestPermission: () => Promise<void>
 } {
     const [orientation, setOrientation] = useState<OrientationResult>()
+    const [orientationAbsolute, setOrientationAbsolute] = useState<OrientationResult>()
     const [motion, setMotion] = useState<MotionResult>()
 
     // Determine if we need to request permission (for iOS 13+)
@@ -66,6 +68,10 @@ export function useOrientation(): {
         setOrientation((prev) => ({...prev, alpha: e.alpha, beta: e.beta, gamma: e.gamma}))
     }, []);
 
+    const handleOrientationAbsolute = useCallback((e: DeviceOrientationEvent) => {
+        setOrientationAbsolute((prev) => ({...prev, alpha: e.alpha, beta: e.beta, gamma: e.gamma}))
+    }, []);
+
     const handleMotion = useCallback((e: DeviceMotionEvent) => {
         setMotion((prev) => ({
             ...prev,
@@ -79,6 +85,12 @@ export function useOrientation(): {
             gravityY: e.accelerationIncludingGravity?.y,
             gravityZ: e.accelerationIncludingGravity?.z,
         }))
+    }, []);
+
+    useEffect(() => {
+        if (window.DeviceOrientationEvent && 'ondeviceorientationabsolute' in window) {
+            window.addEventListener('deviceorientationabsolute', handleOrientationAbsolute);
+        }
     }, []);
 
     useEffect(() => {
@@ -106,5 +118,5 @@ export function useOrientation(): {
         requestPermission().catch(console.error)
     }, []);
 
-    return {orientation, motion, requestPermission}
+    return {orientation, orientationAbsolute, motion, requestPermission}
 }

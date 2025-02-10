@@ -4,7 +4,7 @@ import {calcQiblaDegreeToPoint, getQiblaAngle} from "../../utils";
 
 const Pusula: React.FC = () => {
 
-    const {motion, orientation, requestPermission} = useOrientation();
+    const {motion, orientation, orientationAbsolute, requestPermission} = useOrientation();
 
     const {coords, isGeolocationAvailable, isGeolocationEnabled} =
         useGeolocated({
@@ -65,6 +65,18 @@ const Pusula: React.FC = () => {
             <tr>
                 <td>gamma (orientation)</td>
                 <td>{orientation?.gamma}</td>
+            </tr>
+            <tr>
+                <td>alpha (orientationAbsolute)</td>
+                <td>{orientationAbsolute?.alpha}</td>
+            </tr>
+            <tr>
+                <td>beta (orientationAbsolute)</td>
+                <td>{orientationAbsolute?.beta}</td>
+            </tr>
+            <tr>
+                <td>gamma (orientationAbsolute)</td>
+                <td>{orientationAbsolute?.gamma}</td>
             </tr>
 
             <tr>
