@@ -15,11 +15,6 @@ import './index.css'
 const client = new ClientJS();
 const fingerprint = client.getFingerprint();
 
-var CPU = client.getCPU(); // Get CPU Architecture
-
-console.log( CPU );
-
-
 LogRocket.init('r4dzqd/sample-app');
 LogRocket.identify(`${fingerprint}`);
 
