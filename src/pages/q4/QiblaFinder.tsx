@@ -56,7 +56,8 @@ const QiblaCompass = () => {
     const [hasCalibrate, setHasCalibrate] = useState<boolean>(false);
     const [deviceAngle, setDeviceAngle] = useState<number>(0);
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const [offset, setOffset] = useState<number>(0); // Offset düzeltmesi için
+    const [offset, setOffset] = useState<number>(0);
+    const [isTrueNorth, setIsTrueNorth] = useState<boolean>(false);
     const lastRotation = useRef<number>(0);
 
     useEffect(() => {
@@ -85,7 +86,10 @@ const QiblaCompass = () => {
 
         const handleOrientation = (event: DeviceOrientationEvent) => {
             if (!event.absolute) {
+                setIsTrueNorth(true);
                 setHasCalibrate(true)
+            } else {
+                setHasCalibrate(false)
             }
             if (event.alpha !== null) {
                 setDeviceAngle(event.alpha);
@@ -93,10 +97,10 @@ const QiblaCompass = () => {
         };
 
         if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', handleOrientation);
+            window.addEventListener('deviceorientationabsolute', handleOrientation);
         }
 
-        return () => window.removeEventListener('deviceorientation', handleOrientation);
+        return () => window.removeEventListener('deviceorientationabsolute', handleOrientation);
     }, []);
 
     useEffect(() => {
@@ -210,6 +214,9 @@ const QiblaCompass = () => {
                             onChange={(e) => setOffset(Number(e.target.value))}
                         />
                         <p>Offset: {offset}°</p>
+                        <p style={{color: isTrueNorth ? 'green' : 'red'}}>
+                            {isTrueNorth ? 'Gerçek Kuzey Kullanılıyor' : 'Manyetik Kuzey Kullanılıyor'}
+                        </p>
                     </Card>
                 </Col>
             </Row>
