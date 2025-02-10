@@ -34,7 +34,7 @@ const BasicLayout: React.FC = () => {
                 <Button type="text" variant="text" icon={<MenuOutlined/>} onClick={showDrawer}/>
             </Header>
 
-            <Content style={{margin: '20px', overflow: 'scroll'}}>
+            <Content style={{padding: '20px', overflow: 'scroll'}}>
                 <Outlet/>
             </Content>
 
@@ -69,6 +69,11 @@ const BasicLayout: React.FC = () => {
                             key: 'm14',
                             label: 'Compass 4',
                             onClick: () => goto('/q4')
+                        },
+                        {
+                            key: 'm15',
+                            label: 'Compass 5',
+                            onClick: () => goto('/q5')
                         },
                         {type: 'divider'},
                         {

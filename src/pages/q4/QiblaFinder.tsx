@@ -1,5 +1,5 @@
 import {CSSProperties, useEffect, useRef, useState} from 'react';
-import {Card, Col, notification, Row, Statistic} from "antd";
+import {Card, Col, Layout, notification, Row, Statistic} from "antd";
 
 const style: CSSProperties = {padding: '8px'};
 
@@ -99,7 +99,6 @@ const QiblaCompass = () => {
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientationabsolute', handleOrientation);
         }
-
         return () => window.removeEventListener('deviceorientationabsolute', handleOrientation);
     }, []);
 
@@ -124,7 +123,7 @@ const QiblaCompass = () => {
     const qiblaDirection = getDirectionName(qiblaAngle);
 
     return (
-        <div className="compass-container" style={{textAlign: 'center', marginTop: '50px'}}>
+        <Layout>
             {errorMessage && (
                 <p style={{color: 'red', marginBottom: '10px'}}>{errorMessage}</p>
             )}
@@ -165,7 +164,7 @@ const QiblaCompass = () => {
                 </Col>
             </Row>
             <Row gutter={16}>
-                <Col className="gutter-row" span={8} style={style}>
+                <Col className="gutter-row" span={12} style={style}>
                     <Card bordered={false} title="Kıble Yönü">
                         <Statistic
                             title={qiblaDirection.name}
@@ -175,7 +174,7 @@ const QiblaCompass = () => {
                         />
                     </Card>
                 </Col>
-                <Col className="gutter-row" span={8} style={style}>
+                <Col className="gutter-row" span={12} style={style}>
                     <Card bordered={false} title="Kıble Yönü">
                         <Row align="stretch" justify="center">
                             <Col>
@@ -204,8 +203,9 @@ const QiblaCompass = () => {
                         </Row>
                     </Card>
                 </Col>
-
-                <Col className="gutter-row" span={8} style={style}>
+            </Row>
+            <Row gutter={16}>
+                <Col className="gutter-row" span={24} style={style}>
                     <Card bordered={false} title="Kalibrasyon Düzeltmesi">
                         <input
                             type="range"
@@ -221,7 +221,7 @@ const QiblaCompass = () => {
                     </Card>
                 </Col>
             </Row>
-        </div>
+        </Layout>
     );
 };
 

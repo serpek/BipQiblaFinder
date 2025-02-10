@@ -7,7 +7,17 @@ import trTR from 'antd/locale/tr_TR';
 import '@ant-design/v5-patch-for-react-19';
 
 import {BasicLayout} from './layouts';
-import {Compass1, Compass2, Compass3, Compass4, CookiePolicy, PrivacyPolicy, QiblaCompass, TermsOfUse} from './pages';
+import {
+    Compass1,
+    Compass2,
+    Compass3,
+    Compass4,
+    Compass5,
+    CookiePolicy,
+    PrivacyPolicy,
+    QiblaCompass,
+    TermsOfUse
+} from './pages';
 
 import './index.css'
 
@@ -35,6 +45,7 @@ createRoot(document.getElementById('root')!).render(
                     <Route path='/q2' element={<Compass2/>}/>
                     <Route path='/q3' element={<Compass3/>}/>
                     <Route path='/q4' element={<Compass4/>}/>
+                    <Route path='/q5' element={<Compass5/>}/>
                     <Route path='/terms' element={<TermsOfUse/>}/>
                     <Route path='/privacy' element={<PrivacyPolicy/>}/>
                     <Route path='/cookie' element={<CookiePolicy/>}/>
