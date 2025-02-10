@@ -1,8 +1,8 @@
 # Redirects from what the browser requests to what we serve
 /   /
-/q1 /q1
-/q2 /q2
-/q3 /q3
-/terms  /terms
-/privacy    /privacy
-/cookie /cookie
+/q1 /
+/q2 /
+/q3 /
+/terms  /
+/privacy    /
+/cookie /
