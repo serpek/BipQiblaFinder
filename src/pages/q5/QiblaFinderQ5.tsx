@@ -61,16 +61,53 @@ const Pusula: React.FC = () => {
                 <td>{coords.accuracy}</td>
             </tr>
             <tr>
-                <td>alpha</td>
+                <td>alpha (orientation)</td>
                 <td>{orientation.orientation?.alpha}</td>
             </tr>
             <tr>
-                <td>beta</td>
+                <td>beta (orientation)</td>
                 <td>{orientation.orientation?.beta}</td>
             </tr>
             <tr>
-                <td>gamma</td>
+                <td>gamma (orientation)</td>
                 <td>{orientation.orientation?.gamma}</td>
+            </tr>
+
+            <tr>
+                <td>x (motion)</td>
+                <td>{orientation.motion?.x}</td>
+            </tr>
+            <tr>
+                <td>y (motion)</td>
+                <td>{orientation.motion?.y}</td>
+            </tr>
+            <tr>
+                <td>z (motion)</td>
+                <td>{orientation.motion?.z}</td>
+            </tr>
+            <tr>
+                <td>alpha (motion)</td>
+                <td>{orientation.motion?.alpha}</td>
+            </tr>
+            <tr>
+                <td>beta (motion)</td>
+                <td>{orientation.motion?.beta}</td>
+            </tr>
+            <tr>
+                <td>gamma (motion)</td>
+                <td>{orientation.motion?.gamma}</td>
+            </tr>
+            <tr>
+                <td>gravityX (motion)</td>
+                <td>{orientation.motion?.gravityX}</td>
+            </tr>
+            <tr>
+                <td>gravityY (motion)</td>
+                <td>{orientation.motion?.gravityY}</td>
+            </tr>
+            <tr>
+                <td>gravityZ (motion)</td>
+                <td>{orientation.motion?.gravityZ}</td>
             </tr>
             </tbody>
         </table>
