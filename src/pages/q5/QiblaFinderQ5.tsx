@@ -4,9 +4,9 @@ import {calcQiblaDegreeToPoint, getQiblaAngle} from "../../utils";
 
 const Pusula: React.FC = () => {
 
-    const {motion, orientation} = useOrientation();
+    const {motion, orientation, requestPermission} = useOrientation();
 
-    const {coords, isGeolocationAvailable, isGeolocationEnabled, getPosition} =
+    const {coords, isGeolocationAvailable, isGeolocationEnabled} =
         useGeolocated({
             positionOptions: {
                 enableHighAccuracy: true,
@@ -108,7 +108,7 @@ const Pusula: React.FC = () => {
     ) : (
         <div>Getting the location data&hellip; </div>
     )}
-        <button onClick={getPosition}>getPosition</button>
+        <button onClick={requestPermission}>requestPermission</button>
     </>;
 };
 

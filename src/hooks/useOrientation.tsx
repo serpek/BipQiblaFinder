@@ -29,6 +29,7 @@ interface DeviceMotionEventExtended extends DeviceMotionEvent {
 export function useOrientation(): {
     orientation: OrientationResult | undefined;
     motion: MotionResult | undefined
+    requestPermission: () => Promise<void>
 } {
     const [orientation, setOrientation] = useState<OrientationResult>()
     const [motion, setMotion] = useState<MotionResult>()
@@ -105,5 +106,5 @@ export function useOrientation(): {
         requestPermission().catch(console.error)
     }, []);
 
-    return {orientation, motion}
+    return {orientation, motion, requestPermission}
 }
