@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+import {Button, Card, Col, Layout, Row, Statistic} from "antd";
+import * as motion from "motion/react-client"
 import {useGeolocated, useOrientation} from "../../hooks";
-import {calcQiblaDegreeToPoint, getQiblaAngle} from "../../utils";
+import {calcQiblaDegreeToPoint, getDirectionName, getQiblaAngle, toFixed} from "../../utils";
+import './QiblaFinderQ5.css'
 
 const Pusula: React.FC = () => {
-
-    const {motion, orientation, orientationAbsolute, requestPermission} = useOrientation();
-
+    const {orientation, isOrientationGranted, requestPermission} = useOrientation();
     const {coords, isGeolocationAvailable, isGeolocationEnabled} =
         useGeolocated({
             positionOptions: {
@@ -14,114 +15,217 @@ const Pusula: React.FC = () => {
             userDecisionTimeout: 5000,
         });
 
+    const [deviceAngle, setDeviceAngle] = useState<number>(0);
+    const [deviceDirection, setDeviceDirection] = useState<string>('');
+    const [qiblaAngle, setQiblaAngle] = useState<number>(0);
+    const [qiblaDirection, setQiblaDirection] = useState<string>('');
+    const lastRotation = useRef<number>(0);
 
-    return <>{!isGeolocationAvailable ? (
-        <div>Your browser does not support Geolocation</div>
-    ) : !isGeolocationEnabled ? (
-        <div>Geolocation is not enabled</div>
-    ) : coords ? (
-        <table>
-            <tbody>
-            <tr>
-                <td>getQiblaAngle</td>
-                <td>{getQiblaAngle(coords.latitude, coords.longitude)}</td>
-            </tr>
-            <tr>
-                <td>calcQiblaDegreeToPoint</td>
-                <td>{calcQiblaDegreeToPoint(coords.latitude, coords.longitude)}</td>
-            </tr>
-            <tr>
-                <td>latitude</td>
-                <td>{coords.latitude}</td>
-            </tr>
-            <tr>
-                <td>longitude</td>
-                <td>{coords.longitude}</td>
-            </tr>
-            <tr>
-                <td>altitude</td>
-                <td>{coords.altitude}</td>
-            </tr>
-            <tr>
-                <td>heading</td>
-                <td>{coords.heading}</td>
-            </tr>
-            <tr>
-                <td>speed</td>
-                <td>{coords.speed}</td>
-            </tr>
-            <tr>
-                <td>accuracy</td>
-                <td>{coords.accuracy}</td>
-            </tr>
-            <tr>
-                <td>alpha (orientation)</td>
-                <td>{orientation?.alpha}</td>
-            </tr>
-            <tr>
-                <td>beta (orientation)</td>
-                <td>{orientation?.beta}</td>
-            </tr>
-            <tr>
-                <td>gamma (orientation)</td>
-                <td>{orientation?.gamma}</td>
-            </tr>
-            <tr>
-                <td>alpha (orientationAbsolute)</td>
-                <td>{orientationAbsolute?.alpha}</td>
-            </tr>
-            <tr>
-                <td>beta (orientationAbsolute)</td>
-                <td>{orientationAbsolute?.beta}</td>
-            </tr>
-            <tr>
-                <td>gamma (orientationAbsolute)</td>
-                <td>{orientationAbsolute?.gamma}</td>
-            </tr>
+    const smoothRotation = (newAngle: number) => {
+        let delta = newAngle - lastRotation.current;
+        if (delta > 180) delta -= 360;
+        if (delta < -180) delta += 360;
 
-            <tr>
-                <td>x (motion)</td>
-                <td>{motion?.x}</td>
-            </tr>
-            <tr>
-                <td>y (motion)</td>
-                <td>{motion?.y}</td>
-            </tr>
-            <tr>
-                <td>z (motion)</td>
-                <td>{motion?.z}</td>
-            </tr>
-            <tr>
-                <td>alpha (motion)</td>
-                <td>{motion?.alpha}</td>
-            </tr>
-            <tr>
-                <td>beta (motion)</td>
-                <td>{motion?.beta}</td>
-            </tr>
-            <tr>
-                <td>gamma (motion)</td>
-                <td>{motion?.gamma}</td>
-            </tr>
-            <tr>
-                <td>gravityX (motion)</td>
-                <td>{motion?.gravityX}</td>
-            </tr>
-            <tr>
-                <td>gravityY (motion)</td>
-                <td>{motion?.gravityY}</td>
-            </tr>
-            <tr>
-                <td>gravityZ (motion)</td>
-                <td>{motion?.gravityZ}</td>
-            </tr>
-            </tbody>
-        </table>
-    ) : (
-        <div>Getting the location data&hellip; </div>
-    )}
-        <button onClick={requestPermission}>requestPermission</button>
-    </>;
+        lastRotation.current = (lastRotation.current + delta) % 360;
+        if (lastRotation.current < 0) lastRotation.current += 360;
+
+        return lastRotation.current;
+    };
+
+    useEffect(() => {
+        if (orientation?.alpha) {
+            setDeviceAngle((360 - orientation.alpha) % 360)
+        }
+    }, [orientation]);
+
+    useEffect(() => {
+        if (coords) {
+            setQiblaAngle(() => getQiblaAngle(coords.latitude, coords.longitude))
+        }
+    }, [coords]);
+
+    useEffect(() => {
+        if (deviceAngle) {
+            const direction = getDirectionName(deviceAngle);
+            setDeviceDirection(direction.name)
+        }
+    }, [deviceAngle]);
+
+    useEffect(() => {
+        if (qiblaAngle) {
+            const direction = getDirectionName(qiblaAngle);
+            setQiblaDirection(direction.name)
+        }
+    }, [qiblaAngle]);
+
+    const rotation = smoothRotation((360 - deviceAngle) % 360);
+
+    return (
+        <Layout>
+            {rotation}
+            <Row gutter={16} justify="center" style={{marginBottom: 5}}>
+                <Col className="gutter-row" span={24}>
+                    <Card bordered={false} title="Pusula">
+                        <div
+                            className="compass"
+                            style={{
+                                width: '300px',
+                                height: '300px',
+                                backgroundImage: 'url(/assets/compass-4.png)',
+                                backgroundSize: 'cover',
+                                borderRadius: '50%',
+                                position: 'relative',
+                                margin: '0 auto',
+                                transform: `rotate(${deviceAngle}deg)`,
+                                transition: 'transform 0.5s ease-out',
+                            }}
+                        >
+                            <div style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                width: '40px',
+                                height: '40px',
+                                transform: `rotate(${qiblaAngle}deg) translateY(-60px) translate(-80%, -80%)`,
+                                transformOrigin: 'center'
+                            }}>
+                                <motion.div
+                                    initial={{scale: 1, opacity: 0.8}}
+                                    animate={{scale: [.7, 1.5, .7], opacity: [0.8, 0, 0.8]}}
+                                    transition={{duration: 2, repeat: Infinity, ease: "easeInOut"}}
+                                    style={{
+                                        position: 'absolute',
+                                        width: '40px',
+                                        height: '40px',
+                                        borderRadius: '50%',
+                                        background: 'rgba(0,255,4,0.4)',
+                                        zIndex: 0,
+                                    }}
+                                ></motion.div>
+                                <img
+                                    src="/assets/kaaba.png"
+                                    alt="Kaaba Icon"
+                                    style={{
+                                        width: '40px',
+                                        height: '40px',
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)',
+                                        transformOrigin: 'center',
+                                        transition: 'transform 0.5s ease-out',
+                                        zIndex: 1,
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </Card>
+                </Col>
+            </Row>
+
+            <Row gutter={16} style={{marginBottom: 5}}>
+                <Col className="gutter-row" span={12}>
+                    <Card bordered={false} title="Pusula Yönü">
+                        <Statistic
+                            title={deviceDirection}
+                            value={deviceAngle.toFixed(0)}
+                            precision={2}
+                            suffix={`°`}
+                        />
+                    </Card>
+                </Col>
+                <Col className="gutter-row" span={12}>
+                    <Card bordered={false} title="Kıble Yönü">
+                        {coords && <Statistic
+                            title={qiblaDirection}
+                            value={qiblaAngle}
+                            precision={2}
+                            suffix={`°`}
+                        />}
+                    </Card>
+                </Col>
+            </Row>
+
+            <Row gutter={16}>
+                <Col className="gutter-row" span={24}>
+                    {!isGeolocationAvailable ? (
+                        <div>Your browser does not support Geolocation</div>
+                    ) : !isGeolocationEnabled ? (
+                        <div>Geolocation is not enabled</div>
+                    ) : coords ? (
+                        <table className="compass-table">
+                            <tbody>
+                            <tr>
+                                <th>getQiblaAngle</th>
+                                <td>{getQiblaAngle(coords.latitude, coords.longitude)}</td>
+                            </tr>
+                            <tr>
+                                <th>calcQiblaDegreeToPoint</th>
+                                <td>{calcQiblaDegreeToPoint(coords.latitude, coords.longitude)}</td>
+                            </tr>
+                            <tr>
+                                <th>latitude</th>
+                                <td>{toFixed(coords.latitude, 2)}</td>
+                            </tr>
+                            <tr>
+                                <th>longitude</th>
+                                <td>{toFixed(coords.longitude, 2)}</td>
+                            </tr>
+                            <tr>
+                                <th>altitude</th>
+                                <td>{coords.altitude}</td>
+                            </tr>
+                            <tr>
+                                <th>heading</th>
+                                <td>{coords.heading}</td>
+                            </tr>
+                            <tr>
+                                <th>speed</th>
+                                <td>{coords.speed}</td>
+                            </tr>
+                            <tr>
+                                <th>accuracy</th>
+                                <td>{coords.accuracy}</td>
+                            </tr>
+                            <tr>
+                                <th>isGeolocationAvailable</th>
+                                <td>{isGeolocationAvailable ? 'granted' : 'denied'}</td>
+                            </tr>
+                            <tr>
+                                <th>isOrientationGranted</th>
+                                <td>{isOrientationGranted ? 'granted' : 'denied'}</td>
+                            </tr>
+                            <tr>
+                                <th>absolute</th>
+                                <td>{orientation?.absolute ? '1' : '0'}</td>
+                            </tr>
+                            <tr>
+                                <th>alpha</th>
+                                <td>{orientation?.alpha}</td>
+                            </tr>
+                            <tr>
+                                <th>beta</th>
+                                <td>{orientation?.beta}</td>
+                            </tr>
+                            <tr>
+                                <th>gamma</th>
+                                <td>{orientation?.gamma}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    ) : (
+                        <div>Getting the location data&hellip; </div>
+                    )}
+                </Col>
+            </Row>
+
+            <Row gutter={16} justify="center">
+                <Col className="gutter-row">
+                    <Button onClick={requestPermission}>requestPermission</Button>
+                </Col>
+            </Row>
+        </Layout>
+    );
 };
 
 export default Pusula;

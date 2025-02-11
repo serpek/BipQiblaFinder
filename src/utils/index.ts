@@ -21,6 +21,23 @@ export const calcQiblaDegreeToPoint = (latitude: number, longitude: number) => {
     return Math.round(psi);
 };
 
+export const directions = [
+    {name: 'Kuzey', short: 'N', angle: 0},
+    {name: 'Kuzeydoğu', short: 'NE', angle: 45},
+    {name: 'Doğu', short: 'E', angle: 90},
+    {name: 'Güneydoğu', short: 'SE', angle: 135},
+    {name: 'Güney', short: 'S', angle: 180},
+    {name: 'Güneybatı', short: 'SW', angle: 225},
+    {name: 'Batı', short: 'W', angle: 270},
+    {name: 'Kuzeybatı', short: 'NW', angle: 315},
+];
+
+type Direction = { name: string, short: string }
+
+export const getDirectionName = (angle: number): Direction => {
+    const index = Math.round(angle / 45) % 8;
+    return directions[index];
+};
 
 export function getQiblaAngle(latitude: number, longitude: number): number {
     const makkahLat = 21.4225 * (Math.PI / 180);
@@ -35,7 +52,7 @@ export function getQiblaAngle(latitude: number, longitude: number): number {
         Math.cos(userLat) * Math.tan(makkahLat) - Math.sin(userLat) * Math.cos(deltaLng)
     );
 
-    return (angle * (180 / Math.PI) + 360) % 360;
+    return toFixed((angle * (180 / Math.PI) + 360) % 360);
 }
 
 export function toRadians(degrees: number) {
@@ -44,4 +61,8 @@ export function toRadians(degrees: number) {
 
 export function toDegrees(radians: number) {
     return radians * (180 / Math.PI);
+}
+
+export function toFixed(value: number, radix: number = 0): number {
+    return Number.parseFloat(value.toFixed(radix))
 }
