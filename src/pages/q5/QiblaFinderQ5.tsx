@@ -145,10 +145,8 @@ const Pusula: React.FC = () => {
     }, [coords]);
 
     useEffect(() => {
-        if (deviceAngle) {
-            const direction = getDirectionName(deviceAngle);
-            setDeviceDirection(direction.name)
-        }
+        const direction = getDirectionName(deviceAngle);
+        setDeviceDirection(direction.name)
     }, [deviceAngle]);
 
     useEffect(() => {
@@ -239,22 +237,57 @@ const Pusula: React.FC = () => {
                             <Row gutter={16} style={{marginBottom: 5}}>
                                 <Col className="gutter-row" span={12}>
                                     <Card bordered={false} title="Pusula Yönü">
-                                        <Statistic
-                                            title={deviceDirection}
-                                            value={deviceAngle.toFixed(0)}
-                                            precision={2}
-                                            suffix={`°`}
-                                        />
+                                        <Row align="stretch" justify="center">
+                                            <Col>
+                                                <svg
+                                                    width="50"
+                                                    height="50"
+                                                    viewBox="0 0 100 100"
+                                                    style={{
+                                                        transform: `rotate(${deviceAngle}deg)`,
+                                                        margin: '0 auto',
+                                                        transition: 'transform 0.5s ease-out',
+                                                        background: '#efefef',
+                                                        borderRadius: '50%'
+                                                    }}
+                                                >
+                                                    <polygon points="50,10 60,40 50,30 40,40" fill="red"/>
+                                                </svg>
+                                                <Statistic
+                                                    title={deviceDirection}
+                                                    value={deviceAngle.toFixed(0)}
+                                                    precision={2}
+                                                    suffix={`°`}
+                                                />
+                                            </Col>
+                                        </Row>
                                     </Card>
                                 </Col>
                                 <Col className="gutter-row" span={12}>
                                     <Card bordered={false} title="Kıble Yönü">
-                                        {coords && <Statistic
-                                            title={qiblaDirection}
-                                            value={qiblaAngle}
-                                            precision={2}
-                                            suffix={`°`}
-                                        />}
+                                        <Row align="stretch" justify="center">
+                                            <Col>
+                                                <svg
+                                                    width="50"
+                                                    height="50"
+                                                    viewBox="0 0 100 100"
+                                                    style={{
+                                                        transform: `rotate(${qiblaAngle}deg)`,
+                                                        margin: '0 auto',
+                                                        transition: 'transform 0.5s ease-out',
+                                                        background: '#efefef',
+                                                        borderRadius: '50%'
+                                                    }}
+                                                >
+                                                    <polygon points="50,10 60,40 50,30 40,40" fill="red"/>
+                                                </svg>
+                                                <Statistic
+                                                    title={qiblaDirection}
+                                                    value={qiblaAngle.toFixed(0)}
+                                                    suffix="°"
+                                                />
+                                            </Col>
+                                        </Row>
                                     </Card>
                                 </Col>
                             </Row>
@@ -294,6 +327,14 @@ const Pusula: React.FC = () => {
                             <tr>
                                 <th>alpha</th>
                                 <td>{orientation?.alpha}</td>
+                            </tr>
+                            <tr>
+                                <th>Notrh</th>
+                                <td>
+                                    <span style={{color: !orientation?.absolute ? 'green' : 'red'}}>
+                                        {!orientation?.absolute ? 'Gerçek Kuzey Kullanılıyor' : 'Manyetik Kuzey Kullanılıyor'}
+                                    </span>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
