@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect, useState} from 'react';
+import React, {PropsWithChildren, useEffect, useMemo, useState} from 'react';
 import {Button, Card, Carousel, Col, Layout, Modal, Result, Row, Statistic, Tabs, TabsProps, Typography} from "antd";
 import {AndroidOutlined, AppleOutlined, CloseCircleOutlined} from "@ant-design/icons";
 import * as motion from "motion/react-client"
@@ -59,8 +59,6 @@ const ErrorView = (props: ErrorViewProps) => {
 }
 
 const CalibrateView = () => {
-
-
     const items: TabsProps['items'] = [
         {
             key: '1', icon: <AppleOutlined/>, label: 'IOS', children: <Carousel arrows infinite={false}>
@@ -233,8 +231,18 @@ const Pusula: React.FC = () => {
         if (qiblaAngle) {
             const direction = getDirectionName(qiblaAngle);
             setQiblaDirection(direction.name)
+
         }
     }, [qiblaAngle]);
+
+    const anglePoint = useMemo<boolean>(() => {
+        return (
+            (qiblaAngle < Math.abs(deviceAngle) &&
+                qiblaAngle + 15 > Math.abs(deviceAngle)) ||
+            qiblaAngle > Math.abs(deviceAngle + 15) ||
+            qiblaAngle < Math.abs(deviceAngle)
+        )
+    }, [deviceAngle])
 
     //const rotation = smoothRotation((360 - deviceAngle) % 360);
     const isError = !(isGeolocationAvailable || isGeolocationEnabled || isOrientationGranted)
@@ -392,6 +400,10 @@ const Pusula: React.FC = () => {
                     {coords && (
                         <table className="compass-table">
                             <tbody>
+                            <tr>
+                                <th>anglePoint</th>
+                                <td>{`${anglePoint}`}</td>
+                            </tr>
                             <tr>
                                 <th>latitude</th>
                                 <td>{toFixed(coords.latitude, 2)}</td>
