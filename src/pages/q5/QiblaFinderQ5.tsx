@@ -174,8 +174,14 @@ const CalibrateView = () => {
 
 }
 
-const CompassView = ({rotate, width, height}: { rotate: number, width: number, height: number }) => {
-    const [image] = useImage("/assets/compass-4.png");
+const CompassView = ({rotate, qible, width, height}: {
+    rotate: number,
+    qible: number,
+    width: number,
+    height: number
+}) => {
+    const [CompassImage] = useImage("/assets/compass-4.png");
+    const [KabaaImage] = useImage("/assets/kaaba.png");
 
     const offsetWidth = useMemo(() => (width / 2), []);
     const offsetHeight = useMemo(() => (width / 2), []);
@@ -189,7 +195,6 @@ const CompassView = ({rotate, width, height}: { rotate: number, width: number, h
                 height={height}
                 fill="red"
                 rotation={rotate}
-                image={image}
             />
             <Image
                 x={offsetWidth}
@@ -198,8 +203,18 @@ const CompassView = ({rotate, width, height}: { rotate: number, width: number, h
                 offsetY={offsetHeight}
                 width={width}
                 height={height}
-                image={image}
+                image={CompassImage}
                 rotation={rotate}
+            />
+            <Image
+                x={offsetWidth}
+                y={offsetHeight}
+                offsetX={offsetWidth - 50}
+                offsetY={offsetHeight - 50}
+                width={40}
+                height={40}
+                image={KabaaImage}
+                rotation={qible}
             />
         </Layer>
     </Stage>
@@ -233,13 +248,13 @@ const Pusula: React.FC = () => {
     };*/
 
     useEffect(() => {
-        if (orientation?.absolute) {
+        if (orientation?.absolute && qiblaAngle === -1) {
             Modal.destroyAll();
-            // modal.info({
-            //     icon: null,
-            //     title: 'Pusulanızı Kalibre Edin',
-            //     content: <CalibrateView/>
-            // })
+            modal.info({
+                icon: null,
+                title: 'Pusulanızı Kalibre Edin',
+                content: <CalibrateView/>
+            })
         }
     }, [orientation]);
 
@@ -299,7 +314,8 @@ const Pusula: React.FC = () => {
                             <Row gutter={16} justify="center" style={{marginBottom: 5}}>
                                 <Col className="gutter-row" span={24}>
                                     <Card bordered={false} title="Kıble Pusulası">
-                                        <CompassView rotate={deviceAngle} width={300} height={300}/>
+                                        {deviceAngle - qiblaAngle}
+                                        <CompassView rotate={deviceAngle} qible={qiblaAngle} width={300} height={300}/>
                                         <div
                                             className="compass"
                                             style={{
