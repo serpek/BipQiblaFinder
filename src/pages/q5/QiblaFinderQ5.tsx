@@ -1,7 +1,9 @@
-import React, {PropsWithChildren, useCallback, useEffect, useState} from 'react';
+import React, {PropsWithChildren, useCallback, useEffect, useMemo, useState} from 'react';
 import {Button, Card, Carousel, Col, Layout, Modal, Result, Row, Statistic, Tabs, TabsProps, Typography} from "antd";
 import {AndroidOutlined, AppleOutlined, CloseCircleOutlined} from "@ant-design/icons";
 import * as motion from "motion/react-client"
+import useImage from "use-image";
+import {Circle, Image, Layer, Stage} from "react-konva";
 
 import {useGeolocated, useOrientation} from "../../hooks";
 import {getDirectionName, getQiblaAngle, toFixed} from "../../utils";
@@ -172,6 +174,37 @@ const CalibrateView = () => {
 
 }
 
+const CompassView = ({rotate, width, height}: { rotate: number, width: number, height: number }) => {
+    const [image] = useImage("/assets/compass-4.png");
+
+    const offsetWidth = useMemo(() => (width / 2), []);
+    const offsetHeight = useMemo(() => (width / 2), []);
+
+    return <Stage width={width} height={height}>
+        <Layer>
+            <Circle
+                x={offsetWidth}
+                y={offsetHeight}
+                width={width}
+                height={height}
+                fill="red"
+                rotation={rotate}
+                image={image}
+            />
+            <Image
+                x={offsetWidth}
+                y={offsetHeight}
+                offsetX={offsetWidth}
+                offsetY={offsetHeight}
+                width={width}
+                height={height}
+                image={image}
+                rotation={rotate}
+            />
+        </Layer>
+    </Stage>
+}
+
 const Pusula: React.FC = () => {
     const [modal, contextHolder] = useModal()
     const {orientation, isOrientationGranted, requestPermission} = useOrientation();
@@ -200,7 +233,7 @@ const Pusula: React.FC = () => {
     };*/
 
     useEffect(() => {
-        if (!orientation?.absolute) {
+        if (orientation?.absolute) {
             Modal.destroyAll();
             modal.info({
                 icon: null,
@@ -212,8 +245,7 @@ const Pusula: React.FC = () => {
 
     useEffect(() => {
         if (orientation?.alpha) {
-            // setDeviceAngle((360 - orientation.alpha) % 360)
-            setDeviceAngle(orientation.alpha)
+            setDeviceAngle((360 - orientation.alpha) % 360)
         }
     }, [orientation]);
 
@@ -267,6 +299,7 @@ const Pusula: React.FC = () => {
                             <Row gutter={16} justify="center" style={{marginBottom: 5}}>
                                 <Col className="gutter-row" span={24}>
                                     <Card bordered={false} title="Kıble Pusulası">
+                                        <CompassView rotate={deviceAngle} width={300} height={300}/>
                                         <div
                                             className="compass"
                                             style={{

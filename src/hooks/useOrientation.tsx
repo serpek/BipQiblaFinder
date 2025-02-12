@@ -56,10 +56,8 @@ export function useOrientation(): {
         if (isOrientationGranted) {
 
             if (isIOS) {
-                alert('deviceorientation')
                 window.addEventListener("deviceorientation", handleOrientation, true);
             } else {
-                alert('deviceorientationabsolute')
                 window.addEventListener("deviceorientationabsolute", handleOrientation, true);
             }
 
