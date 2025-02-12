@@ -235,11 +235,11 @@ const Pusula: React.FC = () => {
     useEffect(() => {
         if (orientation?.absolute) {
             Modal.destroyAll();
-            modal.info({
-                icon: null,
-                title: 'Pusulanızı Kalibre Edin',
-                content: <CalibrateView/>
-            })
+            // modal.info({
+            //     icon: null,
+            //     title: 'Pusulanızı Kalibre Edin',
+            //     content: <CalibrateView/>
+            // })
         }
     }, [orientation]);
 
