@@ -40,7 +40,8 @@ export function useOrientation(): {
             // @ts-expect-error iOS özellik kontrolü
             alpha = e.webkitCompassHeading;
         } else if (e.absolute && typeof e.alpha === 'number') {
-            alpha = (360 - e.alpha) % 360;
+            // alpha = (360 - e.alpha) % 360;
+            alpha = e.alpha;
         }
         setOrientation((prev) => ({
             ...prev,

@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, useEffect, useMemo, useState} from 'react';
+import React, {PropsWithChildren, useCallback, useEffect, useState} from 'react';
 import {Button, Card, Carousel, Col, Layout, Modal, Result, Row, Statistic, Tabs, TabsProps, Typography} from "antd";
 import {AndroidOutlined, AppleOutlined, CloseCircleOutlined} from "@ant-design/icons";
 import * as motion from "motion/react-client"
@@ -212,7 +212,8 @@ const Pusula: React.FC = () => {
 
     useEffect(() => {
         if (orientation?.alpha) {
-            setDeviceAngle((360 - orientation.alpha) % 360)
+            // setDeviceAngle((360 - orientation.alpha) % 360)
+            setDeviceAngle(orientation.alpha)
         }
     }, [orientation]);
 
@@ -235,7 +236,7 @@ const Pusula: React.FC = () => {
         }
     }, [qiblaAngle]);
 
-    const anglePoint = useMemo<boolean>(() => {
+    const anglePoint = useCallback(() => {
         return (
             (qiblaAngle < Math.abs(deviceAngle) &&
                 qiblaAngle + 15 > Math.abs(deviceAngle)) ||
@@ -402,7 +403,7 @@ const Pusula: React.FC = () => {
                             <tbody>
                             <tr>
                                 <th>anglePoint</th>
-                                <td>{`${anglePoint}`}</td>
+                                <td>{`${anglePoint()}`}</td>
                             </tr>
                             <tr>
                                 <th>latitude</th>
