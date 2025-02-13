@@ -38,13 +38,7 @@ const Pusula: React.FC = () => {
 
   useEffect(() => {
     if (orientation?.alpha) {
-      const declination = 4.2
-      const angle = (orientation.alpha + declination + 360) % 360
-
-      console.log({
-        alpha: orientation.alpha,
-        angle
-      })
+      const angle = (orientation.alpha + 360) % 360
 
       // const angle = (360 - orientation.alpha) % 360
       const direction = getDirectionName(angle)
