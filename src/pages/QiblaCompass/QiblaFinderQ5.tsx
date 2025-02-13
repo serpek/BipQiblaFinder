@@ -40,13 +40,13 @@ const Pusula: React.FC = () => {
   useEffect(() => {
     if (orientation?.alpha) {
       //const angle = (orientation.alpha + 360) % 360
-
-      const angle = (360 - orientation.alpha) % 360
+      console.log(offset)
+      const angle = (360 - (orientation.alpha + offset)) % 360
       const direction = getDirectionName(angle)
       setDeviceDirection(direction.name)
       setDeviceAngle(angle)
     }
-  }, [orientation])
+  }, [offset, orientation])
 
   useEffect(() => {
     if (coords) {
