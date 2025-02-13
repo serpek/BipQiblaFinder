@@ -1,1 +1,2 @@
-export * from './Map';
+export * from './Compass'
+export * from './Map'
