@@ -39,19 +39,17 @@ const Pusula: React.FC = () => {
   useEffect(() => {
     if (orientation?.alpha) {
       const declination = 4.2
-      const trueNorth = (orientation.alpha + declination + 360) % 360
-      const correctedAngle = trueNorth % 360
+      const angle = (orientation.alpha + declination + 360) % 360
 
       console.log({
         alpha: orientation.alpha,
-        trueNorth,
-        correctedAngle
+        angle
       })
 
       // const angle = (360 - orientation.alpha) % 360
-      const direction = getDirectionName(correctedAngle)
+      const direction = getDirectionName(angle)
       setDeviceDirection(direction.name)
-      setDeviceAngle(correctedAngle)
+      setDeviceAngle(angle)
     }
   }, [orientation])
 
@@ -135,7 +133,7 @@ const Pusula: React.FC = () => {
                         </svg>
                         <Statistic
                           title={deviceDirection}
-                          value={deviceAngle.toFixed(0)}
+                          value={((360 - deviceAngle) % 360).toFixed(0)}
                           precision={2}
                           suffix={`°`}
                         />
