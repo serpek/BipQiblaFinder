@@ -6,7 +6,7 @@ export class AngleUtils {
    * @return {number} Angle in radians
    */
   public static toRadians(deg: number): number {
-    return (deg / 180.0) * Math.PI;
+    return (deg / 180.0) * Math.PI
   }
 
   /**
@@ -15,7 +15,7 @@ export class AngleUtils {
    * @return {number} Angle in degrees
    */
   public static toDegrees(rad: number): number {
-    return (rad * 180.0) / Math.PI;
+    return (rad * 180.0) / Math.PI
   }
 
   /**
@@ -25,6 +25,6 @@ export class AngleUtils {
    * @return {number} Compass angle in degrees
    */
   public static adjust(result: number): number {
-    return Math.round(result <= 0 ? result * -1.0 : 360 - result);
+    return Math.round(result <= 0 ? result * -1.0 : 360 - result)
   }
 }

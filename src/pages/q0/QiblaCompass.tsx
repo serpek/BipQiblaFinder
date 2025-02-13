@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
-import { useDevicePermissions } from '../../hooks';
-import { Qibla } from '../../utils';
-import './QiblaCompass.css';
+import { useEffect, useRef, useState } from 'react'
+import { useDevicePermissions } from '../../hooks'
+import { Qibla } from '../../utils'
+import './QiblaCompass.css'
 
 function QiblaCompass() {
   const {
@@ -10,29 +10,29 @@ function QiblaCompass() {
     requestLocation,
     requestMotionPermission,
     geoPermission,
-    motionPermission,
-  } = useDevicePermissions();
+    motionPermission
+  } = useDevicePermissions()
 
-  const [pointDegree, setPointDegree] = useState(0);
+  const [pointDegree, setPointDegree] = useState(0)
 
-  const compassCircle = useRef<HTMLDivElement>(null);
-  const myPoint = useRef<HTMLDivElement>(null);
+  const compassCircle = useRef<HTMLDivElement>(null)
+  const myPoint = useRef<HTMLDivElement>(null)
 
   const isIOS =
     navigator.userAgent.match(/(iPod|iPhone|iPad)/) &&
-    navigator.userAgent.match(/AppleWebKit/);
+    navigator.userAgent.match(/AppleWebKit/)
 
   useEffect(() => {
     console.log(motionPermission, geoPermission)
-  }, [motionPermission, geoPermission]);
+  }, [motionPermission, geoPermission])
 
   useEffect(() => {
-    const compass = orientation.alpha;
+    const compass = orientation.alpha
 
-    if (compass === null) return;
+    if (compass === null) return
 
     if (compassCircle.current) {
-      compassCircle.current.style.transform = `translate(-50%, -50%) rotate(${-compass}deg)`;
+      compassCircle.current.style.transform = `translate(-50%, -50%) rotate(${-compass}deg)`
     }
 
     if (myPoint.current) {
@@ -42,25 +42,25 @@ function QiblaCompass() {
         pointDegree > Math.abs(compass + 15) ||
         pointDegree < Math.abs(compass)
       ) {
-        myPoint.current.style.opacity = '0';
+        myPoint.current.style.opacity = '0'
       } else if (pointDegree) {
-        myPoint.current.style.opacity = '1';
+        myPoint.current.style.opacity = '1'
       }
     }
-  }, [orientation, pointDegree]);
+  }, [orientation, pointDegree])
 
   useEffect(() => {
-    const { latitude, longitude } = location;
+    const { latitude, longitude } = location
 
-    if (latitude === null || longitude === null) return;
+    if (latitude === null || longitude === null) return
 
     //setPointDegree(() => calcDegreeToPoint(latitude, longitude));
-    setPointDegree(() => Qibla.degreesFromTrueNorth(latitude, longitude));
+    setPointDegree(() => Qibla.degreesFromTrueNorth(latitude, longitude))
 
     if (pointDegree < 0) {
-      setPointDegree(() => pointDegree + 360);
+      setPointDegree(() => pointDegree + 360)
     }
-  }, [location]);
+  }, [location])
 
   return (
     <>
@@ -82,13 +82,8 @@ function QiblaCompass() {
         <div className="compass-circle" ref={compassCircle}></div>
         <div className="my-point" ref={myPoint}></div>
       </div>
-      {/*<div>
-         <div>pointDegree: {pointDegree}</div>
-        <div>compass: {orientation.alpha}</div>
-        <div>Position: {JSON.stringify(location)}</div>
-          </div>*/}
     </>
-  );
+  )
 }
 
-export default QiblaCompass;
+export default QiblaCompass

@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Card, Col, Layout, Row, Statistic } from 'antd'
 
-import { useGeolocated, useModal, useOrientation } from '../../hooks'
-import { getDirectionName, getQiblaAngle, toFixed } from '../../utils'
+import { useGeolocated, useOrientation } from '../../hooks'
+import { getDirectionName, Qibla, toFixed } from '../../utils'
 
 import { CompassWithHTML } from '../../components'
-import { CalibrateView, ErrorView } from '../../views'
+import { ErrorView } from '../../views'
 
 import './QiblaFinderQ5.css'
 
 const Pusula: React.FC = () => {
-  const { modal } = useModal()
+  // const { modal } = useModal()
   const { orientation, isOrientationGranted, requestPermission } =
     useOrientation()
   const { coords, isGeolocationAvailable, isGeolocationEnabled, getPosition } =
@@ -25,62 +25,55 @@ const Pusula: React.FC = () => {
   const [deviceDirection, setDeviceDirection] = useState<string>('')
   const [qiblaAngle, setQiblaAngle] = useState<number>(0)
   const [qiblaDirection, setQiblaDirection] = useState<string>('')
-  //const lastRotation = useRef<number>(0);
-  /*const smoothRotation = (newAngle: number) => {
-                                                  let delta = newAngle - lastRotation.current;
-                                                  if (delta > 180) delta -= 360;
-                                                  if (delta < -180) delta += 360;
-  
-                                                  lastRotation.current = (lastRotation.current + delta) % 360;
-                                                  if (lastRotation.current < 0) lastRotation.current += 360;
-  
-                                                  return lastRotation.current;
-                                              };*/
 
-  useEffect(() => {
-    if (!orientation?.absolute) {
-      modal.info({
-        icon: null,
-        title: 'Pusulanızı Kalibre Edin',
-        content: <CalibrateView />
-      })
-    }
-  }, [orientation])
+  // useEffect(() => {
+  //   if (!orientation?.absolute) {
+  //     modal.info({
+  //       icon: null,
+  //       title: 'Pusulanızı Kalibre Edin',
+  //       content: <CalibrateView />
+  //     })
+  //   }
+  // }, [orientation])
 
   useEffect(() => {
     if (orientation?.alpha) {
-      setDeviceAngle((360 - orientation.alpha) % 360)
+      const declination = 4.2
+      const trueNorth = (orientation.alpha + 4.2 + 360) % 360
+      const correctedAngle =
+        (360 - ((orientation.alpha + declination + 360) % 360)) % 360
+
+      console.log({
+        alpha: orientation.alpha,
+        trueNorth,
+        correctedAngle
+      })
+
+      const angle = (360 - orientation.alpha) % 360
+      const direction = getDirectionName(correctedAngle)
+      setDeviceDirection(direction.name)
+      setDeviceAngle(correctedAngle)
     }
   }, [orientation])
 
   useEffect(() => {
     if (coords) {
-      setQiblaAngle(() => getQiblaAngle(coords.latitude, coords.longitude))
+      const angle = Qibla.degreesFromTrueNorth(
+        coords.latitude,
+        coords.longitude
+      )
+      setQiblaAngle(angle)
+      const direction = getDirectionName(angle)
+      setQiblaDirection(direction.name)
     }
   }, [coords])
 
-  useEffect(() => {
-    const direction = getDirectionName(deviceAngle)
-    setDeviceDirection(direction.name)
-  }, [deviceAngle])
+  const anglePoint = useMemo(() => {
+    let diff = Math.abs(deviceAngle - qiblaAngle)
+    diff = Math.min(diff, 360 - diff) // 0° ve 360° geçişini düzeltir
+    return diff <= 10
+  }, [qiblaAngle, deviceAngle])
 
-  useEffect(() => {
-    if (qiblaAngle) {
-      const direction = getDirectionName(qiblaAngle)
-      setQiblaDirection(direction.name)
-    }
-  }, [qiblaAngle])
-
-  const anglePoint = useCallback(() => {
-    return (
-      (qiblaAngle < Math.abs(deviceAngle) &&
-        qiblaAngle + 15 > Math.abs(deviceAngle)) ||
-      qiblaAngle > Math.abs(deviceAngle + 15) ||
-      qiblaAngle < Math.abs(deviceAngle)
-    )
-  }, [deviceAngle])
-
-  //const rotation = smoothRotation((360 - deviceAngle) % 360);
   const isError = !(
     isGeolocationAvailable ||
     isGeolocationEnabled ||
@@ -206,7 +199,7 @@ const Pusula: React.FC = () => {
               <tbody>
                 <tr>
                   <th>anglePoint</th>
-                  <td>{`${anglePoint()}`}</td>
+                  <td>{`${anglePoint}`}</td>
                 </tr>
                 <tr>
                   <th>latitude</th>

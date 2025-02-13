@@ -1,4 +1,4 @@
-import { AngleUtils } from './angle-utils';
+import { AngleUtils } from './angle-utils'
 
 /** A helper class to provide you the qibla direction
  * relative to True North based on provided coordinates */
@@ -14,12 +14,12 @@ export class Qibla {
     longitude: number
   ): number {
     // Kaaba: https://www.google.com/maps/place/Kaaba/@21.4224576,39.8260568,63m
-    const qiblaLocationLat = 21.4224576;
-    const qiblaLocationLong = 39.8260568;
+    const qiblaLocationLat = 21.4224576
+    const qiblaLocationLong = 39.8260568
 
-    const phiS = AngleUtils.toRadians(latitude);
-    const phiF = AngleUtils.toRadians(qiblaLocationLat);
-    const deltaL = AngleUtils.toRadians(longitude - qiblaLocationLong);
+    const phiS = AngleUtils.toRadians(latitude)
+    const phiF = AngleUtils.toRadians(qiblaLocationLat)
+    const deltaL = AngleUtils.toRadians(longitude - qiblaLocationLong)
 
     return AngleUtils.adjust(
       AngleUtils.toDegrees(
@@ -28,6 +28,6 @@ export class Qibla {
           Math.cos(phiS) * Math.tan(phiF) - Math.sin(phiS) * Math.cos(deltaL)
         )
       )
-    );
+    )
   }
 }
