@@ -21,6 +21,7 @@ const Pusula: React.FC = () => {
       userDecisionTimeout: 5000
     })
 
+  const [offset, setOffset] = useState<number>(0)
   const [deviceAngle, setDeviceAngle] = useState<number>(0)
   const [deviceDirection, setDeviceDirection] = useState<string>('')
   const [qiblaAngle, setQiblaAngle] = useState<number>(0)
@@ -104,6 +105,31 @@ const Pusula: React.FC = () => {
                   </Card>
                 </Col>
               </Row>
+
+              <Row gutter={16} style={{ marginBottom: 5 }}>
+                <Col className="gutter-row" span={24}>
+                  <Card bordered={false} title="Kalibrasyon Düzeltmesi">
+                    <input
+                      style={{ width: '100%' }}
+                      type="range"
+                      min="-10"
+                      max="10"
+                      value={offset}
+                      onChange={(e) => setOffset(Number(e.target.value))}
+                    />
+                    <p>Offset: {offset}°</p>
+                    <p
+                      style={{
+                        color: orientation?.absolute ? 'red' : 'green'
+                      }}>
+                      {orientation?.absolute
+                        ? 'Manyetik Kuzey Kullanılıyor'
+                        : 'Gerçek Kuzey Kullanılıyor'}
+                    </p>
+                  </Card>
+                </Col>
+              </Row>
+
               <Row gutter={16} style={{ marginBottom: 5 }}>
                 <Col className="gutter-row" span={12}>
                   <Card bordered={false} title="Pusula Yönü">
