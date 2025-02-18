@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import { Button, Drawer, Image, Layout, Menu, MenuProps } from 'antd'
 import { MenuOutlined } from '@ant-design/icons'
 
-import './BasicLayout.css'
+import './BasicLayout.scss'
 
 const { Header, Content, Footer } = Layout
 
@@ -29,11 +29,7 @@ const BasicLayout: React.FC = () => {
   }
 
   return (
-    <Layout
-      style={{
-        height: '100vh',
-        backgroundColor: 'transparent'
-      }}>
+    <Layout className="layout-main">
       <Header className="layout-header">
         <Button
           type="text"
@@ -44,7 +40,7 @@ const BasicLayout: React.FC = () => {
         />
       </Header>
 
-      <Content style={{ padding: '20px', overflow: 'scroll', height: '100vh' }}>
+      <Content className="layout-content">
         <Outlet />
       </Content>
 

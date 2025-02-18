@@ -5,24 +5,18 @@ import LogRocket from 'logrocket'
 import { ConfigProvider, ThemeConfig } from 'antd'
 import trTR from 'antd/locale/tr_TR'
 
-import '@ant-design/v5-patch-for-react-19'
-
 import { BasicLayout } from './layouts'
+import { ModalProvider } from './hooks'
 import {
   Blank,
-  Compass0,
-  Compass1,
-  Compass2,
-  Compass3,
-  Compass4,
   CookiePolicy,
   PrivacyPolicy,
   QiblaCompass,
   TermsOfUse
 } from './pages'
 
+import '@ant-design/v5-patch-for-react-19'
 import './index.css'
-import { ModalProvider } from './hooks'
 
 const client = new ClientJS()
 const fingerprint = client.getFingerprint()
@@ -48,11 +42,6 @@ createRoot(document.getElementById('root')!).render(
           <Route element={<BasicLayout />}>
             <Route index element={<QiblaCompass />} />
             <Route path="/b0" element={<Blank />} />
-            <Route path="/q0" element={<Compass0 />} />
-            <Route path="/q1" element={<Compass1 />} />
-            <Route path="/q2" element={<Compass2 />} />
-            <Route path="/q3" element={<Compass3 />} />
-            <Route path="/q4" element={<Compass4 />} />
             <Route path="/terms" element={<TermsOfUse />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/cookie" element={<CookiePolicy />} />

@@ -1,1 +1,1 @@
-export {default} from './QiblaFinderQ5'
+export { default } from './QiblaFinder'

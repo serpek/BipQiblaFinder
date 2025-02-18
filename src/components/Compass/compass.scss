@@ -1,0 +1,88 @@
+.compass {
+  position: relative;
+  border-radius: 50%;
+  background-image: url("/assets/compass.png");
+  background-size: cover;
+  margin: 0 auto;
+  transition: transform 0.5s ease-out;
+
+  .arrow-wrapper {
+    width: 100%;
+    height: 100%;
+
+    .qible-arrow {
+      position: absolute;
+      background: transparent url("/assets/arrow.png") no-repeat center center;
+      background-size: contain;
+      transform-origin: center;
+      width: 100%;
+      height: 100px;
+      text-align: center;
+      left: 0;
+      top: 60px;
+
+      .kabe-icon {
+        width: 50px;
+        position: absolute;
+        left: 50%;
+        margin-left: -25px;
+        top: -83px;
+      }
+    }
+  }
+
+  .compass-arrow {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    .arrow-in {
+      background: transparent url("/assets/arrow-in.png") no-repeat center center;
+      background-size: contain;
+      transform-origin: center;
+      width: 100%;
+      height: 60px;
+      text-align: center;
+      position: relative;
+      top: 80px;
+    }
+  }
+}
+
+.compass > .arrow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  transform: rotate(152deg);
+  background: url(/assets/kaaba.png) 50% 0% no-repeat;
+  background-size: 20%;
+  z-index: 1;
+  border-radius: 50%;
+}
+
+.compass > .compass-circle,
+.compass > .my-point {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease-out;
+  background: url(/assets/compass.png) center no-repeat;
+  background-size: contain;
+}
+
+.compass > .my-point {
+  opacity: 0;
+  width: 20%;
+  height: 20%;
+  background: rgb(8, 223, 69) url(/assets/kaaba.png) center no-repeat;
+  border-radius: 50%;
+  transition: opacity 0.5s ease-out;
+  background-size: 80%;
+}

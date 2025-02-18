@@ -1,25 +1,27 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Card, Col, Layout, Row, Statistic } from 'antd'
+import { useGeolocation, useWindowSize } from 'react-use'
 
-import { useGeolocated, useOrientation } from '../../hooks'
-import { getDirectionName, Qibla, toFixed } from '../../utils'
+import { useOrientation } from '../../hooks'
+import { getDirectionName, Qibla } from '../../utils'
 
 import { CompassWithHTML } from '../../components'
-import { ErrorView } from '../../views'
 
-import './QiblaFinderQ5.css'
+import './QiblaFinder.scss'
 
 const Pusula: React.FC = () => {
   // const { modal } = useModal()
   const { orientation, isOrientationGranted, requestPermission } =
     useOrientation()
-  const { coords, isGeolocationAvailable, isGeolocationEnabled, getPosition } =
-    useGeolocated({
-      positionOptions: {
-        enableHighAccuracy: true
-      },
-      userDecisionTimeout: 5000
-    })
+  // const { coords, isGeolocationAvailable, isGeolocationEnabled, getPosition } =
+  //   useGeolocated({
+  //     positionOptions: {
+  //       enableHighAccuracy: true
+  //     },
+  //     userDecisionTimeout: 5000
+  //   })
+  const state = useGeolocation()
+  const size = useWindowSize()
 
   const [debug, setDebug] = useState<boolean>(false)
   const [offset, setOffset] = useState<number>(0)
@@ -53,58 +55,49 @@ const Pusula: React.FC = () => {
   }, [offset, orientation])
 
   useEffect(() => {
-    if (coords) {
-      const angle = Qibla.degreesFromTrueNorth(
-        coords.latitude,
-        coords.longitude
-      )
+    if (!state.loading && !state.error && state.latitude && state.longitude) {
+      const angle = Qibla.degreesFromTrueNorth(state.latitude, state.longitude)
       setQiblaAngle(angle)
       const direction = getDirectionName(angle)
       setQiblaDirection(direction.name)
     }
-  }, [coords])
+  }, [state])
 
-  const anglePoint = useMemo(() => {
-    let diff = Math.abs(deviceAngle - qiblaAngle)
-    diff = Math.min(diff, 360 - diff) // 0° ve 360° geçişini düzeltir
-    return diff <= 10
-  }, [qiblaAngle, deviceAngle])
+  // const anglePoint = useMemo(() => {
+  //   let diff = Math.abs(deviceAngle - qiblaAngle)
+  //   diff = Math.min(diff, 360 - diff) // 0° ve 360° geçişini düzeltir
+  //   return diff <= 10
+  // }, [qiblaAngle, deviceAngle])
 
-  const isError = !(
-    isGeolocationAvailable ||
-    isGeolocationEnabled ||
-    isOrientationGranted
-  )
+  const isError = state.error || !isOrientationGranted
 
   return (
     <Layout
       style={{
         backgroundColor: 'transparent'
       }}>
-      {isError && (
-        <ErrorView
-          locationActive={isGeolocationAvailable}
-          locationGranted={isGeolocationEnabled}
-          orientationGranted={isOrientationGranted}
-          requestPermissionClick={() => window.location.reload()}
-        />
-      )}
+      {/*{isError && (*/}
+      {/*  <ErrorView*/}
+      {/*    locationActive={isGeolocationAvailable}*/}
+      {/*    locationGranted={isGeolocationEnabled}*/}
+      {/*    orientationGranted={isOrientationGranted}*/}
+      {/*    requestPermissionClick={() => window.location.reload()}*/}
+      {/*  />*/}
+      {/*)}*/}
+      {state.loading && <p>loading... (you may need to enable permissions)</p>}
+
+      {state.error && <p>Enable permissions to access your location data</p>}
 
       {!isError && (
         <>
-          {coords ? (
+          {state ? (
             <>
-              <Row gutter={16} justify="center" style={{ marginBottom: 5 }}>
-                <Col className="gutter-row" span={24}>
-                  <CompassWithHTML
-                    angle={deviceAngle}
-                    qible={qiblaAngle}
-                    width={'100vm'}
-                    height={'100vm'}
-                    marginTop={'25%'}
-                  />
-                </Col>
-              </Row>
+              <CompassWithHTML
+                angle={deviceAngle}
+                qible={qiblaAngle}
+                width={size.width - 60}
+                height={size.width - 60}
+              />
 
               {debug && (
                 <>
@@ -198,9 +191,7 @@ const Pusula: React.FC = () => {
           ) : (
             <>
               <Row gutter={16} justify="center">
-                <Col className="gutter-row">
-                  <Button onClick={getPosition}>Pozisyonu Al</Button>
-                </Col>
+                <Col className="gutter-row"></Col>
                 <Col className="gutter-row">
                   <Button onClick={requestPermission}>
                     Sensör Bilgilerini Al
@@ -210,52 +201,6 @@ const Pusula: React.FC = () => {
             </>
           )}
         </>
-      )}
-
-      {debug && (
-        <Row gutter={16}>
-          <Col className="gutter-row" span={24}>
-            {coords && (
-              <table className="compass-table">
-                <tbody>
-                  <tr>
-                    <th>anglePoint</th>
-                    <td>{`${anglePoint}`}</td>
-                  </tr>
-                  <tr>
-                    <th>latitude</th>
-                    <td>{toFixed(coords.latitude, 2)}</td>
-                  </tr>
-                  <tr>
-                    <th>longitude</th>
-                    <td>{toFixed(coords.longitude, 2)}</td>
-                  </tr>
-                  <tr>
-                    <th>absolute</th>
-                    <td>{orientation?.absolute ? '1' : '0'}</td>
-                  </tr>
-                  <tr>
-                    <th>alpha</th>
-                    <td>{orientation?.alpha}</td>
-                  </tr>
-                  <tr>
-                    <th>Notrh</th>
-                    <td>
-                      <span
-                        style={{
-                          color: !orientation?.absolute ? 'green' : 'red'
-                        }}>
-                        {!orientation?.absolute
-                          ? 'Gerçek Kuzey Kullanılıyor'
-                          : 'Manyetik Kuzey Kullanılıyor'}
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            )}
-          </Col>
-        </Row>
       )}
     </Layout>
   )
