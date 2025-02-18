@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Card, Col, Layout, Row, Statistic } from 'antd'
+import { Button, Card, Col, Layout, Row, Spin, Statistic } from 'antd'
 import { useGeolocation, useWindowSize } from 'react-use'
 
 import { useOrientation } from '../../hooks'
@@ -8,6 +8,7 @@ import { getDirectionName, Qibla } from '../../utils'
 import { CompassWithHTML } from '../../components'
 
 import './QiblaFinder.scss'
+import { ErrorView } from '../../views'
 
 const Pusula: React.FC = () => {
   // const { modal } = useModal()
@@ -26,8 +27,8 @@ const Pusula: React.FC = () => {
   const [debug, setDebug] = useState<boolean>(false)
   const [offset, setOffset] = useState<number>(0)
   const [deviceAngle, setDeviceAngle] = useState<number>(0)
-  const [deviceDirection, setDeviceDirection] = useState<string>('')
   const [qiblaAngle, setQiblaAngle] = useState<number>(0)
+  const [deviceDirection, setDeviceDirection] = useState<string>('')
   const [qiblaDirection, setQiblaDirection] = useState<string>('')
 
   // useEffect(() => {
@@ -63,34 +64,18 @@ const Pusula: React.FC = () => {
     }
   }, [state])
 
-  // const anglePoint = useMemo(() => {
-  //   let diff = Math.abs(deviceAngle - qiblaAngle)
-  //   diff = Math.min(diff, 360 - diff) // 0° ve 360° geçişini düzeltir
-  //   return diff <= 10
-  // }, [qiblaAngle, deviceAngle])
-
-  const isError = state.error || !isOrientationGranted
+  const isError = !!state.error || !isOrientationGranted
 
   return (
     <Layout
       style={{
         backgroundColor: 'transparent'
       }}>
-      {/*{isError && (*/}
-      {/*  <ErrorView*/}
-      {/*    locationActive={isGeolocationAvailable}*/}
-      {/*    locationGranted={isGeolocationEnabled}*/}
-      {/*    orientationGranted={isOrientationGranted}*/}
-      {/*    requestPermissionClick={() => window.location.reload()}*/}
-      {/*  />*/}
-      {/*)}*/}
-      {state.loading && <p>loading... (you may need to enable permissions)</p>}
-
-      {state.error && <p>Enable permissions to access your location data</p>}
+      {state.error && <ErrorView message={state.error?.message} />}
 
       {!isError && (
-        <>
-          {state ? (
+        <Spin spinning={state.loading} delay={500}>
+          {state && (
             <>
               <CompassWithHTML
                 angle={deviceAngle}
@@ -188,19 +173,13 @@ const Pusula: React.FC = () => {
                 </>
               )}
             </>
-          ) : (
+          )}
+          {!state && (
             <>
-              <Row gutter={16} justify="center">
-                <Col className="gutter-row"></Col>
-                <Col className="gutter-row">
-                  <Button onClick={requestPermission}>
-                    Sensör Bilgilerini Al
-                  </Button>
-                </Col>
-              </Row>
+              <Button onClick={requestPermission}>Sensör Bilgilerini Al</Button>
             </>
           )}
-        </>
+        </Spin>
       )}
     </Layout>
   )

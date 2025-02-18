@@ -1,4 +1,4 @@
-import { type CSSProperties, PropsWithChildren } from 'react'
+import { type CSSProperties, PropsWithChildren, useMemo } from 'react'
 import './compass.scss'
 
 type CompassViewProps = PropsWithChildren<
@@ -13,6 +13,12 @@ export const CompassWithHTML = ({
   qible,
   ...styles
 }: CompassViewProps) => {
+  const anglePoint = useMemo(() => {
+    let diff = Math.abs(((360 - angle) % 360) - qible)
+    diff = Math.min(diff, 360 - diff) // 0° ve 360° geçişini düzeltir
+    return diff <= 10
+  }, [angle, qible])
+
   return (
     <>
       <div
@@ -38,7 +44,10 @@ export const CompassWithHTML = ({
 
         <div
           className="compass-arrow"
-          style={{ transform: `rotate(${(360 - angle) % 360}deg)` }}>
+          style={{
+            transform: `rotate(${(360 - angle) % 360}deg)`,
+            opacity: anglePoint ? 1 : 0.5
+          }}>
           <div className="arrow-in"></div>
         </div>
       </div>

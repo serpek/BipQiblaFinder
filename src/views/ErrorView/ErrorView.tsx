@@ -5,10 +5,11 @@ import { CloseCircleOutlined } from '@ant-design/icons'
 const { Paragraph, Text } = Typography
 
 type ErrorViewProps = PropsWithChildren<{
-  locationGranted: boolean
-  locationActive: boolean
-  orientationGranted: boolean
-  requestPermissionClick: () => void
+  message?: string
+  locationGranted?: boolean
+  locationActive?: boolean
+  orientationGranted?: boolean
+  requestPermissionClick?: () => void
 }>
 
 export const ErrorView = (props: ErrorViewProps) => {
@@ -17,6 +18,13 @@ export const ErrorView = (props: ErrorViewProps) => {
 
   return (
     <Result
+      style={{
+        padding: '20px 0',
+        overflow: 'scroll',
+        height: '100%',
+        backgroundColor: 'white',
+        borderRadius: 20
+      }}
       status="error"
       title="Tarayıcı Desteklenmiyor"
       subTitle="Tarayıcı konum veya sensör bilgilerine erişemiyor"
@@ -34,27 +42,33 @@ export const ErrorView = (props: ErrorViewProps) => {
             Sebebi aşağıdakilerden biri olabilir.
           </Text>
         </Paragraph>
-        {!props.orientationGranted && (
+        {props.message && (
           <Paragraph>
-            <CloseCircleOutlined className="site-result-demo-error-icon" />{' '}
+            <CloseCircleOutlined className="site-result-demo-error-icon" />
+            {` ${props.message}`}
+          </Paragraph>
+        )}
+        {props.orientationGranted && (
+          <Paragraph>
+            <CloseCircleOutlined className="site-result-demo-error-icon" />
             Tarayıcınızın sensör bilgileri okunamıyor.
           </Paragraph>
         )}
-        {!props.locationActive && (
+        {props.locationActive && (
           <Paragraph>
-            <CloseCircleOutlined className="site-result-demo-error-icon" />{' '}
+            <CloseCircleOutlined className="site-result-demo-error-icon" />
             Tarayıcınızın lokasyon bilgileri sağlamıyor.
           </Paragraph>
         )}
-        {!props.locationGranted && (
+        {props.locationGranted && (
           <>
             <Paragraph>
-              <CloseCircleOutlined className="site-result-demo-error-icon" />{' '}
+              <CloseCircleOutlined className="site-result-demo-error-icon" />
               Tarayıcınızda lokasyon yetkilerini vermemiş veya reddetmiş
               olabilirsiniz.
             </Paragraph>
-            <Paragraph>
-              <CloseCircleOutlined className="site-result-demo-error-icon" />{' '}
+            <Paragraph style={{ color: 'white' }}>
+              <CloseCircleOutlined className="site-result-demo-error-icon" />
               Sisteminizdeki güvenlik kuralları lokasyon bilgileri paylaşmanıza
               izin vermiyor olabilir.
             </Paragraph>
