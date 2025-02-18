@@ -49,13 +49,12 @@ const BasicLayout: React.FC = () => {
       </Content>
 
       <Footer className="layout-footer">
-        <p>
-          <Image
-            alt="Bip Message"
-            width={200}
-            src="/assets/bip_logo_beyaz.png"
-          />
-        </p>
+        <Image
+          preview={false}
+          alt="Bip Message"
+          width={100}
+          src="/assets/bip_logo.png"
+        />
       </Footer>
       <Drawer
         title="Bip Kıble Bul"

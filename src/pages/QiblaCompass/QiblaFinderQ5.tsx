@@ -101,7 +101,7 @@ const Pusula: React.FC = () => {
                     qible={qiblaAngle}
                     width={'100vm'}
                     height={'100vm'}
-                    marginTop={200}
+                    marginTop={'25%'}
                   />
                 </Col>
               </Row>
