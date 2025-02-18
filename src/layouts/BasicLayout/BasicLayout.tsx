@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { Button, Drawer, Layout, Menu, MenuProps } from 'antd'
+import { Button, Drawer, Image, Layout, Menu, MenuProps } from 'antd'
 import { MenuOutlined } from '@ant-design/icons'
 
 import './BasicLayout.css'
@@ -29,22 +29,33 @@ const BasicLayout: React.FC = () => {
   }
 
   return (
-    <Layout style={{ height: '100vh' }}>
+    <Layout
+      style={{
+        height: '100vh',
+        backgroundColor: 'transparent'
+      }}>
       <Header className="layout-header">
         <Button
           type="text"
           variant="text"
+          color="green"
           icon={<MenuOutlined />}
           onClick={showDrawer}
         />
       </Header>
 
-      <Content style={{ padding: '20px', overflow: 'scroll' }}>
+      <Content style={{ padding: '20px', overflow: 'scroll', height: '100vh' }}>
         <Outlet />
       </Content>
 
       <Footer className="layout-footer">
-        <p>Tüm Hakları Saklıdır @ 2025</p>
+        <p>
+          <Image
+            alt="Bip Message"
+            width={200}
+            src="/assets/bip_logo_beyaz.png"
+          />
+        </p>
       </Footer>
       <Drawer
         title="Bip Kıble Bul"

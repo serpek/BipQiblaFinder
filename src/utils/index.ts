@@ -1,3 +1,4 @@
+export * from './console'
 export * from './qibla'
 
 type Direction = { name: string; short: string }

@@ -9,6 +9,7 @@ import '@ant-design/v5-patch-for-react-19'
 
 import { BasicLayout } from './layouts'
 import {
+  Blank,
   Compass0,
   Compass1,
   Compass2,
@@ -33,6 +34,9 @@ const config: ThemeConfig = {
   token: {
     colorPrimary: '#1890ff',
     fontFamily: 'Nunito'
+  },
+  components: {
+    Layout: {}
   }
 }
 
@@ -43,6 +47,7 @@ createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route element={<BasicLayout />}>
             <Route index element={<QiblaCompass />} />
+            <Route path="/b0" element={<Blank />} />
             <Route path="/q0" element={<Compass0 />} />
             <Route path="/q1" element={<Compass1 />} />
             <Route path="/q2" element={<Compass2 />} />

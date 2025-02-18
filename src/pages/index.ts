@@ -1,3 +1,4 @@
+export { default as Blank } from './Blank'
 export { default as CookiePolicy } from './CookiePolicy'
 export { default as PrivacyPolicy } from './PrivacyPolicy'
 export { default as Compass0 } from './q0'

@@ -21,6 +21,7 @@ const Pusula: React.FC = () => {
       userDecisionTimeout: 5000
     })
 
+  const [debug, setDebug] = useState<boolean>(false)
   const [offset, setOffset] = useState<number>(0)
   const [deviceAngle, setDeviceAngle] = useState<number>(0)
   const [deviceDirection, setDeviceDirection] = useState<string>('')
@@ -38,9 +39,12 @@ const Pusula: React.FC = () => {
   // }, [orientation])
 
   useEffect(() => {
+    setDebug(false)
+  }, [])
+
+  useEffect(() => {
     if (orientation?.alpha) {
       //const angle = (orientation.alpha + 360) % 360
-      console.log(offset)
       const angle = (360 - (orientation.alpha + offset)) % 360
       const direction = getDirectionName(angle)
       setDeviceDirection(direction.name)
@@ -73,7 +77,10 @@ const Pusula: React.FC = () => {
   )
 
   return (
-    <Layout>
+    <Layout
+      style={{
+        backgroundColor: 'transparent'
+      }}>
       {isError && (
         <ErrorView
           locationActive={isGeolocationAvailable}
@@ -89,108 +96,104 @@ const Pusula: React.FC = () => {
             <>
               <Row gutter={16} justify="center" style={{ marginBottom: 5 }}>
                 <Col className="gutter-row" span={24}>
-                  <Card bordered={false} title="Kıble Pusulası">
-                    {/*<CompassWithCanvas
-                      rotate={deviceAngle}
-                      qible={qiblaAngle}
-                      width={300}
-                      height={300}
-                    />*/}
-                    <CompassWithHTML
-                      rotate={deviceAngle}
-                      qible={qiblaAngle}
-                      width={300}
-                      height={300}
-                    />
-                  </Card>
+                  <CompassWithHTML
+                    angle={deviceAngle}
+                    qible={qiblaAngle}
+                    width={'100vm'}
+                    height={'100vm'}
+                    marginTop={200}
+                  />
                 </Col>
               </Row>
 
-              <Row gutter={16} style={{ marginBottom: 5 }}>
-                <Col className="gutter-row" span={24}>
-                  <Card bordered={false} title="Kalibrasyon Düzeltmesi">
-                    <input
-                      style={{ width: '100%' }}
-                      type="range"
-                      min="-10"
-                      max="10"
-                      value={offset}
-                      onChange={(e) => setOffset(Number(e.target.value))}
-                    />
-                    <p>Offset: {offset}°</p>
-                    <p
-                      style={{
-                        color: orientation?.absolute ? 'red' : 'green'
-                      }}>
-                      {orientation?.absolute
-                        ? 'Manyetik Kuzey Kullanılıyor'
-                        : 'Gerçek Kuzey Kullanılıyor'}
-                    </p>
-                  </Card>
-                </Col>
-              </Row>
-
-              <Row gutter={16} style={{ marginBottom: 5 }}>
-                <Col className="gutter-row" span={12}>
-                  <Card bordered={false} title="Pusula Yönü">
-                    <Row align="stretch" justify="center">
-                      <Col>
-                        <svg
-                          width="50"
-                          height="50"
-                          viewBox="0 0 100 100"
-                          style={{
-                            transform: `rotate(${deviceAngle}deg)`,
-                            margin: '0 auto',
-                            transition: 'transform 0.5s ease-out',
-                            background: '#efefef',
-                            borderRadius: '50%'
-                          }}>
-                          <polygon
-                            points="50,10 60,40 50,30 40,40"
-                            fill="red"
-                          />
-                        </svg>
-                        <Statistic
-                          title={deviceDirection}
-                          value={((360 - deviceAngle) % 360).toFixed(0)}
-                          precision={2}
-                          suffix={`°`}
+              {debug && (
+                <>
+                  <Row gutter={16} style={{ marginBottom: 5 }}>
+                    <Col className="gutter-row" span={24}>
+                      <Card bordered={false} title="Kalibrasyon Düzeltmesi">
+                        <input
+                          style={{ width: '100%' }}
+                          type="range"
+                          min="-50"
+                          max="50"
+                          value={offset}
+                          onChange={(e) => setOffset(Number(e.target.value))}
                         />
-                      </Col>
-                    </Row>
-                  </Card>
-                </Col>
-                <Col className="gutter-row" span={12}>
-                  <Card bordered={false} title="Kıble Yönü">
-                    <Row align="stretch" justify="center">
-                      <Col>
-                        <svg
-                          width="50"
-                          height="50"
-                          viewBox="0 0 100 100"
+                        <p>Offset: {offset}°</p>
+                        <p
                           style={{
-                            transform: `rotate(${qiblaAngle}deg)`,
-                            margin: '0 auto',
-                            transition: 'transform 0.5s ease-out',
-                            background: '#efefef',
-                            borderRadius: '50%'
+                            color: orientation?.absolute ? 'red' : 'green'
                           }}>
-                          <polygon
-                            points="50,10 60,40 50,30 40,40"
-                            fill="red"
-                          />
-                        </svg>
-                        <Statistic
-                          title={qiblaDirection}
-                          value={qiblaAngle.toFixed(0)}
-                          suffix="°"
-                        />
-                      </Col>
-                    </Row>
-                  </Card>
-                </Col>
-              </Row>
+                          {orientation?.absolute
+                            ? 'Manyetik Kuzey Kullanılıyor'
+                            : 'Gerçek Kuzey Kullanılıyor'}
+                        </p>
+                      </Card>
+                    </Col>
+                  </Row>
+                  <Row gutter={16} style={{ marginBottom: 5 }}>
+                    <Col className="gutter-row" span={12}>
+                      <Card bordered={false} title="Pusula Yönü">
+                        <Row align="stretch" justify="center">
+                          <Col>
+                            <svg
+                              width="50"
+                              height="50"
+                              viewBox="0 0 100 100"
+                              style={{
+                                transform: `rotate(${deviceAngle}deg)`,
+                                margin: '0 auto',
+                                transition: 'transform 0.5s ease-out',
+                                background: '#efefef',
+                                borderRadius: '50%'
+                              }}>
+                              <polygon
+                                points="50,10 60,40 50,30 40,40"
+                                fill="red"
+                              />
+                            </svg>
+                            <Statistic
+                              title={deviceDirection}
+                              value={((360 - deviceAngle) % 360).toFixed(0)}
+                              precision={2}
+                              suffix={`°`}
+                            />
+                          </Col>
+                        </Row>
+                      </Card>
+                    </Col>
+                    <Col className="gutter-row" span={12}>
+                      <Card bordered={false} title="Kıble Yönü">
+                        <Row align="stretch" justify="center">
+                          <Col>
+                            <svg
+                              width="50"
+                              height="50"
+                              viewBox="0 0 100 100"
+                              style={{
+                                transform: `rotate(${qiblaAngle}deg)`,
+                                margin: '0 auto',
+                                transition: 'transform 0.5s ease-out',
+                                background: '#efefef',
+                                borderRadius: '50%'
+                              }}>
+                              <polygon
+                                points="50,10 60,40 50,30 40,40"
+                                fill="red"
+                              />
+                            </svg>
+                            <Statistic
+                              title={qiblaDirection}
+                              value={qiblaAngle.toFixed(0)}
+                              suffix="°"
+                            />
+                          </Col>
+                        </Row>
+                      </Card>
+                    </Col>
+                  </Row>
+                </>
+              )}
             </>
           ) : (
             <>
@@ -209,49 +212,51 @@ const Pusula: React.FC = () => {
         </>
       )}
 
-      <Row gutter={16}>
-        <Col className="gutter-row" span={24}>
-          {coords && (
-            <table className="compass-table">
-              <tbody>
-                <tr>
-                  <th>anglePoint</th>
-                  <td>{`${anglePoint}`}</td>
-                </tr>
-                <tr>
-                  <th>latitude</th>
-                  <td>{toFixed(coords.latitude, 2)}</td>
-                </tr>
-                <tr>
-                  <th>longitude</th>
-                  <td>{toFixed(coords.longitude, 2)}</td>
-                </tr>
-                <tr>
-                  <th>absolute</th>
-                  <td>{orientation?.absolute ? '1' : '0'}</td>
-                </tr>
-                <tr>
-                  <th>alpha</th>
-                  <td>{orientation?.alpha}</td>
-                </tr>
-                <tr>
-                  <th>Notrh</th>
-                  <td>
-                    <span
-                      style={{
-                        color: !orientation?.absolute ? 'green' : 'red'
-                      }}>
-                      {!orientation?.absolute
-                        ? 'Gerçek Kuzey Kullanılıyor'
-                        : 'Manyetik Kuzey Kullanılıyor'}
-                    </span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          )}
-        </Col>
-      </Row>
+      {debug && (
+        <Row gutter={16}>
+          <Col className="gutter-row" span={24}>
+            {coords && (
+              <table className="compass-table">
+                <tbody>
+                  <tr>
+                    <th>anglePoint</th>
+                    <td>{`${anglePoint}`}</td>
+                  </tr>
+                  <tr>
+                    <th>latitude</th>
+                    <td>{toFixed(coords.latitude, 2)}</td>
+                  </tr>
+                  <tr>
+                    <th>longitude</th>
+                    <td>{toFixed(coords.longitude, 2)}</td>
+                  </tr>
+                  <tr>
+                    <th>absolute</th>
+                    <td>{orientation?.absolute ? '1' : '0'}</td>
+                  </tr>
+                  <tr>
+                    <th>alpha</th>
+                    <td>{orientation?.alpha}</td>
+                  </tr>
+                  <tr>
+                    <th>Notrh</th>
+                    <td>
+                      <span
+                        style={{
+                          color: !orientation?.absolute ? 'green' : 'red'
+                        }}>
+                        {!orientation?.absolute
+                          ? 'Gerçek Kuzey Kullanılıyor'
+                          : 'Manyetik Kuzey Kullanılıyor'}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            )}
+          </Col>
+        </Row>
+      )}
     </Layout>
   )
 }

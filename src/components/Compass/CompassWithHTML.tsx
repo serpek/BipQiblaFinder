@@ -1,33 +1,25 @@
-import { PropsWithChildren } from 'react'
+import { type CSSProperties, PropsWithChildren } from 'react'
 import * as motion from 'motion/react-client'
 
-type CompassViewProps = PropsWithChildren<{
-  rotate: number
-  qible: number
-  width: number
-  height: number
-}>
+type CompassViewProps = PropsWithChildren<
+  {
+    angle: number
+    qible: number
+  } & CSSProperties
+>
 
 export const CompassWithHTML = ({
-  rotate,
+  angle,
   qible,
-  width,
-  height
+  ...styles
 }: CompassViewProps) => {
   return (
     <>
       <div
         className="compass"
         style={{
-          width,
-          height,
-          backgroundImage: 'url(/assets/compass-4.png)',
-          backgroundSize: 'cover',
-          borderRadius: '50%',
-          position: 'relative',
-          margin: '0 auto',
-          transform: `rotate(${rotate}deg)`,
-          transition: 'transform 0.5s ease-out'
+          transform: `rotate(${angle}deg)`,
+          ...styles
         }}>
         <div
           style={{
