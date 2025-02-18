@@ -1,4 +1,5 @@
 export * from './useDevicePermissions'
+export * from './useFilteredAngle.tsx'
 export * from './useGeolocated'
 export * from './useModal'
 export * from './useOrientation'
