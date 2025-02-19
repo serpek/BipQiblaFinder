@@ -6,16 +6,10 @@ const { Paragraph, Text } = Typography
 
 type ErrorViewProps = PropsWithChildren<{
   message?: string[]
-  locationGranted?: boolean
-  locationActive?: boolean
-  orientationGranted?: boolean
   requestPermissionClick?: () => void
 }>
 
 export const ErrorView = (props: ErrorViewProps) => {
-  if (props.locationActive && props.locationGranted && props.orientationGranted)
-    return null
-
   return (
     <Result
       style={{
@@ -48,7 +42,7 @@ export const ErrorView = (props: ErrorViewProps) => {
             {` ${msg}`}
           </Paragraph>
         ))}
-        {props.orientationGranted && (
+        {/*{props.orientationGranted && (
           <Paragraph>
             <CloseCircleOutlined className="site-result-demo-error-icon" />
             Tarayıcınızın sensör bilgileri okunamıyor.
@@ -73,7 +67,7 @@ export const ErrorView = (props: ErrorViewProps) => {
               izin vermiyor olabilir.
             </Paragraph>
           </>
-        )}
+        )}*/}
       </div>
     </Result>
   )
