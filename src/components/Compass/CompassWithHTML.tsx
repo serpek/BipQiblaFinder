@@ -1,6 +1,6 @@
 import { type CSSProperties, PropsWithChildren, useMemo } from 'react'
 import './compass.scss'
-import { useFilteredAngle } from '../../hooks'
+import { useShortestRotation } from '../../hooks'
 
 type CompassViewProps = PropsWithChildren<
   {
@@ -15,8 +15,9 @@ export const CompassWithHTML = ({
   ...styles
 }: CompassViewProps) => {
   // **Titreşim engelleyici filtreleme: Küçük değişiklikleri yok sayar**
-  const correctedAngle = useFilteredAngle(angle, 3) // 3° eşik değeri
+  // const correctedAngle = useFilteredAngle(angle, 3) // 3° eşik değeri
   // const correctedAngle = useSmoothedAngle(angle, 0.85)
+  const correctedAngle = useShortestRotation(angle) // 3° eşik değeri
 
   const anglePoint = useMemo(() => {
     let diff = Math.abs(((360 - angle) % 360) - qible)

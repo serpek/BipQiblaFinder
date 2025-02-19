@@ -20,13 +20,6 @@ import { CalibrateView, ErrorView } from '../../views'
 
 import './QiblaFinder.scss'
 
-const getShortestRotation = (currentAngle: number, targetAngle: number) => {
-  let delta = targetAngle - currentAngle
-  if (delta > 180) delta -= 360
-  if (delta < -180) delta += 360
-  return currentAngle + delta
-}
-
 const Pusula: React.FC = () => {
   // const { coords, isGeolocationAvailable, isGeolocationEnabled, getPosition } =
   //   useGeolocated({
@@ -62,8 +55,6 @@ const Pusula: React.FC = () => {
   const [qiblaAngle, setQiblaAngle] = useState<number>(0)
   const [deviceDirection, setDeviceDirection] = useState<string>('')
   const [qiblaDirection, setQiblaDirection] = useState<string>('')
-
-  const [currentAngle, setCurrentAngle] = useState<number>(0)
 
   useEffect(() => {
     setDebug(false)
@@ -104,11 +95,8 @@ const Pusula: React.FC = () => {
       const direction = getDirectionName(angle)
       setDeviceDirection(direction.name)
       setDeviceAngle(angle)
-
-      const smoothAngle = getShortestRotation(currentAngle, deviceAngle)
-      setCurrentAngle(smoothAngle)
     }
-  }, [offset, alpha])
+  }, [offset, alpha, deviceAngle])
 
   useEffect(() => {
     if (latitude && longitude) {
@@ -169,7 +157,7 @@ const Pusula: React.FC = () => {
             ) : (
               <>
                 <CompassWithHTML
-                  angle={currentAngle}
+                  angle={deviceAngle}
                   qible={qiblaAngle}
                   width={size.width - 60}
                   height={size.width - 60}
