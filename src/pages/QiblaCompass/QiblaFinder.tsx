@@ -83,7 +83,7 @@ const Pusula: React.FC = () => {
         )
       })
     }
-  }, [api, modal])
+  }, [api, cookie, modal, setCookie])
 
   useEffect(() => {
     if (alpha) {

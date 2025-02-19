@@ -49,35 +49,33 @@ export function useOrientation(): OrientationResult {
   const requestPermission = useCallback(async () => {
     try {
       alert('requestPermission 1')
+      const event = DeviceOrientationEvent as any
       if (
-        typeof (DeviceOrientationEvent as any) !== 'undefined' &&
-        typeof (DeviceOrientationEvent as any).requestPermission === 'function'
+        typeof event !== 'undefined' &&
+        typeof event.requestPermission === 'function'
       ) {
-        alert('requestPermission 2')
-        const permissionState = await (
-          DeviceOrientationEvent as any
-        ).requestPermission()
-        alert('requestPermission 3')
-        if (permissionState === 'granted') {
-          window.addEventListener('deviceorientation', handleOrientation)
-          setState((prevState) => ({
-            ...prevState,
-            error: undefined,
-            loading: false
-          }))
-        } else {
-          alert('requestPermission 4')
-          setState((prevState) => ({
-            ...prevState,
-            error: {
-              code: 1,
-              message: 'Pusula erişim izni reddedildi.',
-              PERMISSION_DENIED: 1
-            },
-            loading: false
-          }))
-        }
-        alert(permissionState)
+        event.requestPermission().then((permissionState: string) => {
+          alert('requestPermission 3')
+          if (permissionState === 'granted') {
+            window.addEventListener('deviceorientation', handleOrientation)
+            setState((prevState) => ({
+              ...prevState,
+              error: undefined,
+              loading: false
+            }))
+          } else {
+            alert('requestPermission 4')
+            setState((prevState) => ({
+              ...prevState,
+              error: {
+                code: 1,
+                message: 'Pusula erişim izni reddedildi.',
+                PERMISSION_DENIED: 1
+              },
+              loading: false
+            }))
+          }
+        })
       } else {
         alert('requestPermission 5')
         // 📌 Android ve eski iOS için doğrudan başlat
