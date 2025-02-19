@@ -32,8 +32,8 @@ export const ErrorView = (props: ErrorViewProps) => {
         <Button
           type="primary"
           key="console"
-          onClick={props.requestPermissionClick}>
-          Yetki vermek denemek için tıklayınız
+          onClick={() => window.location.reload()}>
+          Sayfayı Yenileyin
         </Button>
       ]}>
       <div className="desc">
@@ -42,8 +42,8 @@ export const ErrorView = (props: ErrorViewProps) => {
             Sebebi aşağıdakilerden biri olabilir.
           </Text>
         </Paragraph>
-        {props.message?.map((msg) => (
-          <Paragraph>
+        {props.message?.map((msg, i) => (
+          <Paragraph key={'p_' + i}>
             <CloseCircleOutlined className="site-result-demo-error-icon" />
             {` ${msg}`}
           </Paragraph>
