@@ -2,7 +2,9 @@
   position: relative;
   border-radius: 50%;
   background-image: url("/assets/compass.png");
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
   margin: 0 auto;
   transition: transform 0.5s ease-out;
 
@@ -27,7 +29,7 @@
         position: absolute;
         left: 50%;
         margin-left: -25px;
-        top: -87px;
+        top: -82px;
       }
     }
   }

@@ -164,6 +164,8 @@ const Pusula: React.FC = () => {
                   qible={qiblaAngle}
                   width={size.width - 60}
                   height={size.width - 60}
+                  maxWidth={400}
+                  maxHeight={400}
                 />
 
                 {debug && (
