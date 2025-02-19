@@ -7,7 +7,7 @@ export interface OrientationResult {
   timestamp: number | null
   error?: Error | IOrientationError
   log?: string
-  requestPermission: () => void
+  requestPermission?: () => void
 }
 
 export interface IOrientationError {

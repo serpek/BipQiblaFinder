@@ -120,7 +120,7 @@ const Pusula: React.FC = () => {
         <Button
           type="primary"
           key="console"
-          onClick={() => requestPermission()}>
+          onClick={() => requestPermission?.()}>
           Haydi Başlayalım
         </Button>
       )}
