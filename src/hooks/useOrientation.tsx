@@ -48,7 +48,6 @@ export function useOrientation(): OrientationResult {
 
   const requestPermission = useCallback(async () => {
     try {
-      alert('requestPermission 1')
       const event = DeviceOrientationEvent as any
       if (
         typeof event !== 'undefined' &&
@@ -76,7 +75,6 @@ export function useOrientation(): OrientationResult {
           }))
         }
       } else {
-        alert('requestPermission 5')
         // 📌 Android ve eski iOS için doğrudan başlat
         setState((prevState) => ({
           ...prevState,
