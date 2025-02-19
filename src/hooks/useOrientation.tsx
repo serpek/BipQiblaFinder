@@ -48,13 +48,16 @@ export function useOrientation(): OrientationResult {
 
   const requestPermission = useCallback(async () => {
     try {
+      alert('requestPermission 1')
       if (
         typeof (DeviceOrientationEvent as any) !== 'undefined' &&
         typeof (DeviceOrientationEvent as any).requestPermission === 'function'
       ) {
+        alert('requestPermission 2')
         const permissionState = await (
           DeviceOrientationEvent as any
         ).requestPermission()
+        alert('requestPermission 3')
         if (permissionState === 'granted') {
           window.addEventListener('deviceorientation', handleOrientation)
           setState((prevState) => ({
@@ -63,6 +66,7 @@ export function useOrientation(): OrientationResult {
             loading: false
           }))
         } else {
+          alert('requestPermission 4')
           setState((prevState) => ({
             ...prevState,
             error: {
@@ -75,6 +79,7 @@ export function useOrientation(): OrientationResult {
         }
         alert(permissionState)
       } else {
+        alert('requestPermission 5')
         // 📌 Android ve eski iOS için doğrudan başlat
         setState((prevState) => ({
           ...prevState,
@@ -85,6 +90,7 @@ export function useOrientation(): OrientationResult {
         window.addEventListener('deviceorientation', handleOrientation)
       }
     } catch (error: any) {
+      alert('requestPermission 6')
       setState((prevState) => ({
         ...prevState,
         error: error.message
