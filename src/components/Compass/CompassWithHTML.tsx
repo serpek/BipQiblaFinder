@@ -26,7 +26,7 @@ export const CompassWithHTML = ({
 
   return (
     <>
-      {angle + ' / ' + qible}
+      {`${angle} / ${correctedAngle}`}
       <div
         className="compass"
         style={{
