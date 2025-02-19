@@ -41,7 +41,8 @@ const Pusula: React.FC = () => {
     loading: loadingOrientation,
     error: errorOrientation,
     alpha,
-    absolute
+    absolute,
+    log
   } = useOrientation()
   const size = useWindowSize()
 
@@ -115,6 +116,7 @@ const Pusula: React.FC = () => {
   return (
     <Spin spinning={loading} delay={500}>
       {contextHolder}
+      {log}
       {errorGeolocation?.message + ' - ' + errorOrientation?.message}
       <Layout
         style={{

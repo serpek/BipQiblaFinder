@@ -6,6 +6,7 @@ export interface OrientationResult {
   alpha: number | null
   timestamp: number | null
   error?: Error | IOrientationError
+  log?: string
 }
 
 export interface IOrientationError {
@@ -42,7 +43,8 @@ export function useOrientation(): OrientationResult {
       ...prevState,
       error: undefined,
       absolute: e.absolute,
-      alpha: Math.round(_alpha || 0)
+      alpha: Math.round(_alpha || 0),
+      log: 'Alpha değerleri güncelleniyor'
     }))
   }, [])
 
@@ -54,16 +56,15 @@ export function useOrientation(): OrientationResult {
         typeof event.requestPermission === 'function'
       ) {
         const permissionState = await event.requestPermission()
-        alert('requestPermission 3')
         if (permissionState === 'granted') {
           window.addEventListener('deviceorientation', handleOrientation)
           setState((prevState) => ({
             ...prevState,
             error: undefined,
-            loading: false
+            loading: false,
+            log: permissionState + ' permissionState'
           }))
         } else {
-          alert('requestPermission 4')
           setState((prevState) => ({
             ...prevState,
             error: {
@@ -71,15 +72,16 @@ export function useOrientation(): OrientationResult {
               message: 'Pusula erişim izni reddedildi.',
               PERMISSION_DENIED: 1
             },
-            loading: false
+            loading: false,
+            log: ' Pusula erişim izni reddedildi.'
           }))
         }
       } else {
-        // 📌 Android ve eski iOS için doğrudan başlat
         setState((prevState) => ({
           ...prevState,
           error: undefined,
-          loading: false
+          loading: false,
+          log: 'Android ve eski iOS için doğrudan başlat'
         }))
         window.addEventListener('deviceorientationabsolute', handleOrientation)
         window.addEventListener('deviceorientation', handleOrientation)
@@ -91,7 +93,8 @@ export function useOrientation(): OrientationResult {
         error: error.message
           ? error
           : { message: 'Bilinmeyen bir hata oluştu.' },
-        loading: false
+        loading: false,
+        log: 'Exception catch'
       }))
     }
   }, [handleOrientation])
