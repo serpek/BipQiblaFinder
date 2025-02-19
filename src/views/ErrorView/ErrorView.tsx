@@ -6,7 +6,6 @@ const { Paragraph, Text } = Typography
 
 type ErrorViewProps = PropsWithChildren<{
   message?: string[]
-  requestPermissionClick?: () => void
 }>
 
 export const ErrorView = (props: ErrorViewProps) => {

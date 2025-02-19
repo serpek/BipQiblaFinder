@@ -20,7 +20,8 @@ export function useOrientation(): OrientationResult {
     loading: true,
     timestamp: Date.now(),
     absolute: null,
-    alpha: null
+    alpha: null,
+    error: undefined
   })
 
   const handleOrientation = useCallback((e: DeviceOrientationEvent) => {
@@ -39,6 +40,7 @@ export function useOrientation(): OrientationResult {
 
     setState((prevState) => ({
       ...prevState,
+      error: undefined,
       absolute: e.absolute,
       alpha: Math.round(_alpha || 0)
     }))
@@ -57,6 +59,7 @@ export function useOrientation(): OrientationResult {
           window.addEventListener('deviceorientation', handleOrientation)
           setState((prevState) => ({
             ...prevState,
+            error: undefined,
             loading: false
           }))
         } else {
@@ -74,6 +77,7 @@ export function useOrientation(): OrientationResult {
         // 📌 Android ve eski iOS için doğrudan başlat
         setState((prevState) => ({
           ...prevState,
+          error: undefined,
           loading: false
         }))
         window.addEventListener('deviceorientationabsolute', handleOrientation)
