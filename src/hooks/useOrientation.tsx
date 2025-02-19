@@ -110,8 +110,15 @@ export function useOrientation(): OrientationResult {
     requestPermission().catch(console.error)
 
     return () => {
-      window.removeEventListener('deviceorientationabsolute', handleOrientation)
-      window.removeEventListener('deviceorientation', handleOrientation)
+      if ('ondeviceorientationabsolute' in window) {
+        window.removeEventListener(
+          'deviceorientationabsolute',
+          handleOrientation
+        )
+      }
+      if ('deviceorientation' in window) {
+        window.removeEventListener('deviceorientation', handleOrientation)
+      }
     }
   }, [handleOrientation, requestPermission])
 
