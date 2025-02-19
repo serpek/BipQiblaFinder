@@ -45,7 +45,7 @@ export function useOrientation(): OrientationResult {
       error: undefined,
       absolute: e.absolute,
       alpha: Math.round(_alpha || 0),
-      log: 'Alpha değerleri güncelleniyor'
+      log: `Alpha değerleri güncelleniyor. alpha: ${_alpha}`
     }))
   }, [])
 
@@ -63,7 +63,7 @@ export function useOrientation(): OrientationResult {
             ...prevState,
             error: undefined,
             loading: false,
-            log: permissionState + ' permissionState'
+            log: permissionState
           }))
         } else {
           setState((prevState) => ({
@@ -88,14 +88,13 @@ export function useOrientation(): OrientationResult {
         window.addEventListener('deviceorientation', handleOrientation)
       }
     } catch (error: any) {
-      alert('requestPermission 6')
       setState((prevState) => ({
         ...prevState,
         error: error.message
           ? error
           : { message: 'Bilinmeyen bir hata oluştu.' },
         loading: false,
-        log: 'Exception catch'
+        log: 'Request Permission Exception'
       }))
     }
   }, [handleOrientation])
