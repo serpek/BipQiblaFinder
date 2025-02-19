@@ -11,28 +11,67 @@ export function useOrientation(): {
   orientation: OrientationResult | undefined
   requestPermission: () => Promise<void>
   isOrientationGranted: boolean
+  errorMessage: string | null
 } {
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
-
+  // const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [orientation, setOrientation] = useState<OrientationResult>()
-  const [isOrientationGranted, setIsOrientationGranted] = useState(
-    // @ts-expect-error iOS özellik kontrolü
-    typeof DeviceOrientationEvent.requestPermission !== 'function'
-  )
+  const [isOrientationGranted, setIsOrientationGranted] =
+    useState<boolean>(false)
 
   const requestPermission = useCallback(async () => {
-    try {
-      if (
-        typeof DeviceOrientationEvent !== 'undefined' &&
-        // @ts-expect-error iOS özellik kontrolü
-        typeof DeviceOrientationEvent.requestPermission === 'function'
-      ) {
-        // @ts-expect-error iOS özellik kontrolü
-        const permissionState = await DeviceOrientationEvent.requestPermission()
-        setIsOrientationGranted(permissionState === 'granted')
+    /*try {
+                                                      if (
+                                                        typeof DeviceOrientationEvent !== 'undefined' &&
+                                                        // @ts-expect-error iOS özellik kontrolü
+                                                        typeof DeviceOrientationEvent.requestPermission === 'function'
+                                                      ) {
+                                                        // @ts-expect-error iOS özellik kontrolü
+                                                        const permissionState = await DeviceOrientationEvent.requestPermission()
+                                                        setIsOrientationGranted(permissionState === 'granted')
+                                                      }
+                                                    } catch {
+                                                      setIsOrientationGranted(false)
+                                                    }*/
+  }, [])
+
+  useEffect(() => {
+    const requestPermission = async () => {
+      try {
+        if (
+          typeof DeviceOrientationEvent !== 'undefined' &&
+          // @ts-ignore
+          typeof DeviceOrientationEvent.requestPermission === 'function'
+        ) {
+          // 📌 iOS 13+ için kullanıcıdan izin iste
+          const permissionState =
+            // @ts-ignore
+            await DeviceOrientationEvent.requestPermission()
+          if (permissionState === 'granted') {
+            setIsOrientationGranted(true)
+            window.addEventListener('deviceorientation', handleOrientation)
+          } else {
+            throw new Error('Pusula erişim izni reddedildi.')
+          }
+        } else {
+          // 📌 Android ve eski iOS için doğrudan başlat
+          setIsOrientationGranted(true)
+          window.addEventListener(
+            'deviceorientationabsolute',
+            handleOrientation
+          )
+          window.addEventListener('deviceorientation', handleOrientation)
+        }
+      } catch (error: any) {
+        setErrorMessage(error.message || 'Bilinmeyen bir hata oluştu.')
       }
-    } catch {
-      setIsOrientationGranted(false)
+    }
+
+    requestPermission()
+
+    return () => {
+      window.removeEventListener('deviceorientationabsolute', handleOrientation)
+      window.removeEventListener('deviceorientation', handleOrientation)
     }
   }, [])
 
@@ -55,34 +94,34 @@ export function useOrientation(): {
     }))
   }, [])
 
-  useEffect(() => {
-    if (isOrientationGranted) {
-      if (isIOS) {
-        window.addEventListener('deviceorientation', handleOrientation, true)
-      } else {
-        window.addEventListener(
-          'deviceorientationabsolute',
-          handleOrientation,
-          true
-        )
-      }
+  /*useEffect(() => {
+                if (isOrientationGranted) {
+                  if (isIOS) {
+                    window.addEventListener('deviceorientation', handleOrientation, true)
+                  } else {
+                    window.addEventListener(
+                      'deviceorientationabsolute',
+                      handleOrientation,
+                      true
+                    )
+                  }
+            
+                  return () => {
+                    if (isIOS) {
+                      window.removeEventListener('deviceorientation', handleOrientation)
+                    } else {
+                      window.removeEventListener(
+                        'deviceorientationabsolute',
+                        handleOrientation
+                      )
+                    }
+                  }
+                }
+              }, [isOrientationGranted, handleOrientation, isIOS])*/
 
-      return () => {
-        if (isIOS) {
-          window.removeEventListener('deviceorientation', handleOrientation)
-        } else {
-          window.removeEventListener(
-            'deviceorientationabsolute',
-            handleOrientation
-          )
-        }
-      }
-    }
-  }, [isOrientationGranted, handleOrientation, isIOS])
+  /*useEffect(() => {
+          requestPermission().catch(console.error)
+        }, [])*/
 
-  useEffect(() => {
-    requestPermission().catch(console.error)
-  }, [])
-
-  return { orientation, requestPermission, isOrientationGranted }
+  return { orientation, isOrientationGranted, errorMessage, requestPermission }
 }

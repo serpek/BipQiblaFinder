@@ -41,6 +41,7 @@ createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route element={<BasicLayout />}>
             <Route index element={<QiblaCompass />} />
+            <Route path="*" element={<QiblaCompass />} />
             <Route path="/b0" element={<Blank />} />
             <Route path="/terms" element={<TermsOfUse />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />

@@ -1,6 +1,6 @@
 import { type CSSProperties, PropsWithChildren, useMemo } from 'react'
-import './compass.scss'
 import { useSmoothedAngle } from '../../hooks'
+import './compass.scss'
 
 type CompassViewProps = PropsWithChildren<
   {
@@ -14,6 +14,8 @@ export const CompassWithHTML = ({
   qible,
   ...styles
 }: CompassViewProps) => {
+  // **Titreşim engelleyici filtreleme: Küçük değişiklikleri yok sayar**
+  // const filteredAngle = useFilteredAngle(angle, 3) // 3° eşik değeri
   const smoothedAngle = useSmoothedAngle(angle, 0.85)
 
   const anglePoint = useMemo(() => {
@@ -24,6 +26,7 @@ export const CompassWithHTML = ({
 
   return (
     <>
+      {angle + ' / ' + qible}
       <div
         className="compass"
         style={{

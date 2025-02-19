@@ -12,7 +12,7 @@ import { ErrorView } from '../../views'
 
 const Pusula: React.FC = () => {
   // const { modal } = useModal()
-  const { orientation, isOrientationGranted, requestPermission } =
+  const { orientation, isOrientationGranted, requestPermission, errorMessage } =
     useOrientation()
   // const { coords, isGeolocationAvailable, isGeolocationEnabled, getPosition } =
   //   useGeolocated({
@@ -71,8 +71,9 @@ const Pusula: React.FC = () => {
       style={{
         backgroundColor: 'transparent'
       }}>
-      {state.error && <ErrorView message={state.error?.message} />}
-
+      {state.error && (
+        <ErrorView message={[state.error?.message, `${errorMessage}`]} />
+      )}
       {!isError && (
         <Spin spinning={state.loading} delay={500}>
           {state && (

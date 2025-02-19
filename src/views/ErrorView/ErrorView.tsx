@@ -5,7 +5,7 @@ import { CloseCircleOutlined } from '@ant-design/icons'
 const { Paragraph, Text } = Typography
 
 type ErrorViewProps = PropsWithChildren<{
-  message?: string
+  message?: string[]
   locationGranted?: boolean
   locationActive?: boolean
   orientationGranted?: boolean
@@ -42,12 +42,12 @@ export const ErrorView = (props: ErrorViewProps) => {
             Sebebi aşağıdakilerden biri olabilir.
           </Text>
         </Paragraph>
-        {props.message && (
+        {props.message?.map((msg) => (
           <Paragraph>
             <CloseCircleOutlined className="site-result-demo-error-icon" />
-            {` ${props.message}`}
+            {` ${msg}`}
           </Paragraph>
-        )}
+        ))}
         {props.orientationGranted && (
           <Paragraph>
             <CloseCircleOutlined className="site-result-demo-error-icon" />
