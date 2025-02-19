@@ -84,8 +84,14 @@ export function useOrientation(): OrientationResult {
           loading: false,
           log: 'Android ve eski iOS için doğrudan başlat'
         }))
-        window.addEventListener('deviceorientationabsolute', handleOrientation)
-        window.addEventListener('deviceorientation', handleOrientation)
+        if ('ondeviceorientationabsolute' in window) {
+          window.addEventListener(
+            'deviceorientationabsolute',
+            handleOrientation
+          )
+        } else {
+          window.addEventListener('deviceorientation', handleOrientation)
+        }
       }
     } catch (error: any) {
       setState((prevState) => ({
