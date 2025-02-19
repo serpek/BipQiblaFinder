@@ -21,18 +21,18 @@ export function useOrientation(): {
 
   const requestPermission = useCallback(async () => {
     /*try {
-                                                      if (
-                                                        typeof DeviceOrientationEvent !== 'undefined' &&
-                                                        // @ts-expect-error iOS özellik kontrolü
-                                                        typeof DeviceOrientationEvent.requestPermission === 'function'
-                                                      ) {
-                                                        // @ts-expect-error iOS özellik kontrolü
-                                                        const permissionState = await DeviceOrientationEvent.requestPermission()
-                                                        setIsOrientationGranted(permissionState === 'granted')
-                                                      }
-                                                    } catch {
-                                                      setIsOrientationGranted(false)
-                                                    }*/
+                                                                  if (
+                                                                    typeof DeviceOrientationEvent !== 'undefined' &&
+                                                                    // @ts-expect-error iOS özellik kontrolü
+                                                                    typeof DeviceOrientationEvent.requestPermission === 'function'
+                                                                  ) {
+                                                                    // @ts-expect-error iOS özellik kontrolü
+                                                                    const permissionState = await DeviceOrientationEvent.requestPermission()
+                                                                    setIsOrientationGranted(permissionState === 'granted')
+                                                                  }
+                                                                } catch {
+                                                                  setIsOrientationGranted(false)
+                                                                }*/
   }, [])
 
   useEffect(() => {
@@ -79,12 +79,16 @@ export function useOrientation(): {
     let alpha = e.alpha
     // @ts-expect-error iOS özellik kontrolü
     if (e.webkitCompassHeading) {
-      // @ts-expect-error iOS özellik kontrolü
-      alpha = e.webkitCompassHeading
+      // alpha = e.webkitCompassHeading
     } else if (e.absolute && typeof e.alpha === 'number') {
-      alpha = (360 - e.alpha) % 360
+      // alpha = (360 - e.alpha) % 360
       // alpha = e.alpha
     }
+
+    if (typeof e.alpha === 'number') {
+      alpha = (360 - e.alpha) % 360
+    }
+
     setOrientation((prev) => ({
       ...prev,
       absolute: e.absolute,
@@ -95,33 +99,33 @@ export function useOrientation(): {
   }, [])
 
   /*useEffect(() => {
-                if (isOrientationGranted) {
-                  if (isIOS) {
-                    window.addEventListener('deviceorientation', handleOrientation, true)
-                  } else {
-                    window.addEventListener(
-                      'deviceorientationabsolute',
-                      handleOrientation,
-                      true
-                    )
-                  }
-            
-                  return () => {
-                    if (isIOS) {
-                      window.removeEventListener('deviceorientation', handleOrientation)
-                    } else {
-                      window.removeEventListener(
-                        'deviceorientationabsolute',
-                        handleOrientation
-                      )
-                    }
-                  }
-                }
-              }, [isOrientationGranted, handleOrientation, isIOS])*/
+                      if (isOrientationGranted) {
+                        if (isIOS) {
+                          window.addEventListener('deviceorientation', handleOrientation, true)
+                        } else {
+                          window.addEventListener(
+                            'deviceorientationabsolute',
+                            handleOrientation,
+                            true
+                          )
+                        }
+                  
+                        return () => {
+                          if (isIOS) {
+                            window.removeEventListener('deviceorientation', handleOrientation)
+                          } else {
+                            window.removeEventListener(
+                              'deviceorientationabsolute',
+                              handleOrientation
+                            )
+                          }
+                        }
+                      }
+                    }, [isOrientationGranted, handleOrientation, isIOS])*/
 
   /*useEffect(() => {
-          requestPermission().catch(console.error)
-        }, [])*/
+                requestPermission().catch(console.error)
+              }, [])*/
 
   return { orientation, isOrientationGranted, errorMessage, requestPermission }
 }
