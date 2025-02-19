@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { useGeolocation, useWindowSize } from 'react-use'
+import { useCookie, useGeolocation, useWindowSize } from 'react-use'
 import {
   Button,
   Card,
@@ -29,6 +29,7 @@ const Pusula: React.FC = () => {
   //   })
   const { modal } = useModal()
   const [api, contextHolder] = notification.useNotification()
+  const [cookie, setCookie] = useCookie('_calibrated')
 
   const {
     loading: loadingGeolocation,
@@ -53,33 +54,35 @@ const Pusula: React.FC = () => {
 
   useEffect(() => {
     setDebug(false)
-    api.destroy()
-
-    api.open({
-      key: `open${Date.now()}`,
-      message: '',
-      description: 'Şimdi pusulanızın doğru yönü gösterdiğinden emin olalım.',
-      placement: 'bottom',
-      duration: 0,
-      closeIcon: false,
-      btn: (
-        <Space>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              api.destroy()
-              modal.info({
-                icon: null,
-                title: 'Pusulanızı Kalibre Edin',
-                content: <CalibrateView />
-              })
-            }}>
-            Pusulayı kalibre et
-          </Button>
-        </Space>
-      )
-    })
+    if (cookie) {
+      api.destroy()
+      setCookie('1', { expires: Date.now() + 60 * 10e3 })
+      api.open({
+        key: `open${Date.now()}`,
+        message: '',
+        description: 'Şimdi pusulanızın doğru yönü gösterdiğinden emin olalım.',
+        placement: 'bottom',
+        duration: 0,
+        closeIcon: false,
+        btn: (
+          <Space>
+            <Button
+              type="link"
+              size="small"
+              onClick={() => {
+                api.destroy()
+                modal.info({
+                  icon: null,
+                  title: 'Pusulanızı Kalibre Edin',
+                  content: <CalibrateView />
+                })
+              }}>
+              Pusulayı kalibre et
+            </Button>
+          </Space>
+        )
+      })
+    }
   }, [api, modal])
 
   useEffect(() => {
