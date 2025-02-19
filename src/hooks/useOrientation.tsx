@@ -73,6 +73,7 @@ export function useOrientation(): OrientationResult {
             loading: false
           }))
         }
+        alert(permissionState)
       } else {
         // 📌 Android ve eski iOS için doğrudan başlat
         setState((prevState) => ({

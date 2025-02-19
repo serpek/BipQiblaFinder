@@ -115,6 +115,7 @@ const Pusula: React.FC = () => {
   return (
     <Spin spinning={loading} delay={500}>
       {contextHolder}
+      {errorGeolocation?.message + ' - ' + errorOrientation?.message}
       <Layout
         style={{
           backgroundColor: 'transparent'
