@@ -78,20 +78,21 @@ export function useOrientation(): OrientationResult {
           }))
         }
       } else {
+        if ('ondeviceorientationabsolute' in window) {
+          window.addEventListener(
+            'deviceorientationabsolute',
+            handleOrientation
+          )
+        }
+        if ('deviceorientation' in window) {
+          window.addEventListener('deviceorientation', handleOrientation)
+        }
         setState((prevState) => ({
           ...prevState,
           error: undefined,
           loading: false,
           log: 'Android ve eski iOS için doğrudan başlat'
         }))
-        if ('ondeviceorientationabsolute' in window) {
-          window.addEventListener(
-            'deviceorientationabsolute',
-            handleOrientation
-          )
-        } else {
-          window.addEventListener('deviceorientation', handleOrientation)
-        }
       }
     } catch (error: any) {
       setState((prevState) => ({
