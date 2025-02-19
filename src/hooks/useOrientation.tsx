@@ -7,6 +7,7 @@ export interface OrientationResult {
   timestamp: number | null
   error?: Error | IOrientationError
   log?: string
+  requestPermission: () => void
 }
 
 export interface IOrientationError {
@@ -108,5 +109,5 @@ export function useOrientation(): OrientationResult {
     }
   }, [handleOrientation, requestPermission])
 
-  return state
+  return { ...state, requestPermission }
 }
