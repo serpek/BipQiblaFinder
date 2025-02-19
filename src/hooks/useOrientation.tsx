@@ -54,28 +54,27 @@ export function useOrientation(): OrientationResult {
         typeof event !== 'undefined' &&
         typeof event.requestPermission === 'function'
       ) {
-        event.requestPermission().then((permissionState: string) => {
-          alert('requestPermission 3')
-          if (permissionState === 'granted') {
-            window.addEventListener('deviceorientation', handleOrientation)
-            setState((prevState) => ({
-              ...prevState,
-              error: undefined,
-              loading: false
-            }))
-          } else {
-            alert('requestPermission 4')
-            setState((prevState) => ({
-              ...prevState,
-              error: {
-                code: 1,
-                message: 'Pusula erişim izni reddedildi.',
-                PERMISSION_DENIED: 1
-              },
-              loading: false
-            }))
-          }
-        })
+        const permissionState = await event.requestPermission()
+        alert('requestPermission 3')
+        if (permissionState === 'granted') {
+          window.addEventListener('deviceorientation', handleOrientation)
+          setState((prevState) => ({
+            ...prevState,
+            error: undefined,
+            loading: false
+          }))
+        } else {
+          alert('requestPermission 4')
+          setState((prevState) => ({
+            ...prevState,
+            error: {
+              code: 1,
+              message: 'Pusula erişim izni reddedildi.',
+              PERMISSION_DENIED: 1
+            },
+            loading: false
+          }))
+        }
       } else {
         alert('requestPermission 5')
         // 📌 Android ve eski iOS için doğrudan başlat
