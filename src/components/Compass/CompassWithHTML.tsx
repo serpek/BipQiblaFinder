@@ -30,7 +30,7 @@ export const CompassWithHTML = ({
       <div
         className="compass"
         style={{
-          transform: `rotate(${correctedAngle}deg)`,
+          transform: `rotate(${angle}deg)`,
           position: 'relative',
           ...styles
         }}>
@@ -51,7 +51,7 @@ export const CompassWithHTML = ({
         <div
           className="compass-arrow"
           style={{
-            transform: `rotate(${(360 - correctedAngle) % 360}deg)`,
+            transform: `rotate(${(360 - angle) % 360}deg)`,
             opacity: anglePoint ? 1 : 0.5
           }}>
           <div className="arrow-in"></div>
