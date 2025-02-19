@@ -58,38 +58,21 @@ const BasicLayout: React.FC = () => {
         placement="left"
         onClose={onClose}
         open={open}>
+        <div style={{ textAlign: 'center', marginBottom: 100 }}>
+          <Image
+            preview={false}
+            alt="Bip Message"
+            width={150}
+            src="/assets/bip_ramadan_logo.png"
+          />
+        </div>
         <Menu
           onClick={onClick}
           items={[
             {
               key: 'm0',
-              label: 'Home',
+              label: 'Kıble Bul',
               onClick: () => goto('/')
-            },
-            {
-              key: 'm10',
-              label: 'Compass 0',
-              onClick: () => goto('/q0')
-            },
-            {
-              key: 'm11',
-              label: 'Compass 1',
-              onClick: () => goto('/q1')
-            },
-            {
-              key: 'm12',
-              label: 'Compass 2',
-              onClick: () => goto('/q2')
-            },
-            {
-              key: 'm13',
-              label: 'Compass 3',
-              onClick: () => goto('/q3')
-            },
-            {
-              key: 'm14',
-              label: 'Compass 4',
-              onClick: () => goto('/q4')
             },
             { type: 'divider' },
             {

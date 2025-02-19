@@ -58,9 +58,8 @@ const Pusula: React.FC = () => {
 
   useEffect(() => {
     setDebug(false)
-    if (cookie) {
+    if (!cookie) {
       api.destroy()
-      setCookie('1', { expires: Date.now() + 60 * 10e3 })
       api.open({
         key: `open${Date.now()}`,
         message: '',
@@ -78,7 +77,12 @@ const Pusula: React.FC = () => {
                 modal.info({
                   icon: null,
                   title: 'Pusulanızı Kalibre Edin',
-                  content: <CalibrateView />
+                  content: <CalibrateView />,
+                  onOk() {
+                    setCookie('1', {
+                      expires: new Date(Date.now() + 6 * 60 * 10e3)
+                    })
+                  }
                 })
               }}>
               Pusulayı kalibre et
