@@ -55,6 +55,9 @@ const BasicLayout: React.FC = () => {
       <Drawer
         title="Bip Kıble Bul"
         size="default"
+        styles={{
+          content: { backgroundColor: '#fafafa' }
+        }}
         placement="left"
         onClose={onClose}
         open={open}>
@@ -91,7 +94,7 @@ const BasicLayout: React.FC = () => {
               onClick: () => goto('/cookie')
             }
           ]}
-          style={{ border: 0 }}
+          style={{ border: 0, background: 'transparent' }}
         />
       </Drawer>
     </Layout>

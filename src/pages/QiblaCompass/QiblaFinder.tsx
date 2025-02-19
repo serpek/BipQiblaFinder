@@ -128,7 +128,7 @@ const Pusula: React.FC = () => {
       {contextHolder}
       {!mounted ? (
         <div style={{ width: '100%', textAlign: 'center' }}>
-          <div style={{ padding: 10 }}>
+          <div style={{ padding: 10, marginBottom: 50 }}>
             <Image
               width={200}
               src="/assets/bip_ramadan_logo.png"
@@ -138,7 +138,12 @@ const Pusula: React.FC = () => {
           <p>
             <Button
               type="primary"
-              style={{ backgroundColor: '#48b3e8' }}
+              size="large"
+              style={{
+                backgroundColor: '#48b3e8',
+                paddingLeft: 30,
+                paddingRight: 30
+              }}
               onClick={() => {
                 requestPermission?.()
                 setMounted(true)
