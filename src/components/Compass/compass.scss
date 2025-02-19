@@ -9,6 +9,7 @@
   .arrow-wrapper {
     width: 100%;
     height: 100%;
+    transition: transform 0.5s ease-out;
 
     .qible-arrow {
       position: absolute;
@@ -37,6 +38,7 @@
     position: absolute;
     left: 0;
     top: 0;
+    transition: transform 0.5s ease-out;
 
     .arrow-in {
       background: transparent url("/assets/arrow-in.png") no-repeat center center;
