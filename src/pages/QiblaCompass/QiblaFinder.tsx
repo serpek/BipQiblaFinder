@@ -43,7 +43,6 @@ const Pusula: React.FC = () => {
     error: errorOrientation,
     alpha,
     absolute,
-    log,
     requestPermission
   } = useOrientation()
   const size = useWindowSize()
@@ -123,7 +122,8 @@ const Pusula: React.FC = () => {
   return (
     <Layout
       style={{
-        backgroundColor: 'transparent'
+        backgroundColor: 'transparent',
+        justifyContent: 'center'
       }}>
       {contextHolder}
       {!mounted ? (
@@ -149,7 +149,6 @@ const Pusula: React.FC = () => {
         </div>
       ) : (
         <>
-          {log}
           <Spin spinning={loading} delay={500}>
             {isError ? (
               <ErrorView
