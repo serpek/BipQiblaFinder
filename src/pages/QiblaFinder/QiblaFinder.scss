@@ -1,14 +1,27 @@
+.compass-layout {
+  width: 100%;
+  background-color: transparent;
+  justify-content: center;
 
-.compass-table {
+  .start-screen {
     width: 100%;
-}
+    text-align: center;
+    background: transparent url("../../assets/bip_ramadan_logo.png") no-repeat top center;
+    background-size: 70%;
+    padding-top: 300px;
+  }
 
-.compass-table th {
+  .compass-table {
+    width: 100%;
+  }
+
+  .compass-table th {
     text-align: left;
-}
+  }
 
-.compass-table th,
-.compass-table td {
+  .compass-table th,
+  .compass-table td {
     border: 1px solid #c8c7c7;
     padding: 5px;
+  }
 }

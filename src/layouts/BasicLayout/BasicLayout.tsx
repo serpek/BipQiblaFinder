@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { Button, Drawer, Image, Layout, Menu, MenuProps } from 'antd'
+import { Button, Drawer, Layout, Menu, MenuProps } from 'antd'
 import { MenuOutlined } from '@ant-design/icons'
 
 import './BasicLayout.scss'
@@ -44,14 +44,7 @@ const BasicLayout: React.FC = () => {
         <Outlet />
       </Content>
 
-      <Footer className="layout-footer">
-        <Image
-          preview={false}
-          alt="Bip Message"
-          width={100}
-          src="/assets/bip_logo.png"
-        />
-      </Footer>
+      <Footer className="layout-footer"></Footer>
       <Drawer
         title="Bip Kıble Bul"
         size="default"
@@ -61,14 +54,7 @@ const BasicLayout: React.FC = () => {
         placement="left"
         onClose={onClose}
         open={open}>
-        <div style={{ textAlign: 'center', marginBottom: 100 }}>
-          <Image
-            preview={false}
-            alt="Bip Message"
-            width={150}
-            src="/assets/bip_ramadan_logo.png"
-          />
-        </div>
+        <div className="drawer-logo"></div>
         <Menu
           onClick={onClick}
           items={[

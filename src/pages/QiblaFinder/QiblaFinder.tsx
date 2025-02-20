@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   Col,
-  Image,
   Layout,
   notification,
   Row,
@@ -120,22 +119,11 @@ const QiblaFinder: React.FC = () => {
   }, [loadingGeolocation, loadingOrientation])
 
   return (
-    <Layout
-      style={{
-        backgroundColor: 'transparent',
-        justifyContent: 'center'
-      }}>
+    <Layout className="compass-layout">
       {contextHolder}
       {/*<p>{log?.split('|').map((l, i) => <div key={i}>{l}</div>)}</p>*/}
       {!mounted ? (
-        <div style={{ width: '100%', textAlign: 'center' }}>
-          <div style={{ padding: 10, marginBottom: 50 }}>
-            <Image
-              width={200}
-              src="/assets/bip_ramadan_logo.png"
-              preview={false}
-            />
-          </div>
+        <div className="start-screen">
           <p>
             <Button
               type="primary"

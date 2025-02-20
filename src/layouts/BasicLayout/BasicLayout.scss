@@ -21,8 +21,10 @@
   }
 
   .layout-footer {
-    background: transparent;
-    padding: 20px;
+    background: transparent url("../../assets/bip_logo.png") no-repeat center center;
+    background-size: 20%;
+    height: 100px;
+    padding: 0;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -34,8 +36,14 @@
     color: #9298b9;
     justify-content: center;
 
-    > img {
-      width: 100px;
-    }
   }
+}
+
+.drawer-logo {
+  text-align: center;
+  width: 150px;
+  height: 150px;
+  margin: 50px auto;
+  background: transparent url("../../assets/bip_ramadan_logo.png") no-repeat center center;
+  background-size: contain;
 }

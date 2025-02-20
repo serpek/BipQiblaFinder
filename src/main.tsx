@@ -16,7 +16,7 @@ import {
 } from './pages'
 
 import '@ant-design/v5-patch-for-react-19'
-import './index.css'
+import './index.scss'
 
 // const client = new ClientJS()
 // const fingerprint = client.getFingerprint()

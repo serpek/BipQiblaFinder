@@ -36,11 +36,7 @@ export const Compass = ({ angle, qible, ...styles }: CompassViewProps) => {
             transform: `rotate(${qible}deg)`
           }}>
           <div className="qible-arrow">
-            <img
-              src="/assets/kabe.png"
-              alt="Kaaba Icon"
-              className="kabe-icon"
-            />
+            <div className="kabe-icon"></div>
           </div>
         </div>
 
