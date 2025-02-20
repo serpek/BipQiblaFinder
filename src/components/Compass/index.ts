@@ -1,2 +1,1 @@
-export * from './CompassWithCanvas'
-export * from './CompassWithHTML'
+export * from './Compass'

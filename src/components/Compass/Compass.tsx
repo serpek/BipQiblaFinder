@@ -9,11 +9,7 @@ type CompassViewProps = PropsWithChildren<
   } & CSSProperties
 >
 
-export const CompassWithHTML = ({
-  angle,
-  qible,
-  ...styles
-}: CompassViewProps) => {
+export const Compass = ({ angle, qible, ...styles }: CompassViewProps) => {
   // **Titreşim engelleyici filtreleme: Küçük değişiklikleri yok sayar**
   // const correctedAngle = useFilteredAngle(angle, 3) // 3° eşik değeri
   // const correctedAngle = useSmoothedAngle(angle, 0.85)

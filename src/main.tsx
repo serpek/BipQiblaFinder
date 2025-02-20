@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { ClientJS } from 'clientjs'
-import LogRocket from 'logrocket'
+// import { ClientJS } from 'clientjs'
+// import LogRocket from 'logrocket'
 import { ConfigProvider, ThemeConfig } from 'antd'
 import trTR from 'antd/locale/tr_TR'
 
@@ -18,11 +18,11 @@ import {
 import '@ant-design/v5-patch-for-react-19'
 import './index.css'
 
-const client = new ClientJS()
-const fingerprint = client.getFingerprint()
+// const client = new ClientJS()
+// const fingerprint = client.getFingerprint()
 
-LogRocket.init('r4dzqd/sample-app')
-LogRocket.identify(`${fingerprint}`)
+// LogRocket.init('r4dzqd/sample-app')
+// LogRocket.identify(`${fingerprint}`)
 
 const config: ThemeConfig = {
   token: {

@@ -15,7 +15,7 @@ import {
 
 import { useModal, useOrientation } from '../../hooks'
 import { getDirectionName, Qibla } from '../../utils'
-import { CompassWithHTML } from '../../components'
+import { Compass } from '../../components'
 import { CalibrateView, ErrorView } from '../../views'
 
 import './QiblaFinder.scss'
@@ -111,7 +111,6 @@ const Pusula: React.FC = () => {
   }, [latitude, longitude])
 
   const isError = useMemo(() => {
-    console.log({ errorGeolocation, errorOrientation })
     return !!(errorGeolocation || errorOrientation)
   }, [errorOrientation, errorGeolocation])
 
@@ -164,7 +163,7 @@ const Pusula: React.FC = () => {
               />
             ) : (
               <>
-                <CompassWithHTML
+                <Compass
                   angle={deviceAngle}
                   qible={qiblaAngle}
                   width={size.width - 60}
