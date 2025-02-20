@@ -43,6 +43,7 @@ const Pusula: React.FC = () => {
     error: errorOrientation,
     alpha,
     absolute,
+    log,
     requestPermission
   } = useOrientation()
   const size = useWindowSize()
@@ -125,6 +126,7 @@ const Pusula: React.FC = () => {
         justifyContent: 'center'
       }}>
       {contextHolder}
+      {log}
       {!mounted ? (
         <div style={{ width: '100%', textAlign: 'center' }}>
           <div style={{ padding: 10, marginBottom: 50 }}>

@@ -45,7 +45,7 @@ export function useOrientation(): OrientationResult {
       error: undefined,
       absolute: e.absolute,
       alpha: Math.round(_alpha || 0),
-      log: `Alpha değerleri güncelleniyor. alpha: ${_alpha}`
+      log: `Alpha değerleri güncelleniyor. alpha: ${Math.round(_alpha || 0)}`
     }))
   }, [])
 
