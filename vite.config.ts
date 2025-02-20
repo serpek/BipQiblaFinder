@@ -26,12 +26,26 @@ export default defineConfig({
     commonjsOptions: {
       transformMixedEsModules: true
     },
+    assetsDir: '',
     rollupOptions: {
       output: {
+        entryFileNames: 'js/[name]-[hash].js',
+        chunkFileNames: 'js/[name]-[hash].js',
         manualChunks(id) {
           if (id.includes('node_modules')) {
             return 'vendor'
           }
+        },
+        assetFileNames: ({ name }) => {
+          if (/\.(css)$/.test(name ?? '')) {
+            return 'css/[name]-[hash][extname]' // CSS dosyaları
+          }
+
+          if (/\.(png|jpe?g|svg|gif|tiff|bmp|ico|webp)$/.test(name ?? '')) {
+            return 'img/[name]-[hash][extname]' // Görseller
+          }
+
+          return 'assets/[name]-[hash][extname]' // Diğer dosyalar
         }
       }
     }

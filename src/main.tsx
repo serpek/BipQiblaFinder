@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 // import { ClientJS } from 'clientjs'
 // import LogRocket from 'logrocket'
-import { ConfigProvider, ThemeConfig } from 'antd'
+import { ConfigProvider, theme, ThemeConfig } from 'antd'
 import trTR from 'antd/locale/tr_TR'
 
 import { BasicLayout } from './layouts'
@@ -25,6 +25,7 @@ import './index.css'
 // LogRocket.identify(`${fingerprint}`)
 
 const config: ThemeConfig = {
+  algorithm: theme.defaultAlgorithm,
   token: {
     colorPrimary: '#1890ff',
     fontFamily: 'Nunito'
