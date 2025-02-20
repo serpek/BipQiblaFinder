@@ -11,7 +11,7 @@ import {
   Blank,
   CookiePolicy,
   PrivacyPolicy,
-  QiblaCompass,
+  QiblaFinder,
   TermsOfUse
 } from './pages'
 
@@ -40,8 +40,8 @@ createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
         <Routes>
           <Route element={<BasicLayout />}>
-            <Route index element={<QiblaCompass />} />
-            <Route path="*" element={<QiblaCompass />} />
+            <Route index element={<QiblaFinder />} />
+            <Route path="*" element={<QiblaFinder />} />
             <Route path="/b0" element={<Blank />} />
             <Route path="/terms" element={<TermsOfUse />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />

@@ -20,7 +20,7 @@ import { CalibrateView, ErrorView } from '../../views'
 
 import './QiblaFinder.scss'
 
-const Pusula: React.FC = () => {
+const QiblaFinder: React.FC = () => {
   // const { coords, isGeolocationAvailable, isGeolocationEnabled, getPosition } =
   //   useGeolocated({
   //     positionOptions: {
@@ -271,4 +271,4 @@ const Pusula: React.FC = () => {
   )
 }
 
-export default Pusula
+export default QiblaFinder

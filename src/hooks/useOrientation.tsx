@@ -27,6 +27,7 @@ export function useOrientation(): OrientationResult {
   })
 
   const handleOrientation = useCallback((e: DeviceOrientationEvent) => {
+    console.log('orientation', e)
     let _alpha = e.alpha
     // @ts-expect-error iOS özellik kontrolü
     if (e.webkitCompassHeading) {
@@ -45,7 +46,7 @@ export function useOrientation(): OrientationResult {
       error: undefined,
       absolute: e.absolute,
       alpha: Math.round(_alpha || 0),
-      log: `Alpha değerleri güncelleniyor. alpha: ${Math.round(_alpha || 0)}`
+      log: `Alpha değerleri güncelleniyor. alpha: ${Math.round(_alpha || 0)} ${(e as any).webkitCompassHeading}`
     }))
   }, [])
 
@@ -78,20 +79,21 @@ export function useOrientation(): OrientationResult {
           }))
         }
       } else {
-        if ('ondeviceorientationabsolute' in window) {
-          window.addEventListener(
-            'deviceorientationabsolute',
-            handleOrientation
-          )
-        }
-        if ('deviceorientation' in window) {
-          window.addEventListener('deviceorientation', handleOrientation)
-        }
+        // if ('ondeviceorientationabsolute' in window) {
+        //   console.log('ondeviceorientationabsolute')
+        //   window.addEventListener(
+        //     'deviceorientationabsolute',
+        //     handleOrientation
+        //   )
+        // }
+
+        console.log('deviceorientation')
+        window.addEventListener('deviceorientation', handleOrientation)
         setState((prevState) => ({
           ...prevState,
           error: undefined,
           loading: false,
-          log: 'Android ve eski iOS için doğrudan başlat'
+          log: `Android ve eski iOS için doğrudan başlat, absolute ${'ondeviceorientationabsolute' in window}`
         }))
       }
     } catch (error: any) {
