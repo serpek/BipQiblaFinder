@@ -49,7 +49,7 @@ export function useOrientation(): OrientationResult {
       error: undefined,
       absolute: e.absolute,
       alpha: Math.round(_alpha || 0),
-      log: `Alpha değerleri güncelleniyor. alpha: ${Math.round(_alpha || 0)} ${_iosAlpha}`
+      log: `Alpha değerleri güncelleniyor. alpha: ${Math.round(_alpha || 0)} | ${_iosAlpha} | ${(e as any).webkitCompassHeading}`
     }))
   }, [])
 
