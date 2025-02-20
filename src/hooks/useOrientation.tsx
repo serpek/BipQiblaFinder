@@ -29,7 +29,6 @@ export function useOrientation(): OrientationResult {
 
   const handleOrientation = useCallback(
     (e: DeviceOrientationEvent) => {
-      console.log('orientation', e)
       let _alpha = e.alpha
 
       let _iosAlpha = (e as any).webkitCompassHeading
@@ -38,11 +37,6 @@ export function useOrientation(): OrientationResult {
       if ((e as any).webkitCompassHeading) {
         _alpha = (e as any).webkitCompassHeading
       } else if (e.absolute && typeof e.alpha === 'number') {
-        // _alpha = (360 - e.alpha) % 360
-        // _alpha = e.alpha
-      }
-
-      if (e.absolute && typeof e.alpha === 'number') {
         _alpha = (360 - e.alpha) % 360
       }
 

@@ -174,7 +174,6 @@ export function useGeolocated(config: GeolocatedConfig = {}): GeolocatedResult {
         positionOptions
       )
     } else {
-      console.log('getCurrentPosition')
       geolocationProvider.getCurrentPosition(
         handlePositionSuccess,
         handlePositionError,
