@@ -29,8 +29,11 @@ export function useOrientation(): OrientationResult {
   const handleOrientation = useCallback((e: DeviceOrientationEvent) => {
     console.log('orientation', e)
     let _alpha = e.alpha
-    // @ts-expect-error iOS özellik kontrolü
-    if (e.webkitCompassHeading) {
+
+    let _iosAlpha = (e as any).webkitCompassHeading
+    _iosAlpha = _iosAlpha ? (360 - _iosAlpha) % 360 : 0
+
+    if ((e as any).webkitCompassHeading) {
       // _alpha = e.webkitCompassHeading
     } else if (e.absolute && typeof e.alpha === 'number') {
       // _alpha = (360 - e.alpha) % 360
@@ -46,7 +49,7 @@ export function useOrientation(): OrientationResult {
       error: undefined,
       absolute: e.absolute,
       alpha: Math.round(_alpha || 0),
-      log: `Alpha değerleri güncelleniyor. alpha: ${Math.round(_alpha || 0)} ${(e as any).webkitCompassHeading}`
+      log: `Alpha değerleri güncelleniyor. alpha: ${Math.round(_alpha || 0)} ${_iosAlpha}`
     }))
   }, [])
 
