@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import useDeviceType from './useDeviceType.ts'
 
 export interface OrientationResult {
   loading: boolean
@@ -17,7 +18,7 @@ export interface IOrientationError {
 }
 
 export function useOrientation(): OrientationResult {
-  // const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+  const deviceType = useDeviceType()
   const [state, setState] = useState<OrientationResult>({
     loading: true,
     timestamp: Date.now(),
@@ -26,32 +27,46 @@ export function useOrientation(): OrientationResult {
     error: undefined
   })
 
-  const handleOrientation = useCallback((e: DeviceOrientationEvent) => {
-    console.log('orientation', e)
-    let _alpha = e.alpha
+  const handleOrientation = useCallback(
+    (e: DeviceOrientationEvent) => {
+      console.log('orientation', e)
+      let _alpha = e.alpha
 
-    let _iosAlpha = (e as any).webkitCompassHeading
-    _iosAlpha = _iosAlpha ? (360 - _iosAlpha) % 360 : 0
+      let _iosAlpha = (e as any).webkitCompassHeading
+      _iosAlpha = _iosAlpha ? (360 - _iosAlpha) % 360 : 0
 
-    if ((e as any).webkitCompassHeading) {
-      // _alpha = e.webkitCompassHeading
-    } else if (e.absolute && typeof e.alpha === 'number') {
-      // _alpha = (360 - e.alpha) % 360
-      // _alpha = e.alpha
-    }
+      if ((e as any).webkitCompassHeading) {
+        _alpha = (e as any).webkitCompassHeading
+      } else if (e.absolute && typeof e.alpha === 'number') {
+        // _alpha = (360 - e.alpha) % 360
+        // _alpha = e.alpha
+      }
 
-    if (typeof e.alpha === 'number') {
-      _alpha = (360 - e.alpha) % 360
-    }
+      if (e.absolute && typeof e.alpha === 'number') {
+        _alpha = (360 - e.alpha) % 360
+      }
 
-    setState((prevState) => ({
-      ...prevState,
-      error: undefined,
-      absolute: e.absolute,
-      alpha: Math.round(_alpha || 0),
-      log: `Alpha değerleri güncelleniyor. alpha: ${Math.round(_alpha || 0)} | ${_iosAlpha} | ${(e as any).webkitCompassHeading}`
-    }))
-  }, [])
+      setState((prevState) => ({
+        ...prevState,
+        error: undefined,
+        absolute: e.absolute,
+        alpha: Math.round(_alpha || 0),
+        log: `Alpha değerleri güncelleniyor. 
+        angle: ${(360 - Math.round(_alpha || 0)) % 360}|
+        _alpha: ${Math.round(_alpha || 0)} | 
+        e.alpha: ${Math.round(e.alpha || 0)} |
+        _iosAlpha: ${Math.round(_iosAlpha || 0)} | 
+        CompassHeading: ${Math.round((e as any).webkitCompassHeading || 0)} |
+        absolute: ${e.absolute} | 
+        deviceabsolute ${typeof (DeviceOrientationEvent as any).requestPermission} |
+        userAgent ${deviceType} |
+        deviceorientation ${'ondeviceorientation' in window} |
+        deviceorientationabsolute ${'ondeviceorientationabsolute' in window} |
+        `
+      }))
+    },
+    [deviceType]
+  )
 
   const requestPermission = useCallback(async () => {
     try {
@@ -82,22 +97,29 @@ export function useOrientation(): OrientationResult {
           }))
         }
       } else {
-        // if ('ondeviceorientationabsolute' in window) {
-        //   console.log('ondeviceorientationabsolute')
-        //   window.addEventListener(
-        //     'deviceorientationabsolute',
-        //     handleOrientation
-        //   )
-        // }
-
-        console.log('deviceorientation')
-        window.addEventListener('deviceorientation', handleOrientation)
-        setState((prevState) => ({
-          ...prevState,
-          error: undefined,
-          loading: false,
-          log: `Android ve eski iOS için doğrudan başlat, absolute ${'ondeviceorientationabsolute' in window}`
-        }))
+        if (deviceType === 'mobile') {
+          window.addEventListener(
+            'deviceorientationabsolute',
+            handleOrientation
+          )
+        } else {
+          window.addEventListener('deviceorientation', handleOrientation)
+        }
+        if ('DeviceOrientationEvent' in window) {
+          setState((prevState) => ({
+            ...prevState,
+            error: undefined,
+            loading: false,
+            log: `Android ve eski iOS için doğrudan başlat`
+          }))
+        } else {
+          setState((prevState) => ({
+            ...prevState,
+            error: undefined,
+            loading: false,
+            log: `DeviceOrientationEvent desteklenmiyor.`
+          }))
+        }
       }
     } catch (error: any) {
       setState((prevState) => ({

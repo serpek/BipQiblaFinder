@@ -1,4 +1,5 @@
 export * from './useDevicePermissions'
+export * from './useDeviceType'
 export * from './useFilteredAngle'
 export * from './useGeolocated'
 export * from './useModal'

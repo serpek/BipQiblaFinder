@@ -43,7 +43,6 @@ const QiblaFinder: React.FC = () => {
     error: errorOrientation,
     alpha,
     absolute,
-    log,
     requestPermission
   } = useOrientation()
   const size = useWindowSize()
@@ -78,6 +77,7 @@ const QiblaFinder: React.FC = () => {
                   icon: null,
                   title: 'Pusulanızı Kalibre Edin',
                   content: <CalibrateView />,
+                  okText: 'Bitti',
                   onOk() {
                     setCookie('1', {
                       expires: new Date(Date.now() + 6 * 60 * 10e3)
@@ -126,7 +126,7 @@ const QiblaFinder: React.FC = () => {
         justifyContent: 'center'
       }}>
       {contextHolder}
-      {log}
+      {/*<p>{log?.split('|').map((l, i) => <div key={i}>{l}</div>)}</p>*/}
       {!mounted ? (
         <div style={{ width: '100%', textAlign: 'center' }}>
           <div style={{ padding: 10, marginBottom: 50 }}>
