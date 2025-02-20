@@ -1,6 +1,6 @@
 import { createLogger, defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { visualizer } from 'rollup-plugin-visualizer'
+// import { visualizer } from 'rollup-plugin-visualizer'
 
 const logger = createLogger()
 logger.clearScreen('error')
@@ -8,8 +8,8 @@ logger.clearScreen('error')
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react(),
-    visualizer({ open: true, filename: 'bundle-visualization.html' })
+    react()
+    // visualizer({ open: true, filename: 'bundle-visualization.html' })
   ],
   build: {
     commonjsOptions: {
