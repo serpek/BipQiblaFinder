@@ -18,9 +18,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('antd/')) {
-            return 'ui'
-          }
           if (id.includes('node_modules')) {
             return 'vendor'
           }
