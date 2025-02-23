@@ -1,64 +1,137 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useCookie, useGeolocation, useWindowSize } from 'react-use'
-import {
-  Button,
-  Card,
-  Col,
-  Layout,
-  notification,
-  Row,
-  Space,
-  Spin,
-  Statistic
-} from 'antd'
+import { Button, Layout, message, notification, Space } from 'antd'
 
 import { useModal, useOrientation } from '../../hooks'
-import { getDirectionName, Qibla } from '../../utils'
+import { isUndefinedOrEmpty, Qibla } from '../../utils'
 import { Compass } from '../../components'
 import { CalibrateView, ErrorView } from '../../views'
 
 import './QiblaFinder.scss'
 
 const QiblaFinder: React.FC = () => {
-  // const { coords, isGeolocationAvailable, isGeolocationEnabled, getPosition } =
-  //   useGeolocated({
-  //     positionOptions: {
-  //       enableHighAccuracy: true
-  //     },
-  //     userDecisionTimeout: 5000
-  //   })
   const { modal } = useModal()
-  const [api, contextHolder] = notification.useNotification()
+  const [notifApi, notificationContextHolder] = notification.useNotification()
+  const [, messageContextHolder] = message.useMessage()
+
   const [cookie, setCookie] = useCookie('_calibrated')
 
   const {
-    loading: loadingGeolocation,
     error: errorGeolocation,
     latitude,
     longitude
   } = useGeolocation({ enableHighAccuracy: true })
-  const {
-    loading: loadingOrientation,
-    error: errorOrientation,
-    alpha,
-    absolute,
-    requestPermission
-  } = useOrientation()
-  const size = useWindowSize()
 
-  const [debug, setDebug] = useState<boolean>(false)
+  const { error: errorOrientation, alpha, requestPermission } = useOrientation()
+
+  const size = useWindowSize()
+  const [searchParams] = useSearchParams({ lon: '', lat: '' })
+
   const [mounted, setMounted] = useState<boolean>(false)
-  const [offset, setOffset] = useState<number>(0)
   const [deviceAngle, setDeviceAngle] = useState<number>(0)
   const [qiblaAngle, setQiblaAngle] = useState<number>(0)
-  const [deviceDirection, setDeviceDirection] = useState<string>('')
-  const [qiblaDirection, setQiblaDirection] = useState<string>('')
+  const [errorMessages, setErrorMessages] = useState<{
+    location: boolean
+    sensor: boolean
+  }>({ location: false, sensor: false })
+
+  const qiblaCalculation = useCallback(
+    (lat: number, lon: number) => {
+      if (lat && lon) {
+        const angle = Qibla.degreesFromTrueNorth(lat, lon)
+        setQiblaAngle(angle)
+      }
+    },
+    [setQiblaAngle]
+  )
 
   useEffect(() => {
-    setDebug(false)
+    // const location = {
+    //   ank: {
+    //     latitude: 39.929624,
+    //     longitude: 32.8545828
+    //   },
+    //   ist: {
+    //     latitude: 41.0120885,
+    //     longitude: 28.9738743
+    //   }
+    // }
+    let lat = 0 //location.ank.latitude
+    let lon = 0 //location.ank.longitude
+    let locationError = false
+
+    const [a, b] = [searchParams.get('lon'), searchParams.get('lat')]
+    if (!isUndefinedOrEmpty(a) && !isUndefinedOrEmpty(b)) {
+      lon = parseFloat(a)
+      lat = parseFloat(b)
+      locationError = false
+    } else {
+      if (errorGeolocation) {
+        locationError = true
+      } else {
+        if (longitude !== null && latitude !== null) {
+          lon = longitude
+          lat = latitude
+          locationError = false
+        } else {
+          locationError = true
+        }
+      }
+    }
+
+    if (lon && lat) {
+      qiblaCalculation(lat, lon)
+    }
+    setErrorMessages((prevState) => ({ ...prevState, location: locationError }))
+  }, [errorGeolocation, latitude, longitude, qiblaCalculation, searchParams])
+
+  useEffect(() => {
+    if (errorOrientation) {
+      setErrorMessages((prevState) => ({ ...prevState, sensor: true }))
+    }
+  }, [errorOrientation])
+
+  useEffect(() => {
+    console.log(
+      'errorMessages: ',
+      errorMessages,
+      errorOrientation,
+      errorGeolocation
+    )
+  }, [errorMessages, errorOrientation, errorGeolocation])
+
+  // const loading = useMemo(() => {
+  //   return loadingGeolocation || loadingOrientation
+  // }, [loadingGeolocation, loadingOrientation])
+
+  // const handlePositionSelected = ([latitude, longitude]: [
+  //   lat: number,
+  //   lon: number
+  // ]) => {
+  //   if (latitude && longitude) {
+  //     qiblaCalculation(latitude, longitude)
+  //   }
+  //   console.log({ latitude, longitude })
+  // }
+
+  useEffect(() => {
+    if (alpha) {
+      const angle = (360 - alpha) % 360
+      setDeviceAngle(angle)
+    }
+  }, [alpha, deviceAngle])
+
+  useEffect(() => {
+    if (latitude && longitude) {
+      qiblaCalculation(latitude, longitude)
+    }
+  }, [latitude, longitude, qiblaCalculation])
+
+  useEffect(() => {
     if (!cookie) {
-      api.destroy()
-      api.open({
+      notifApi.destroy()
+      notifApi.open({
         key: `open${Date.now()}`,
         message: '',
         description: 'Şimdi pusulanızın doğru yönü gösterdiğinden emin olalım.',
@@ -71,7 +144,7 @@ const QiblaFinder: React.FC = () => {
               type="link"
               size="small"
               onClick={() => {
-                api.destroy()
+                notifApi.destroy()
                 modal.info({
                   icon: null,
                   title: 'Pusulanızı Kalibre Edin',
@@ -90,40 +163,21 @@ const QiblaFinder: React.FC = () => {
         )
       })
     }
-  }, [api, cookie, modal, setCookie])
-
-  useEffect(() => {
-    if (alpha) {
-      const angle = (360 - (alpha + offset)) % 360
-      const direction = getDirectionName(angle)
-      setDeviceDirection(direction.name)
-      setDeviceAngle(angle)
-    }
-  }, [offset, alpha, deviceAngle])
-
-  useEffect(() => {
-    if (latitude && longitude) {
-      const angle = Qibla.degreesFromTrueNorth(latitude, longitude)
-      setQiblaAngle(angle)
-      const direction = getDirectionName(angle)
-      setQiblaDirection(direction.name)
-    }
-  }, [latitude, longitude])
+  }, [notifApi, cookie, modal, setCookie])
 
   const isError = useMemo(() => {
-    return !!(errorGeolocation || errorOrientation)
-  }, [errorOrientation, errorGeolocation])
-
-  const loading = useMemo(() => {
-    return loadingGeolocation || loadingOrientation
-  }, [loadingGeolocation, loadingOrientation])
+    return errorMessages.location || errorMessages.sensor
+  }, [errorMessages])
 
   return (
     <Layout className="compass-layout">
-      {contextHolder}
+      {notificationContextHolder}
+      {messageContextHolder}
       {/*<p>{log?.split('|').map((l, i) => <div key={i}>{l}</div>)}</p>*/}
+      {/*<MapPicker onPositionSelected={handlePositionSelected} />*/}
       {!mounted ? (
         <div className="start-screen">
+          <div className="bip-logo"></div>
           <p>
             <Button
               type="primary"
@@ -143,116 +197,17 @@ const QiblaFinder: React.FC = () => {
         </div>
       ) : (
         <>
-          <Spin spinning={loading} delay={500}>
-            {isError ? (
-              <ErrorView
-                message={[
-                  errorGeolocation?.message,
-                  errorOrientation?.message
-                ].filter((e) => typeof e === 'string')}
-              />
-            ) : (
-              <>
-                <Compass
-                  angle={deviceAngle}
-                  qible={qiblaAngle}
-                  width={size.width - 60}
-                  height={size.width - 60}
-                  maxWidth={400}
-                  maxHeight={400}
-                />
-
-                {debug && (
-                  <>
-                    <Row gutter={16} style={{ marginBottom: 5 }}>
-                      <Col className="gutter-row" span={24}>
-                        <Card bordered={false} title="Kalibrasyon Düzeltmesi">
-                          <input
-                            style={{ width: '100%' }}
-                            type="range"
-                            min="-50"
-                            max="50"
-                            value={offset}
-                            onChange={(e) => setOffset(Number(e.target.value))}
-                          />
-                          <p>Offset: {offset}°</p>
-                          <p
-                            style={{
-                              color: absolute ? 'red' : 'green'
-                            }}>
-                            {absolute
-                              ? 'Manyetik Kuzey Kullanılıyor'
-                              : 'Gerçek Kuzey Kullanılıyor'}
-                          </p>
-                        </Card>
-                      </Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: 5 }}>
-                      <Col className="gutter-row" span={12}>
-                        <Card bordered={false} title="Pusula Yönü">
-                          <Row align="stretch" justify="center">
-                            <Col>
-                              <svg
-                                width="50"
-                                height="50"
-                                viewBox="0 0 100 100"
-                                style={{
-                                  transform: `rotate(${deviceAngle}deg)`,
-                                  margin: '0 auto',
-                                  transition: 'transform 0.5s ease-out',
-                                  background: '#efefef',
-                                  borderRadius: '50%'
-                                }}>
-                                <polygon
-                                  points="50,10 60,40 50,30 40,40"
-                                  fill="red"
-                                />
-                              </svg>
-                              <Statistic
-                                title={deviceDirection}
-                                value={((360 - deviceAngle) % 360).toFixed(0)}
-                                precision={2}
-                                suffix={`°`}
-                              />
-                            </Col>
-                          </Row>
-                        </Card>
-                      </Col>
-                      <Col className="gutter-row" span={12}>
-                        <Card bordered={false} title="Kıble Yönü">
-                          <Row align="stretch" justify="center">
-                            <Col>
-                              <svg
-                                width="50"
-                                height="50"
-                                viewBox="0 0 100 100"
-                                style={{
-                                  transform: `rotate(${qiblaAngle}deg)`,
-                                  margin: '0 auto',
-                                  transition: 'transform 0.5s ease-out',
-                                  background: '#efefef',
-                                  borderRadius: '50%'
-                                }}>
-                                <polygon
-                                  points="50,10 60,40 50,30 40,40"
-                                  fill="red"
-                                />
-                              </svg>
-                              <Statistic
-                                title={qiblaDirection}
-                                value={qiblaAngle.toFixed(0)}
-                                suffix="°"
-                              />
-                            </Col>
-                          </Row>
-                        </Card>
-                      </Col>
-                    </Row>
-                  </>
-                )}
-              </>
-            )}
-          </Spin>
+          {isError && <ErrorView message={errorMessages} />}
+          {!isError && deviceAngle > -1 && qiblaAngle > -1 && (
+            <Compass
+              angle={deviceAngle}
+              qible={qiblaAngle}
+              width={size.width - 60}
+              height={size.width - 60}
+              maxWidth={400}
+              maxHeight={400}
+            />
+          )}
         </>
       )}
     </Layout>

@@ -43,7 +43,7 @@ createRoot(document.getElementById('root')!).render(
           <Route element={<BasicLayout />}>
             <Route index element={<QiblaFinder />} />
             <Route path="*" element={<QiblaFinder />} />
-            <Route path="/b0" element={<Blank />} />
+            <Route path="/blank" element={<Blank />} />
             <Route path="/terms" element={<TermsOfUse />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/cookie" element={<CookiePolicy />} />

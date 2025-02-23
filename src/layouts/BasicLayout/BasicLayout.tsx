@@ -8,6 +8,8 @@ import './BasicLayout.scss'
 const { Header, Content, Footer } = Layout
 
 const BasicLayout: React.FC = () => {
+  const appVersion = import.meta.env.APP_VERSION || 'Bilinmeyen Versiyon'
+
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
 
@@ -63,6 +65,11 @@ const BasicLayout: React.FC = () => {
               label: 'Kıble Bul',
               onClick: () => goto('/')
             },
+            {
+              key: 'm10',
+              label: 'blank',
+              onClick: () => goto('blank/')
+            },
             { type: 'divider' },
             {
               key: 'm2',
@@ -82,6 +89,7 @@ const BasicLayout: React.FC = () => {
           ]}
           style={{ border: 0, background: 'transparent' }}
         />
+        <small>{appVersion}</small>
       </Drawer>
     </Layout>
   )

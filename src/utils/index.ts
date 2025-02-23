@@ -22,3 +22,9 @@ export const getDirectionName = (angle: number): Direction => {
 export function toFixed(value: number, radix: number = 0): number {
   return Number.parseFloat(value.toFixed(radix))
 }
+
+export function isUndefinedOrEmpty(
+  value: string | null | undefined
+): value is undefined | null | '' {
+  return value === undefined || value === null || value === ''
+}

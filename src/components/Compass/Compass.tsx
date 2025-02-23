@@ -1,6 +1,13 @@
-import { type CSSProperties, PropsWithChildren, useMemo } from 'react'
+import {
+  type CSSProperties,
+  PropsWithChildren,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
 import './compass.scss'
 import { useShortestRotation } from '../../hooks'
+import { getDirectionName } from '../../utils'
 
 type CompassViewProps = PropsWithChildren<
   {
@@ -13,12 +20,24 @@ export const Compass = ({ angle, qible, ...styles }: CompassViewProps) => {
   // **Titreşim engelleyici filtreleme: Küçük değişiklikleri yok sayar**
   // const correctedAngle = useFilteredAngle(angle, 3) // 3° eşik değeri
   // const correctedAngle = useSmoothedAngle(angle, 0.85)
+
+  const [, setDeviceDirection] = useState<string>('')
+  const [, setQiblaDirection] = useState<string>('')
+
   const correctedAngle = useShortestRotation(angle) // 3° eşik değeri
 
   const anglePoint = useMemo(() => {
     let diff = Math.abs(((360 - angle) % 360) - qible)
     diff = Math.min(diff, 360 - diff) // 0° ve 360° geçişini düzeltir
     return diff <= 10
+  }, [angle, qible])
+
+  useEffect(() => {
+    const qiblaDirection = getDirectionName(qible)
+    setQiblaDirection(qiblaDirection.name)
+
+    const deviceDirection = getDirectionName(angle)
+    setDeviceDirection(deviceDirection.name)
   }, [angle, qible])
 
   return (
