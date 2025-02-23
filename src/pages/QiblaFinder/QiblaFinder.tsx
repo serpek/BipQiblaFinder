@@ -87,19 +87,10 @@ const QiblaFinder: React.FC = () => {
   }, [errorGeolocation, latitude, longitude, qiblaCalculation, searchParams])
 
   useEffect(() => {
-    if (errorOrientation) {
+    if ((errorOrientation as any)?.code === 1) {
       setErrorMessages((prevState) => ({ ...prevState, sensor: true }))
     }
   }, [errorOrientation])
-
-  useEffect(() => {
-    console.log(
-      'errorMessages: ',
-      errorMessages,
-      errorOrientation,
-      errorGeolocation
-    )
-  }, [errorMessages, errorOrientation, errorGeolocation])
 
   // const loading = useMemo(() => {
   //   return loadingGeolocation || loadingOrientation
