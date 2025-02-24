@@ -181,16 +181,9 @@ const QiblaFinder: React.FC = () => {
       ) : (
         <>
           {isError && <ErrorView message={errorMessages} />}
-          {!isError && alpha && (
-            <Compass
-              alpha={alpha}
-              qible={qiblaAngle}
-              width={size.width - 60}
-              height={size.width - 60}
-              maxWidth={400}
-              maxHeight={400}
-            />
-          )}
+          <div style={{ backgroundColor: 'rebeccapurple' }}>
+            {!isError && alpha && <Compass alpha={alpha} qible={qiblaAngle} />}
+          </div>
         </>
       )}
     </Layout>
