@@ -36,11 +36,7 @@ export const Compass = ({
 
   useEffect(() => {
     if (alpha) {
-      const positionCurrent = alpha
-
-      const phase =
-        positionCurrent < 0 ? 360 + positionCurrent : positionCurrent
-      heading.current = (360 - phase) | 0
+      heading.current = alpha * (Math.PI / 180)
     }
   }, [alpha])
 
@@ -60,7 +56,7 @@ export const Compass = ({
 
   return (
     <>
-      {`correctedAngle ${Math.round(correctedAngle)}° | angle: ${angle}° | alpha: ${alpha}° | heading: ${heading.current}°`}
+      {`corrected ${Math.round(correctedAngle)}° | angle: ${angle}° | alpha: ${alpha}° | heading: ${heading.current}°`}
       <div
         className="compass"
         style={{
