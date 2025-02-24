@@ -60,7 +60,7 @@ export const Compass = ({
 
   return (
     <>
-      {`correctedAngle ${correctedAngle}° | angle: ${angle}° | alpha: ${alpha}° | heading: ${heading}°`}
+      {`correctedAngle ${Math.round(correctedAngle)}° | angle: ${angle}° | alpha: ${alpha}° | heading: ${heading}°`}
       <div
         className="compass"
         style={{
