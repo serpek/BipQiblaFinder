@@ -20,17 +20,11 @@ import arrowInImg from '../../assets/arrow-in.png'
 type CompassViewProps = PropsWithChildren<
   {
     alpha: number | null
-    angle: number
     qible: number
   } & CSSProperties
 >
 
-export const Compass = ({
-  alpha,
-  angle,
-  qible,
-  ...styles
-}: CompassViewProps) => {
+export const Compass = ({ alpha, qible, ...styles }: CompassViewProps) => {
   // **Titreşim engelleyici filtreleme: Küçük değişiklikleri yok sayar**
   // const correctedAngle1 = useFilteredAngle(angle, 3) // 3° eşik değeri
   // const correctedAngle2 = useSmoothedAngle(angle, 0.85)
@@ -41,29 +35,31 @@ export const Compass = ({
 
   const [, setDeviceDirection] = useState<string>('')
   const [, setQiblaDirection] = useState<string>('')
+  const [deviceAngle, setDeviceAngle] = useState<number>(0)
 
   const size = useWindowSize()
-  const correctedAngle = useShortestRotation(angle)
+  const correctedAngle = useShortestRotation(deviceAngle)
+
+  useEffect(() => {
+    if (alpha) {
+      const angle = (360 - alpha) % 360
+      setDeviceAngle(angle)
+    }
+  }, [alpha, deviceAngle])
 
   const anglePoint = useMemo(() => {
-    let diff = Math.abs(((360 - angle) % 360) - qible)
+    let diff = Math.abs(((360 - deviceAngle) % 360) - qible)
     diff = Math.min(diff, 360 - diff) // 0° ve 360° geçişini düzeltir
     return diff <= 10
-  }, [angle, qible])
-
-  const anglePoint2 = useMemo(() => {
-    let diff = Math.abs(((360 - (alpha || 0)) % 360) - qible)
-    diff = Math.min(diff, 360 - diff) // 0° ve 360° geçişini düzeltir
-    return diff
-  }, [angle, qible])
+  }, [deviceAngle, qible])
 
   useEffect(() => {
     const qiblaDirection = getDirectionName(qible)
     setQiblaDirection(qiblaDirection.name)
 
-    const deviceDirection = getDirectionName(angle)
+    const deviceDirection = getDirectionName(deviceAngle)
     setDeviceDirection(deviceDirection.name)
-  }, [angle, qible])
+  }, [deviceAngle, qible])
 
   const screenWidth = useMemo(() => size.width / 1.1, [size.width])
   const screenScale = useMemo(
@@ -73,8 +69,7 @@ export const Compass = ({
 
   return (
     <>
-      <div>{`corrected ${Math.round(correctedAngle)}° | angle: ${angle}° | alpha: ${alpha}° | heading: ${anglePoint2}°`}</div>
-      <div>{`width: ${screenWidth} - ${screenWidth / size.width}`}</div>
+      <div>{`angle: ${deviceAngle}° | alpha: ${alpha}°`}</div>
       <Stage
         width={size.width}
         height={size.width}
@@ -91,7 +86,7 @@ export const Compass = ({
               x: screenScale,
               y: screenScale
             }}
-            rotation={angle}
+            rotation={deviceAngle}
             duration={0.5}>
             <Image
               width={size.width}
@@ -131,7 +126,6 @@ export const Compass = ({
             height={64}
             image={arrowInImage}
             opacity={anglePoint ? 1 : 0.5}
-            rotation={(360 - angle) % 360}
             scale={{
               x: screenScale,
               y: screenScale

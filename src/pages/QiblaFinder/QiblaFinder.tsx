@@ -29,7 +29,6 @@ const QiblaFinder: React.FC = () => {
   const [searchParams] = useSearchParams({ lon: '', lat: '' })
 
   const [mounted, setMounted] = useState<boolean>(false)
-  const [deviceAngle, setDeviceAngle] = useState<number>(0)
   const [qiblaAngle, setQiblaAngle] = useState<number>(0)
   const [errorMessages, setErrorMessages] = useState<{
     location: boolean
@@ -107,13 +106,6 @@ const QiblaFinder: React.FC = () => {
   // }
 
   useEffect(() => {
-    if (alpha) {
-      const angle = (360 - alpha) % 360
-      setDeviceAngle(angle)
-    }
-  }, [alpha, deviceAngle])
-
-  useEffect(() => {
     if (latitude && longitude) {
       qiblaCalculation(latitude, longitude)
     }
@@ -189,10 +181,9 @@ const QiblaFinder: React.FC = () => {
       ) : (
         <>
           {isError && <ErrorView message={errorMessages} />}
-          {!isError && deviceAngle > -1 && qiblaAngle > -1 && (
+          {!isError && alpha && (
             <Compass
               alpha={alpha}
-              angle={deviceAngle}
               qible={qiblaAngle}
               width={size.width - 60}
               height={size.width - 60}
