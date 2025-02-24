@@ -27,7 +27,7 @@ export const useShortestRotation = (targetAngle: number) => {
 
     animationRef.current = requestAnimationFrame(updateAngle)
     return () => cancelAnimationFrame(animationRef.current!)
-  }, [])
+  }, [targetAngle])
 
   return currentAngle
 }
