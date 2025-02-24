@@ -1,11 +1,12 @@
 {
   "name": "vite-react-typescript-starter",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "prestart": "npm minor",
+    "prebuild": "npm major",
     "expo": "npx expo start",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

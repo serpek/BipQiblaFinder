@@ -57,6 +57,9 @@ const BasicLayout: React.FC = () => {
         onClose={onClose}
         open={open}>
         <div className="drawer-logo"></div>
+        <p style={{ textAlign: 'center' }}>
+          <small>v.{appVersion}</small>
+        </p>
         <Menu
           onClick={onClick}
           items={[
@@ -89,7 +92,6 @@ const BasicLayout: React.FC = () => {
           ]}
           style={{ border: 0, background: 'transparent' }}
         />
-        <small>{appVersion}</small>
       </Drawer>
     </Layout>
   )
