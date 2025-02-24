@@ -46,11 +46,11 @@ export const Compass = ({ alpha = 0, qible, ...styles }: CompassViewProps) => {
   const correctedAngle = useShortestRotation(deviceAngle)
 
   useEffect(() => {
-    if (alpha) {
-      const angle = (360 - alpha) % 360
+    if (correctedAngle2) {
+      const angle = (360 - correctedAngle2) % 360
       setDeviceAngle(angle)
     }
-  }, [alpha, deviceAngle])
+  }, [correctedAngle2, deviceAngle])
 
   const anglePoint = useMemo(() => {
     let diff = Math.abs(((360 - deviceAngle) % 360) - qible)
