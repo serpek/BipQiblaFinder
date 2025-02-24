@@ -7,7 +7,7 @@ export const useShortestRotation = (targetAngle: number) => {
     let delta = targetAngle - currentAngle
     if (delta > 180) delta -= 360
     if (delta < -180) delta += 360
-    setCurrentAngle(currentAngle + delta)
+    setCurrentAngle((360 - currentAngle + delta) % 360)
   }, [currentAngle, targetAngle])
 
   return currentAngle
