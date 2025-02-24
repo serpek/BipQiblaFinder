@@ -18,5 +18,5 @@ export const useSmoothedAngle = (
     )
   }, [rawAngle, smoothFactor])
 
-  return smoothedAngle
+  return Math.round(smoothedAngle)
 }
