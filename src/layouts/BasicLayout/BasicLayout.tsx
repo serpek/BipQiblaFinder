@@ -65,11 +65,11 @@ const BasicLayout: React.FC = () => {
               label: 'Kıble Bul',
               onClick: () => goto('/')
             },
-            {
-              key: 'm10',
-              label: 'blank',
-              onClick: () => goto('blank/')
-            },
+            // {
+            //   key: 'm10',
+            //   label: 'blank',
+            //   onClick: () => goto('blank/')
+            // },
             { type: 'divider' },
             {
               key: 'm2',
