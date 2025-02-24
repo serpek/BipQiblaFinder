@@ -180,9 +180,9 @@ const QiblaFinder: React.FC = () => {
       ) : (
         <>
           {isError && <ErrorView message={errorMessages} />}
+          {alpha?.toString()}
           <div style={{ backgroundColor: 'rebeccapurple' }}>
-            {alpha?.toString()}
-            {!isError && alpha && alpha > -1 && (
+            {!isError && alpha > -1 && (
               <Compass alpha={alpha} qible={qiblaAngle} />
             )}
           </div>
