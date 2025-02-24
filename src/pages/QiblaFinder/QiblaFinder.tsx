@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useCookie, useGeolocation } from 'react-use'
-import { Button, Layout, message, notification, Space } from 'antd'
+import { Button, Layout, message, notification, Space, Spin } from 'antd'
 
 import { useModal, useOrientation } from '../../hooks'
 import { isUndefinedOrEmpty, Qibla } from '../../utils'
@@ -180,7 +180,15 @@ const QiblaFinder: React.FC = () => {
         </div>
       ) : (
         <>
-          {loading ? null : (
+          {loading ? (
+            <Spin tip="Lütfen Bekleyin" size="large" fullscreen={true}>
+              <div
+                style={{
+                  padding: 50
+                }}
+              />
+            </Spin>
+          ) : (
             <>
               {isError && <ErrorView message={errorMessages} />}
               {!isError && alpha > -1 && (
