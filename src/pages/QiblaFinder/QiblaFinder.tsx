@@ -19,6 +19,7 @@ const QiblaFinder: React.FC = () => {
 
   const {
     error: errorGeolocation,
+    loading,
     latitude,
     longitude
   } = useGeolocation({ enableHighAccuracy: true })
@@ -179,9 +180,13 @@ const QiblaFinder: React.FC = () => {
         </div>
       ) : (
         <>
-          {isError && <ErrorView message={errorMessages} />}
-          {!isError && alpha > -1 && (
-            <Compass alpha={alpha} qible={qiblaAngle} />
+          {loading ? null : (
+            <>
+              {isError && <ErrorView message={errorMessages} />}
+              {!isError && alpha > -1 && (
+                <Compass alpha={alpha} qible={qiblaAngle} />
+              )}
+            </>
           )}
         </>
       )}

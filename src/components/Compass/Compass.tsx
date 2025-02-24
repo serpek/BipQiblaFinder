@@ -66,7 +66,6 @@ export const Compass = ({ alpha = 0, qible }: CompassViewProps) => {
       <Stage
         width={defaultWidth}
         height={defaultWidth}
-        style={{ backgroundColor: 'green' }}
         scale={{
           x: screenScale,
           y: screenScale
