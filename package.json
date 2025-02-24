@@ -5,8 +5,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prestart": "npm version minor",
-    "prebuild": "npm version major",
     "expo": "npx expo start",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
