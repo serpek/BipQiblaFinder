@@ -4,7 +4,7 @@ import useDeviceType from './useDeviceType.ts'
 export interface OrientationResult {
   loading: boolean
   absolute: boolean | null
-  alpha: number | null
+  alpha: number
   timestamp: number | null
   error?: Error | IOrientationError
   log?: string
@@ -23,7 +23,7 @@ export function useOrientation(): OrientationResult {
     loading: true,
     timestamp: Date.now(),
     absolute: null,
-    alpha: null,
+    alpha: 0,
     error: undefined
   })
 
