@@ -6,11 +6,7 @@ import {
   useState
 } from 'react'
 import './compass.scss'
-import {
-  useFilteredAngle,
-  useShortestRotation,
-  useSmoothedAngle
-} from '../../hooks'
+import { useShortestRotation } from '../../hooks'
 import { getDirectionName } from '../../utils'
 
 type CompassViewProps = PropsWithChildren<
@@ -22,8 +18,8 @@ type CompassViewProps = PropsWithChildren<
 
 export const Compass = ({ angle, qible, ...styles }: CompassViewProps) => {
   // **Titreşim engelleyici filtreleme: Küçük değişiklikleri yok sayar**
-  const correctedAngle1 = useFilteredAngle(angle, 3) // 3° eşik değeri
-  const correctedAngle2 = useSmoothedAngle(angle, 0.85)
+  // const correctedAngle1 = useFilteredAngle(angle, 3) // 3° eşik değeri
+  // const correctedAngle2 = useSmoothedAngle(angle, 0.85)
 
   const [, setDeviceDirection] = useState<string>('')
   const [, setQiblaDirection] = useState<string>('')
@@ -46,7 +42,7 @@ export const Compass = ({ angle, qible, ...styles }: CompassViewProps) => {
 
   return (
     <>
-      {`correctedAngle ${correctedAngle}° / ${correctedAngle1} / ${correctedAngle2} | angle: ${angle}°`}
+      {`correctedAngle ${correctedAngle}° | angle: ${angle}°`}
       <div
         className="compass"
         style={{
