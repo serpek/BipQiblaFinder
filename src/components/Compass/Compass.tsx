@@ -11,12 +11,18 @@ import { getDirectionName } from '../../utils'
 
 type CompassViewProps = PropsWithChildren<
   {
+    alpha?: number
     angle: number
     qible: number
   } & CSSProperties
 >
 
-export const Compass = ({ angle, qible, ...styles }: CompassViewProps) => {
+export const Compass = ({
+  alpha,
+  angle,
+  qible,
+  ...styles
+}: CompassViewProps) => {
   // **Titreşim engelleyici filtreleme: Küçük değişiklikleri yok sayar**
   // const correctedAngle1 = useFilteredAngle(angle, 3) // 3° eşik değeri
   // const correctedAngle2 = useSmoothedAngle(angle, 0.85)
@@ -42,7 +48,7 @@ export const Compass = ({ angle, qible, ...styles }: CompassViewProps) => {
 
   return (
     <>
-      {`correctedAngle ${correctedAngle}° | angle: ${angle}°`}
+      {`correctedAngle ${correctedAngle}° | angle: ${angle}° | alpha: ${alpha}°`}
       <div
         className="compass"
         style={{
