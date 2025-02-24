@@ -3,12 +3,19 @@ import {
   PropsWithChildren,
   useEffect,
   useMemo,
-  useRef,
   useState
 } from 'react'
 import './compass.scss'
+import { Group, Image, Layer, Stage } from 'react-konva'
+import useImage from 'use-image'
+import { useWindowSize } from 'react-use'
 import { useShortestRotation } from '../../hooks'
 import { getDirectionName } from '../../utils'
+
+import compassImg from '../../assets/compass.png'
+import qibleArrowImg from '../../assets/arrow.png'
+import kabeImg from '../../assets/kabe.png'
+import arrowInImg from '../../assets/arrow-in.png'
 
 type CompassViewProps = PropsWithChildren<
   {
@@ -27,23 +34,27 @@ export const Compass = ({
   // **Titreşim engelleyici filtreleme: Küçük değişiklikleri yok sayar**
   // const correctedAngle1 = useFilteredAngle(angle, 3) // 3° eşik değeri
   // const correctedAngle2 = useSmoothedAngle(angle, 0.85)
+  const [compassImage] = useImage(compassImg)
+  const [qibleArrowImage] = useImage(qibleArrowImg)
+  const [kabeImage] = useImage(kabeImg)
+  const [arrowInImage] = useImage(arrowInImg)
 
   const [, setDeviceDirection] = useState<string>('')
   const [, setQiblaDirection] = useState<string>('')
-  const heading = useRef<number>(0)
 
+  const size = useWindowSize()
   const correctedAngle = useShortestRotation(angle)
-
-  useEffect(() => {
-    if (alpha) {
-      heading.current = alpha * (Math.PI / 180)
-    }
-  }, [alpha])
 
   const anglePoint = useMemo(() => {
     let diff = Math.abs(((360 - angle) % 360) - qible)
     diff = Math.min(diff, 360 - diff) // 0° ve 360° geçişini düzeltir
     return diff <= 10
+  }, [angle, qible])
+
+  const anglePoint2 = useMemo(() => {
+    let diff = Math.abs(((360 - (alpha || 0)) % 360) - qible)
+    diff = Math.min(diff, 360 - diff) // 0° ve 360° geçişini düzeltir
+    return diff
   }, [angle, qible])
 
   useEffect(() => {
@@ -54,12 +65,85 @@ export const Compass = ({
     setDeviceDirection(deviceDirection.name)
   }, [angle, qible])
 
+  const screenWidth = useMemo(() => size.width / 1.1, [size.width])
+  const screenScale = useMemo(
+    () => screenWidth / size.width,
+    [screenWidth, size.width]
+  )
+
   return (
     <>
-      {`corrected ${Math.round(correctedAngle)}° | angle: ${angle}° | alpha: ${alpha}° | heading: ${heading.current}°`}
+      <div>{`corrected ${Math.round(correctedAngle)}° | angle: ${angle}° | alpha: ${alpha}° | heading: ${anglePoint2}°`}</div>
+      <div>{`width: ${screenWidth} - ${screenWidth / size.width}`}</div>
+      <Stage
+        width={size.width}
+        height={size.width}
+        style={{ backgroundColor: '#ccc' }}>
+        <Layer>
+          <Group
+            width={size.width}
+            height={size.width}
+            x={size.width / 2}
+            y={size.width / 2}
+            offsetX={size.width / 2}
+            offsetY={size.width / 2}
+            scale={{
+              x: screenScale,
+              y: screenScale
+            }}
+            rotation={angle}
+            duration={0.5}>
+            <Image
+              width={size.width}
+              height={size.width}
+              image={compassImage}
+            />
+            <Image
+              x={size.width / 2}
+              y={size.width / 2}
+              offsetX={34}
+              offsetY={125}
+              width={68}
+              height={91}
+              image={qibleArrowImage}
+              duration={0.5}
+              rotation={qible}
+            />
+            <Image
+              x={size.width / 2}
+              y={size.width / 2}
+              offsetX={24}
+              offsetY={210}
+              width={48}
+              height={56}
+              image={kabeImage}
+              duration={0.5}
+              rotation={qible}
+            />
+          </Group>
+
+          <Image
+            x={size.width / 2}
+            y={size.width / 2}
+            offsetX={24}
+            offsetY={112}
+            width={48}
+            height={64}
+            image={arrowInImage}
+            opacity={anglePoint ? 1 : 0.5}
+            rotation={(360 - angle) % 360}
+            scale={{
+              x: screenScale,
+              y: screenScale
+            }}
+          />
+        </Layer>
+      </Stage>
+
       <div
         className="compass"
         style={{
+          display: 'none',
           transform: `rotate(${correctedAngle}deg)`,
           position: 'relative',
           ...styles

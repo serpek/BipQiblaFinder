@@ -19,10 +19,12 @@
     "leaflet": "^1.9.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-konva": "^19.0.3",
     "react-leaflet": "^5.0.0",
     "react-router": "6.3.0",
     "react-router-dom": "6.3.0",
     "react-use": "^17.6.0",
+    "use-image": "^1.1.1",
     "vite-plugin-clean": "^2.0.1"
   },
   "devDependencies": {
