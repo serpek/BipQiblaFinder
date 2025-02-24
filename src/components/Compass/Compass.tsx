@@ -9,7 +9,11 @@ import './compass.scss'
 import { Group, Image, Layer, Stage } from 'react-konva'
 import useImage from 'use-image'
 import { useWindowSize } from 'react-use'
-import { useShortestRotation } from '../../hooks'
+import {
+  useFilteredAngle,
+  useShortestRotation,
+  useSmoothedAngle
+} from '../../hooks'
 import { getDirectionName } from '../../utils'
 
 import compassImg from '../../assets/compass.png'
@@ -19,15 +23,16 @@ import arrowInImg from '../../assets/arrow-in.png'
 
 type CompassViewProps = PropsWithChildren<
   {
-    alpha: number | null
+    alpha: number
     qible: number
   } & CSSProperties
 >
 
-export const Compass = ({ alpha, qible, ...styles }: CompassViewProps) => {
+export const Compass = ({ alpha = 0, qible, ...styles }: CompassViewProps) => {
   // **Titreşim engelleyici filtreleme: Küçük değişiklikleri yok sayar**
-  // const correctedAngle1 = useFilteredAngle(angle, 3) // 3° eşik değeri
-  // const correctedAngle2 = useSmoothedAngle(angle, 0.85)
+  const correctedAngle1 = useFilteredAngle(alpha, 3) // 3° eşik değeri
+  const correctedAngle2 = useSmoothedAngle(alpha, 0.85)
+
   const [compassImage] = useImage(compassImg)
   const [qibleArrowImage] = useImage(qibleArrowImg)
   const [kabeImage] = useImage(kabeImg)
@@ -70,6 +75,7 @@ export const Compass = ({ alpha, qible, ...styles }: CompassViewProps) => {
   return (
     <>
       <div>{`angle: ${deviceAngle}° | alpha: ${alpha}°`}</div>
+      <div>{`correct 1: ${correctedAngle1}° | correct 2: ${correctedAngle2}°`}</div>
       <Stage
         width={size.width}
         height={size.width}
