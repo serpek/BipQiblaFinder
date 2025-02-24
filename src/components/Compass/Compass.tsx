@@ -1,15 +1,7 @@
-import {
-  type CSSProperties,
-  PropsWithChildren,
-  useEffect,
-  useMemo,
-  useState
-} from 'react'
-import './compass.scss'
+import { PropsWithChildren, useEffect, useMemo, useState } from 'react'
 import { Group, Image, Layer, Stage } from 'react-konva'
 import useImage from 'use-image'
 import { useWindowSize } from 'react-use'
-import { useFilteredAngle, useShortestRotation } from '../../hooks'
 import { getDirectionName } from '../../utils'
 
 import compassImg from '../../assets/compass.png'
@@ -17,17 +9,14 @@ import qibleArrowImg from '../../assets/arrow.png'
 import kabeImg from '../../assets/kabe.png'
 import arrowInImg from '../../assets/arrow-in.png'
 
-type CompassViewProps = PropsWithChildren<
-  {
-    alpha: number
-    qible: number
-  } & CSSProperties
->
+import './compass.scss'
 
-export const Compass = ({ alpha = 0, qible, ...styles }: CompassViewProps) => {
-  // **Titreşim engelleyici filtreleme: Küçük değişiklikleri yok sayar**
-  const correctedAngle1 = useFilteredAngle(alpha, 3) // 3° eşik değeri
+type CompassViewProps = PropsWithChildren<{
+  alpha: number
+  qible: number
+}>
 
+export const Compass = ({ alpha = 0, qible }: CompassViewProps) => {
   const [compassImage] = useImage(compassImg)
   const [qibleArrowImage] = useImage(qibleArrowImg)
   const [kabeImage] = useImage(kabeImg)
@@ -38,7 +27,6 @@ export const Compass = ({ alpha = 0, qible, ...styles }: CompassViewProps) => {
   const [deviceAngle, setDeviceAngle] = useState<number>(0)
 
   const size = useWindowSize()
-  const correctedAngle = useShortestRotation(deviceAngle)
 
   useEffect(() => {
     if (alpha) {
@@ -49,7 +37,7 @@ export const Compass = ({ alpha = 0, qible, ...styles }: CompassViewProps) => {
 
   const anglePoint = useMemo(() => {
     let diff = Math.abs(((360 - deviceAngle) % 360) - qible)
-    diff = Math.min(diff, 360 - diff) // 0° ve 360° geçişini düzeltir
+    diff = Math.min(diff, 360 - diff)
     return diff <= 10
   }, [deviceAngle, qible])
 
@@ -61,7 +49,13 @@ export const Compass = ({ alpha = 0, qible, ...styles }: CompassViewProps) => {
     setDeviceDirection(deviceDirection.name)
   }, [deviceAngle, qible])
 
-  const screenWidth = useMemo(() => size.width / 1.1, [size.width])
+  const scale = 1.1
+  const defaultWidth = useMemo(() => size.width, [size.width])
+  const screenWidth = useMemo(() => size.width / scale, [size.width])
+  const screenCenter = useMemo(
+    () => (defaultWidth - screenWidth) / 2 + defaultWidth / 2,
+    [defaultWidth, screenWidth]
+  )
   const screenScale = useMemo(
     () => screenWidth / size.width,
     [screenWidth, size.width]
@@ -69,34 +63,32 @@ export const Compass = ({ alpha = 0, qible, ...styles }: CompassViewProps) => {
 
   return (
     <>
-      <div>{`angle: ${deviceAngle}° | alpha: ${alpha}°`}</div>
-      <div>{`correct 1: ${correctedAngle1}°`}</div>
       <Stage
-        width={size.width}
-        height={size.width}
-        style={{ backgroundColor: '#ccc' }}>
+        width={defaultWidth}
+        height={defaultWidth}
+        style={{ backgroundColor: 'green' }}
+        scale={{
+          x: screenScale,
+          y: screenScale
+        }}>
         <Layer>
           <Group
-            width={size.width}
-            height={size.width}
-            x={size.width / 2}
-            y={size.width / 2}
-            offsetX={size.width / 2}
-            offsetY={size.width / 2}
-            scale={{
-              x: screenScale,
-              y: screenScale
-            }}
+            width={defaultWidth}
+            height={defaultWidth}
+            x={screenCenter}
+            y={screenCenter}
+            offsetX={defaultWidth / 2}
+            offsetY={defaultWidth / 2}
             rotation={deviceAngle}
             duration={0.5}>
             <Image
-              width={size.width}
-              height={size.width}
+              width={defaultWidth}
+              height={defaultWidth}
               image={compassImage}
             />
             <Image
-              x={size.width / 2}
-              y={size.width / 2}
+              x={defaultWidth / 2}
+              y={defaultWidth / 2}
               offsetX={34}
               offsetY={125}
               width={68}
@@ -106,8 +98,8 @@ export const Compass = ({ alpha = 0, qible, ...styles }: CompassViewProps) => {
               rotation={qible}
             />
             <Image
-              x={size.width / 2}
-              y={size.width / 2}
+              x={defaultWidth / 2}
+              y={defaultWidth / 2}
               offsetX={24}
               offsetY={210}
               width={48}
@@ -119,49 +111,17 @@ export const Compass = ({ alpha = 0, qible, ...styles }: CompassViewProps) => {
           </Group>
 
           <Image
-            x={size.width / 2}
-            y={size.width / 2}
+            x={screenCenter}
+            y={screenCenter}
             offsetX={24}
             offsetY={112}
             width={48}
             height={64}
             image={arrowInImage}
             opacity={anglePoint ? 1 : 0.5}
-            scale={{
-              x: screenScale,
-              y: screenScale
-            }}
           />
         </Layer>
       </Stage>
-
-      <div
-        className="compass"
-        style={{
-          display: 'none',
-          transform: `rotate(${correctedAngle}deg)`,
-          position: 'relative',
-          ...styles
-        }}>
-        <div
-          className="arrow-wrapper"
-          style={{
-            transform: `rotate(${qible}deg)`
-          }}>
-          <div className="qible-arrow">
-            <div className="kabe-icon"></div>
-          </div>
-        </div>
-
-        <div
-          className="compass-arrow"
-          style={{
-            transform: `rotate(${(360 - correctedAngle) % 360}deg)`,
-            opacity: anglePoint ? 1 : 0.5
-          }}>
-          <div className="arrow-in"></div>
-        </div>
-      </div>
     </>
   )
 }
