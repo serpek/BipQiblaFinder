@@ -24,7 +24,7 @@ export const Compass = ({ angle, qible, ...styles }: CompassViewProps) => {
   const [, setDeviceDirection] = useState<string>('')
   const [, setQiblaDirection] = useState<string>('')
 
-  const correctedAngle = useShortestRotation(angle) // 3° eşik değeri
+  const correctedAngle = useShortestRotation(angle)
 
   const anglePoint = useMemo(() => {
     let diff = Math.abs(((360 - angle) % 360) - qible)
@@ -42,6 +42,7 @@ export const Compass = ({ angle, qible, ...styles }: CompassViewProps) => {
 
   return (
     <>
+      {`correctedAngle ${correctedAngle}° | anglePoint: ${anglePoint}° | qible: ${qible}°`}
       <div
         className="compass"
         style={{

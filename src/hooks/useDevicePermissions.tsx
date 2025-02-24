@@ -13,6 +13,8 @@ interface OrientationData {
   error?: string
 }
 
+type PermissionState = 'granted' | 'denied' | 'prompt' | null
+
 export function useDevicePermissions() {
   const [location, setLocation] = useState<LocationData>({
     latitude: null,
