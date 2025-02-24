@@ -9,11 +9,7 @@ import './compass.scss'
 import { Group, Image, Layer, Stage } from 'react-konva'
 import useImage from 'use-image'
 import { useWindowSize } from 'react-use'
-import {
-  useFilteredAngle,
-  useShortestRotation,
-  useSmoothedAngle
-} from '../../hooks'
+import { useFilteredAngle, useShortestRotation } from '../../hooks'
 import { getDirectionName } from '../../utils'
 
 import compassImg from '../../assets/compass.png'
@@ -31,7 +27,6 @@ type CompassViewProps = PropsWithChildren<
 export const Compass = ({ alpha = 0, qible, ...styles }: CompassViewProps) => {
   // **Titreşim engelleyici filtreleme: Küçük değişiklikleri yok sayar**
   const correctedAngle1 = useFilteredAngle(alpha, 3) // 3° eşik değeri
-  const correctedAngle2 = useSmoothedAngle(alpha, 0.85)
 
   const [compassImage] = useImage(compassImg)
   const [qibleArrowImage] = useImage(qibleArrowImg)
@@ -46,11 +41,11 @@ export const Compass = ({ alpha = 0, qible, ...styles }: CompassViewProps) => {
   const correctedAngle = useShortestRotation(deviceAngle)
 
   useEffect(() => {
-    if (correctedAngle2) {
-      const angle = (360 - correctedAngle2) % 360
+    if (alpha) {
+      const angle = (360 - alpha) % 360
       setDeviceAngle(angle)
     }
-  }, [correctedAngle2, deviceAngle])
+  }, [alpha, deviceAngle])
 
   const anglePoint = useMemo(() => {
     let diff = Math.abs(((360 - deviceAngle) % 360) - qible)
@@ -75,7 +70,7 @@ export const Compass = ({ alpha = 0, qible, ...styles }: CompassViewProps) => {
   return (
     <>
       <div>{`angle: ${deviceAngle}° | alpha: ${alpha}°`}</div>
-      <div>{`correct 1: ${correctedAngle1}° | correct 2: ${correctedAngle2}°`}</div>
+      <div>{`correct 1: ${correctedAngle1}°`}</div>
       <Stage
         width={size.width}
         height={size.width}
