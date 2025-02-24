@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useCookie, useGeolocation, useWindowSize } from 'react-use'
+import { useCookie, useGeolocation } from 'react-use'
 import { Button, Layout, message, notification, Space } from 'antd'
 
 import { useModal, useOrientation } from '../../hooks'
@@ -25,7 +25,6 @@ const QiblaFinder: React.FC = () => {
 
   const { error: errorOrientation, alpha, requestPermission } = useOrientation()
 
-  const size = useWindowSize()
   const [searchParams] = useSearchParams({ lon: '', lat: '' })
 
   const [mounted, setMounted] = useState<boolean>(false)
