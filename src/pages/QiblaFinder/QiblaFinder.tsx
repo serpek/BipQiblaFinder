@@ -191,6 +191,7 @@ const QiblaFinder: React.FC = () => {
           {isError && <ErrorView message={errorMessages} />}
           {!isError && deviceAngle > -1 && qiblaAngle > -1 && (
             <Compass
+              alpha={alpha}
               angle={deviceAngle}
               qible={qiblaAngle}
               width={size.width - 60}

@@ -3,6 +3,7 @@ import {
   PropsWithChildren,
   useEffect,
   useMemo,
+  useRef,
   useState
 } from 'react'
 import './compass.scss'
@@ -11,7 +12,7 @@ import { getDirectionName } from '../../utils'
 
 type CompassViewProps = PropsWithChildren<
   {
-    alpha?: number
+    alpha: number | null
     angle: number
     qible: number
   } & CSSProperties
@@ -29,8 +30,19 @@ export const Compass = ({
 
   const [, setDeviceDirection] = useState<string>('')
   const [, setQiblaDirection] = useState<string>('')
+  const heading = useRef<number>(0)
 
   const correctedAngle = useShortestRotation(angle)
+
+  useEffect(() => {
+    if (alpha) {
+      const positionCurrent = alpha
+
+      const phase =
+        positionCurrent < 0 ? 360 + positionCurrent : positionCurrent
+      heading.current = (360 - phase) | 0
+    }
+  }, [alpha])
 
   const anglePoint = useMemo(() => {
     let diff = Math.abs(((360 - angle) % 360) - qible)
@@ -48,7 +60,7 @@ export const Compass = ({
 
   return (
     <>
-      {`correctedAngle ${correctedAngle}° | angle: ${angle}° | alpha: ${alpha}°`}
+      {`correctedAngle ${correctedAngle}° | angle: ${angle}° | alpha: ${alpha}° | heading: ${heading}°`}
       <div
         className="compass"
         style={{
