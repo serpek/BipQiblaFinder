@@ -33,7 +33,7 @@ export default function HowDoesItWork() {
         <h3>Neden kalibrasyon yapmanız isteniyor?</h3>
       </p>
       <p>
-        <strong>Bip Kıble Bulucu</strong>, cihazınızın pusulasıyla çalışır.
+        <strong>Bip Kıble Pusulası</strong>, cihazınızın pusulasıyla çalışır.
         Pusula’nın mümkün olduğunca doğru yönü gösterdiğinden emin olmak için
         kullanmaya başlamadan önce pusulanız için kalibrasyon yapmanızı
         öneririz.
@@ -55,11 +55,11 @@ export default function HowDoesItWork() {
         <h3>Kıble Pusulası için neden izniniz isteniyor?</h3>
       </p>
       <p>
-        <strong>Bip Kıble Bulucu</strong>, telefonunuzun GPS ve kamera
-        işlevleriyle (Android'de) çalışmak üzere tasarlanmıştır. Size en iyi
-        deneyimi sağlamak üzere bu özelliklere erişmek için izin istememiz
-        gerekmektedir. Bu bilgiler hiçbir zaman kaydedilmez ve
-        <strong>Bip Kıble Bulucu</strong>
+        <strong>Bip Kıble Pusulası</strong>, telefonunuzun GPS ve kamera
+        işlevleriyle çalışmak üzere tasarlanmıştır. Size en iyi deneyimi
+        sağlamak üzere bu özelliklere erişmek için izin istememiz gerekmektedir.
+        Bu bilgiler hiçbir zaman kaydedilmez ve
+        <strong>Bip Kıble Pusulası</strong>
         uygulaması dışında paylaşılmaz. İzinleri istediğiniz zaman
         tarayıcınızdan değiştirebilirsiniz.
       </p>
@@ -68,8 +68,8 @@ export default function HowDoesItWork() {
       </p>
       <p>
         İzinleri değiştirmek için tarayıcınızın izin ayarlarına gitmeniz ve bu
-        sitenin kameranıza ve/veya konumunuza erişmesine izin vermeniz (ya da
-        verdiğiniz izni kaldırmanız) yeterlidir.
+        sitenin konumunuza erişmesine izin vermeniz (ya da verdiğiniz izni
+        kaldırmanız) yeterlidir.
       </p>
     </div>
   )

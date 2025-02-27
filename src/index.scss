@@ -34,13 +34,13 @@ body {
 
 @media screen and (orientation: landscape) {
   body::before {
-    /*content: "Lütfen cihazınızı dikey moda çevirin.";*/
+    content: "Bip Kıble Pusulası en iyi dikey modda çalışır. Lütfen cihazınızı dikey moda çevirin.";
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.9);
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9) url("./assets/bip_logo.png") no-repeat center 20%;
+    background-size: 10%;
     color: white;
     display: flex;
     align-items: center;
@@ -48,6 +48,11 @@ body {
     font-size: 20px;
     z-index: 9999;
     text-align: center;
-    padding: 20px;
+    margin: 20px;
+    padding: 50px;
+  }
+
+  body > * {
+    display: none;
   }
 }
