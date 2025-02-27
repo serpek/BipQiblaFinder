@@ -31,74 +31,76 @@ const BasicLayout: React.FC = () => {
   }
 
   return (
-    <Layout className="layout-main">
-      <Header className="layout-header">
-        <Button
-          type="text"
-          variant="text"
-          color="green"
-          icon={<MenuOutlined />}
-          onClick={showDrawer}
-        />
-      </Header>
+    <>
+      <Layout className="layout-main">
+        <Header className="layout-header">
+          <Button
+            type="text"
+            variant="text"
+            color="green"
+            icon={<MenuOutlined />}
+            onClick={showDrawer}
+          />
+        </Header>
 
-      <Content className="layout-content">
-        <Outlet />
-      </Content>
+        <Content className="layout-content">
+          <Outlet />
+        </Content>
 
-      <Footer className="layout-footer"></Footer>
-      <Drawer
-        title="Bip Kıble Bul"
-        size="default"
-        styles={{
-          content: { backgroundColor: '#fafafa' }
-        }}
-        placement="left"
-        onClose={onClose}
-        open={open}>
-        <div className="drawer-logo"></div>
-        <p style={{ textAlign: 'center' }}>
-          <small>v.{appVersion}</small>
-        </p>
-        <Menu
-          onClick={onClick}
-          items={[
-            {
-              key: 'm0',
-              label: 'Kıble Bul',
-              onClick: () => goto('/')
-            },
-            // {
-            //   key: 'm10',
-            //   label: 'blank',
-            //   onClick: () => goto('blank/')
-            // },
-            { type: 'divider' },
-            {
-              key: 'm21',
-              label: 'Kıble Pusulası nasıl çalışır?',
-              onClick: () => goto('/how-does-it-work')
-            }
-            // {
-            //   key: 'm22',
-            //   label: 'Terms of Use',
-            //   onClick: () => goto('/terms')
-            // },
-            // {
-            //   key: 'm23',
-            //   label: ' Privacy Notice',
-            //   onClick: () => goto('/privacy')
-            // },
-            // {
-            //   key: 'm24',
-            //   label: 'Cookie Policy',
-            //   onClick: () => goto('/cookie')
-            // }
-          ]}
-          style={{ border: 0, background: 'transparent' }}
-        />
-      </Drawer>
-    </Layout>
+        <Footer className="layout-footer"></Footer>
+        <Drawer
+          title="Bip Kıble Bul"
+          size="default"
+          styles={{
+            content: { backgroundColor: '#fafafa' }
+          }}
+          placement="left"
+          onClose={onClose}
+          open={open}>
+          <div className="drawer-logo"></div>
+          <p style={{ textAlign: 'center' }}>
+            <small>v.{appVersion}</small>
+          </p>
+          <Menu
+            onClick={onClick}
+            items={[
+              {
+                key: 'm0',
+                label: 'Kıble Bul',
+                onClick: () => goto('/')
+              },
+              // {
+              //   key: 'm10',
+              //   label: 'blank',
+              //   onClick: () => goto('blank/')
+              // },
+              { type: 'divider' },
+              {
+                key: 'm21',
+                label: 'Kıble Pusulası nasıl çalışır?',
+                onClick: () => goto('/how-does-it-work')
+              }
+              // {
+              //   key: 'm22',
+              //   label: 'Terms of Use',
+              //   onClick: () => goto('/terms')
+              // },
+              // {
+              //   key: 'm23',
+              //   label: ' Privacy Notice',
+              //   onClick: () => goto('/privacy')
+              // },
+              // {
+              //   key: 'm24',
+              //   label: 'Cookie Policy',
+              //   onClick: () => goto('/cookie')
+              // }
+            ]}
+            style={{ border: 0, background: 'transparent' }}
+          />
+        </Drawer>
+      </Layout>
+    </>
   )
 }
 

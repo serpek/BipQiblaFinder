@@ -47,7 +47,7 @@ const config: ThemeConfig = {
 createRoot(document.getElementById('root')!).render(
   <ConfigProvider locale={trTR} theme={config}>
     <ModalProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <Routes>
           <Route element={<BasicLayout />}>
             <Route index element={<QiblaFinder />} />
