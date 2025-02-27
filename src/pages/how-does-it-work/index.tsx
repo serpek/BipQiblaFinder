@@ -27,7 +27,7 @@ export default function HowDoesItWork() {
       </p>
       <h3>Neden kalibrasyon yapmanız isteniyor?</h3>
       <p>
-        <strong>Bip Kıble Pusulası</strong>, cihazınızın pusulasıyla çalışır.
+        <strong>BiP Kıble Pusulası</strong>, cihazınızın pusulasıyla çalışır.
         Pusula’nın mümkün olduğunca doğru yönü gösterdiğinden emin olmak için
         kullanmaya başlamadan önce pusulanız için kalibrasyon yapmanızı
         öneririz.
@@ -47,11 +47,11 @@ export default function HowDoesItWork() {
       </div>
       <h3>Kıble Pusulası için neden izniniz isteniyor?</h3>
       <p>
-        <strong>Bip Kıble Pusulası</strong>, telefonunuzun GPS ve kamera
+        <strong>BiP Kıble Pusulası</strong>, telefonunuzun GPS ve kamera
         işlevleriyle çalışmak üzere tasarlanmıştır. Size en iyi deneyimi
         sağlamak üzere bu özelliklere erişmek için izin istememiz gerekmektedir.
         Bu bilgiler hiçbir zaman kaydedilmez ve
-        <strong>Bip Kıble Pusulası</strong>
+        <strong> BiP Kıble Pusulası </strong>
         uygulaması dışında paylaşılmaz. İzinleri istediğiniz zaman
         tarayıcınızdan değiştirebilirsiniz.
       </p>

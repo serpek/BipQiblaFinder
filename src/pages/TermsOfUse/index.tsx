@@ -84,7 +84,7 @@ export default function TermsOfUse() {
         <strong>us</strong>”) at the address Aydinevler Mahallesi Ismet Inonu
         Cad. Kuçukyali Ofis Park B Blok Apt. No: 20 Maltepe/Istanbul, registered
         under corporate no. 124470-5 and tax no. 8710842486 and ia duly licenced
-        to Bip İletişim.
+        to BiP İletişim.
       </p>
       <p>
         Depending on your geographical location, the features and services

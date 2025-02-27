@@ -49,7 +49,7 @@ const BasicLayout: React.FC = () => {
 
         <Footer className="layout-footer"></Footer>
         <Drawer
-          title="Bip Kıble Bul"
+          title="BiP Kıble Bul"
           size="default"
           styles={{
             content: { backgroundColor: '#fafafa' }
