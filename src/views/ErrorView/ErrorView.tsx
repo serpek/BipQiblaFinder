@@ -21,9 +21,9 @@ export const ErrorView = (props: ErrorViewProps) => {
         backgroundColor: 'white',
         borderRadius: 20
       }}
-      status="error"
-      title="Tarayıcı Desteklenmiyor"
-      subTitle="Tarayıcı konum veya sensör bilgilerine erişemiyor"
+      status="info"
+      title="Pusula Gösterilemiyor"
+      subTitle="Konumunuza veya sensör bilgilerinize erişim izni verdiğinize emin olun."
       extra={[
         <Button
           type="primary"
@@ -35,7 +35,7 @@ export const ErrorView = (props: ErrorViewProps) => {
       <div className="desc">
         <Paragraph>
           <Text strong style={{ fontSize: 16 }}>
-            Sebebi aşağıdakilerden biri olabilir.
+            Aşağıdaki durumları kontrol edin.
           </Text>
         </Paragraph>
         {props.message?.location && (

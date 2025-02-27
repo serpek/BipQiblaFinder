@@ -10,6 +10,7 @@ import { ModalProvider } from './hooks'
 import {
   Blank,
   CookiePolicy,
+  HowDoesItWork,
   PrivacyPolicy,
   QiblaFinder,
   TermsOfUse
@@ -47,6 +48,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path="/terms" element={<TermsOfUse />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/cookie" element={<CookiePolicy />} />
+            <Route path="/how-does-it-work" element={<HowDoesItWork />} />
           </Route>
         </Routes>
       </BrowserRouter>

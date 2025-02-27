@@ -75,20 +75,25 @@ const BasicLayout: React.FC = () => {
             // },
             { type: 'divider' },
             {
-              key: 'm2',
-              label: 'Terms of Use',
-              onClick: () => goto('/terms')
-            },
-            {
-              key: 'm3',
-              label: ' Privacy Notice',
-              onClick: () => goto('/privacy')
-            },
-            {
-              key: 'm4',
-              label: 'Cookie Policy',
-              onClick: () => goto('/cookie')
+              key: 'm21',
+              label: 'Kıble Pusulası nasıl çalışır?',
+              onClick: () => goto('/how-does-it-work')
             }
+            // {
+            //   key: 'm22',
+            //   label: 'Terms of Use',
+            //   onClick: () => goto('/terms')
+            // },
+            // {
+            //   key: 'm23',
+            //   label: ' Privacy Notice',
+            //   onClick: () => goto('/privacy')
+            // },
+            // {
+            //   key: 'm24',
+            //   label: 'Cookie Policy',
+            //   onClick: () => goto('/cookie')
+            // }
           ]}
           style={{ border: 0, background: 'transparent' }}
         />
