@@ -5,8 +5,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { ConfigProvider, theme, ThemeConfig } from 'antd'
 import trTR from 'antd/locale/tr_TR'
 
-import mixpanel from 'mixpanel-browser'
-
+// import mixpanel from 'mixpanel-browser'
 import { BasicLayout } from './layouts'
 import { ModalProvider } from './hooks'
 import {
@@ -27,11 +26,12 @@ import './index.scss'
 // LogRocket.identify(`${fingerprint}`)
 
 // Near entry of your product, init Mixpanel
-mixpanel.init('6e10f43601c50838c050138bca862ff7', {
-  debug: true,
-  track_pageview: true,
-  persistence: 'cookie'
-})
+// mixpanel.init('6e10f43601c50838c050138bca862ff7', {
+//   debug: false,
+//   track_pageview: true,
+//   autotrack: true,
+//   persistence: 'cookie'
+// })
 
 const config: ThemeConfig = {
   algorithm: theme.defaultAlgorithm,
