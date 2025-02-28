@@ -62,65 +62,63 @@ export const Compass = ({ alpha = 0, qible }: CompassViewProps) => {
   )
 
   return (
-    <>
-      <Stage
-        width={defaultWidth}
-        height={defaultWidth}
-        scale={{
-          x: screenScale,
-          y: screenScale
-        }}>
-        <Layer>
-          <Group
+    <Stage
+      width={defaultWidth}
+      height={defaultWidth}
+      scale={{
+        x: screenScale,
+        y: screenScale
+      }}>
+      <Layer>
+        <Group
+          width={defaultWidth}
+          height={defaultWidth}
+          x={screenCenter}
+          y={screenCenter}
+          offsetX={defaultWidth / 2}
+          offsetY={defaultWidth / 2}
+          rotation={deviceAngle}
+          duration={0.5}>
+          <Image
             width={defaultWidth}
             height={defaultWidth}
-            x={screenCenter}
-            y={screenCenter}
-            offsetX={defaultWidth / 2}
-            offsetY={defaultWidth / 2}
-            rotation={deviceAngle}
-            duration={0.5}>
-            <Image
-              width={defaultWidth}
-              height={defaultWidth}
-              image={compassImage}
-            />
-            <Image
-              x={defaultWidth / 2}
-              y={defaultWidth / 2}
-              offsetX={34}
-              offsetY={125}
-              width={68}
-              height={91}
-              image={qibleArrowImage}
-              duration={0.5}
-              rotation={qible}
-            />
-            <Image
-              x={defaultWidth / 2}
-              y={defaultWidth / 2}
-              offsetX={24}
-              offsetY={210}
-              width={48}
-              height={56}
-              image={kabeImage}
-              duration={0.5}
-              rotation={qible}
-            />
-          </Group>
-
-          <Image
-            x={screenCenter}
-            y={screenCenter}
-            offsetX={24}
-            offsetY={112}
-            width={48}
-            height={64}
-            image={arrowInImage}
-            opacity={anglePoint ? 1 : 0.5}
+            image={compassImage}
           />
-        </Layer>
-      </Stage>
-    </>
+          <Image
+            x={defaultWidth / 2}
+            y={defaultWidth / 2}
+            offsetX={34}
+            offsetY={125}
+            width={68}
+            height={91}
+            image={qibleArrowImage}
+            duration={0.5}
+            rotation={qible}
+          />
+          <Image
+            x={defaultWidth / 2}
+            y={defaultWidth / 2}
+            offsetX={24}
+            offsetY={210}
+            width={48}
+            height={56}
+            image={kabeImage}
+            duration={0.5}
+            rotation={qible}
+          />
+        </Group>
+
+        <Image
+          x={screenCenter}
+          y={screenCenter}
+          offsetX={24}
+          offsetY={112}
+          width={48}
+          height={64}
+          image={arrowInImage}
+          opacity={anglePoint ? 1 : 0.5}
+        />
+      </Layer>
+    </Stage>
   )
 }
